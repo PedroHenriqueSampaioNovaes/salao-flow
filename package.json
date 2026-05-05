@@ -1,0 +1,17 @@
+{
+  "name": "sistema-barbearia",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "server": "npm run dev --workspace=server"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "workspaces": [
+    "client",
+    "server",
+    "packages/*"
+  ]
+}

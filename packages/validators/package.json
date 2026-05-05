@@ -1,0 +1,14 @@
+{
+  "name": "@sistema-barbearia/validators",
+  "version": "1.0.0",
+  "description": "Shared validation schemas",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "type": "module",
+  "scripts": {},
+  "keywords": [],
+  "license": "ISC",
+  "dependencies": {
+    "zod": "^4.4.3"
+  }
+}
