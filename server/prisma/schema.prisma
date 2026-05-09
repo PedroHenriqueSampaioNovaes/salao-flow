@@ -6,3 +6,35 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model User {
+  id          Int      @id @default(autoincrement())
+  email       String   @unique
+  name        String
+  password    String
+  customer_id String   @unique
+  image       String?
+  address     String
+  phone       String
+  status      Boolean  @default(false)
+  times       String[] @default([])
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  appointments Appointment[]
+}
+
+model Appointment {
+  id    Int      @id @default(autoincrement())
+  name  String
+  phone String
+  date  DateTime
+  time  String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  user_id Int
+  user    User @relation(fields: [user_id], references: [id])
+}
