@@ -7,7 +7,7 @@ datasource db {
   provider = "postgresql"
 }
 
-model Users {
+model User {
   id          Int      @id @default(autoincrement())
   email       String   @unique
   name        String
@@ -22,10 +22,10 @@ model Users {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  appointments Appointments[]
+  appointments Appointment[]
 }
 
-model Appointments {
+model Appointment {
   id    Int      @id @default(autoincrement())
   name  String
   phone String
@@ -36,5 +36,5 @@ model Appointments {
   updated_at DateTime @updatedAt
 
   user_id Int
-  user    Users @relation(fields: [user_id], references: [id])
+  user    User @relation(fields: [user_id], references: [id])
 }
