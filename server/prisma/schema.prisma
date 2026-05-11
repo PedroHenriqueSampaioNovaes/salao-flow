@@ -23,6 +23,8 @@ model User {
   updatedAt DateTime @updatedAt
 
   appointments Appointment[]
+
+  @@index([email])
 }
 
 model Appointment {
