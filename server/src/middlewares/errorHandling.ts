@@ -2,6 +2,8 @@ import { NextFunction, Request, Response } from 'express';
 
 import { AppError } from '../errors/AppError.js';
 
+import { ZodError } from '@sistema-barbearia/validators';
+
 export function errorHandling(
   err: any,
   _req: Request,
@@ -12,6 +14,13 @@ export function errorHandling(
     return res.status(err.statusCode).json({
       ok: false,
       message: err.message,
+    });
+  }
+
+  if (err instanceof ZodError) {
+    return res.status(422).json({
+      ok: false,
+      message: err.issues[0].message,
     });
   }
 
