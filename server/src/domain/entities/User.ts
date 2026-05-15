@@ -4,7 +4,6 @@ interface UserProps {
   password: string;
   address: string;
   phone: string;
-  times: string[];
   image?: string | null;
   status?: boolean;
   customerId?: string | null;
@@ -16,7 +15,6 @@ export class User {
   password: string;
   address: string;
   phone: string;
-  times: string[];
   image?: string | null;
   status?: boolean;
   customerId?: string | null;
@@ -27,7 +25,6 @@ export class User {
     password,
     address,
     phone,
-    times,
     image,
     status,
     customerId,
@@ -37,7 +34,6 @@ export class User {
     this.password = password;
     this.address = address;
     this.phone = phone;
-    this.times = times;
     this.image = image;
     this.status = status;
     this.customerId = customerId;
