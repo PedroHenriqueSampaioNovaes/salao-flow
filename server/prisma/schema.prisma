@@ -22,8 +22,22 @@ model User {
   updatedAt DateTime @updatedAt
 
   appointments Appointment[]
+  employees    Employee[]
 
   @@index([email])
+}
+
+model Employee {
+  id    Int      @id @default(autoincrement())
+  name  String
+  image String?
+  times String[] @default([])
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Appointment {
