@@ -1,6 +1,12 @@
 import { Request, Response } from 'express';
 
-import { UserSchema } from '@sistema-barbearia/validators';
+import { UserSchema, EmployeeSchema, z } from '@sistema-barbearia/validators';
+
+const CreateUserWithEmployeesSchema = UserSchema.and(
+  z.object({
+    employees: z.array(EmployeeSchema, 'Adicione pelo menos 1 profissional.'),
+  }),
+);
 
 import { PrismaUserAdapter } from '@/src/infrastructure/database/PrismaUserAdapter.js';
 import { BcryptHashAdapter } from '@/src/infrastructure/Providers/BcryptHashAdapter.js';
@@ -8,7 +14,7 @@ import { CreateUserService } from '@/src/domain/services/users/CreateUserService
 
 export class CreateUserController {
   static async handle(req: Request, res: Response) {
-    const body = UserSchema.parse(req.body);
+    const body = CreateUserWithEmployeesSchema.parse(req.body);
 
     const prismaUserAdapter = new PrismaUserAdapter();
     const bcryptHashAdapter = new BcryptHashAdapter();

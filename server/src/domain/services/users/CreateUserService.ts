@@ -1,4 +1,4 @@
-import { User } from '@/src/domain/entities/User.js';
+import { CreateUserRequest } from '@/src/types/CreateUserRequest.js';
 
 import { UserRepository } from '../../repositories/UserRepository.js';
 import { HashRepository } from '../../repositories/HashRepository.js';
@@ -11,7 +11,7 @@ export class CreateUserService {
     private hashRepository: HashRepository,
   ) {}
 
-  async execute(userData: User) {
+  async execute(userData: CreateUserRequest) {
     const userAlreadyExists = await this.userRepository.findByEmail(
       userData.email,
     );

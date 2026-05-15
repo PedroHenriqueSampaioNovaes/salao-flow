@@ -1,10 +1,10 @@
 import { prisma } from '@/lib/prisma.js';
 
 import { UserRepository } from '../../domain/repositories/UserRepository.js';
-import { User } from '@/src/domain/entities/User.js';
+import { CreateUserRequest } from '@/src/types/CreateUserRequest.js';
 
 export class PrismaUserAdapter implements UserRepository {
-  async create(user: User) {
+  async create(user: CreateUserRequest) {
     await prisma.user.create({
       data: {
         name: user.name,
@@ -12,7 +12,9 @@ export class PrismaUserAdapter implements UserRepository {
         password: user.password,
         phone: user.phone,
         address: user.address,
-        times: user.times,
+        employees: {
+          create: user.employees,
+        },
       },
     });
   }
@@ -34,7 +36,6 @@ export class PrismaUserAdapter implements UserRepository {
       address: prismaUser.address,
       phone: prismaUser.phone,
       status: prismaUser.status,
-      times: prismaUser.times,
       image: prismaUser.image ?? undefined,
     };
   }

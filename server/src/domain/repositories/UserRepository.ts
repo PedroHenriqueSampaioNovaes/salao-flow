@@ -1,6 +1,8 @@
 import { User } from '../entities/User.js';
 
+import { CreateUserRequest } from '@/src/types/CreateUserRequest.js';
+
 export interface UserRepository {
-  create(user: User): Promise<void>;
+  create(user: CreateUserRequest): Promise<void>;
   findByEmail(email: string): Promise<User | null>;
 }
