@@ -7,7 +7,7 @@ datasource db {
   provider = "postgresql"
 }
 
-model User {
+model Barbershop {
   id         Int     @id @default(autoincrement())
   email      String  @unique
   name       String
@@ -32,8 +32,8 @@ model Employee {
   image String?
   times String[] @default([])
 
-  userId Int
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  barbershopId Int
+  barbershop   Barbershop @relation(fields: [barbershopId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

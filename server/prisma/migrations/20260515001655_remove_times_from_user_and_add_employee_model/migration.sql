@@ -1,11 +1,11 @@
 /*
   Warnings:
 
-  - You are about to drop the column `times` on the `User` table. All the data in the column will be lost.
+  - You are about to drop the column `times` on the `Barbershop` table. All the data in the column will be lost.
 
 */
 -- AlterTable
-ALTER TABLE "User" DROP COLUMN "times";
+ALTER TABLE "Barbershop" DROP COLUMN "times";
 
 -- CreateTable
 CREATE TABLE "Employee" (
@@ -13,7 +13,7 @@ CREATE TABLE "Employee" (
     "name" TEXT NOT NULL,
     "image" TEXT,
     "times" TEXT[] DEFAULT ARRAY[]::TEXT[],
-    "userId" INTEGER NOT NULL,
+    "barbershopId" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -21,4 +21,4 @@ CREATE TABLE "Employee" (
 );
 
 -- AddForeignKey
-ALTER TABLE "Employee" ADD CONSTRAINT "Employee_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Employee" ADD CONSTRAINT "Employee_barbershopId_fkey" FOREIGN KEY ("barbershopId") REFERENCES "Barbershop"("id") ON DELETE CASCADE ON UPDATE CASCADE;

@@ -1,15 +1,15 @@
 /*
   Warnings:
 
-  - You are about to drop the column `userId` on the `Appointment` table. All the data in the column will be lost.
+  - You are about to drop the column `barbershopId` on the `Appointment` table. All the data in the column will be lost.
   - Added the required column `employeeId` to the `Appointment` table without a default value. This is not possible if the table is not empty.
 
 */
 -- DropForeignKey
-ALTER TABLE "Appointment" DROP CONSTRAINT "Appointment_userId_fkey";
+ALTER TABLE "Appointment" DROP CONSTRAINT "Appointment_barbershopId_fkey";
 
 -- AlterTable
-ALTER TABLE "Appointment" DROP COLUMN "userId",
+ALTER TABLE "Appointment" DROP COLUMN "barbershopId",
 ADD COLUMN     "employeeId" INTEGER NOT NULL;
 
 -- AddForeignKey

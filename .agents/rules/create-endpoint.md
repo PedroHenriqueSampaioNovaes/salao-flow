@@ -65,7 +65,8 @@ export interface NomeRepository {
 ```
 
 **Interfaces já existentes:**
-- `UserRepository` — `create`, `findByEmail`
+
+- `BarbershopRepository` — `create`, `findByEmail`
 - `HashRepository` — `hash`, `compare`
 - `TokenRepository` — `sign`, `verify`
 
@@ -92,7 +93,8 @@ export class ExemploAdapter implements NomeRepository {
 ```
 
 **Adapters já existentes:**
-- `PrismaUserAdapter` → implementa `UserRepository`
+
+- `PrismaBarbershopAdapter` → implementa `BarbershopRepository`
 - `BcryptHashAdapter` → implementa `HashRepository`
 - `JwtTokenAdapter` → implementa `TokenRepository`
 
@@ -103,6 +105,7 @@ export class ExemploAdapter implements NomeRepository {
 Criar o Service em `domain/services/<recurso>/NomeService.ts`.
 
 **Regras do Service:**
+
 - Recebe as interfaces (Ports) via **injeção de dependência no constructor**
 - Contém **toda a lógica de negócio**
 - Lança `AppError` para erros de negócio (com statusCode adequado)
@@ -113,12 +116,12 @@ Criar o Service em `domain/services/<recurso>/NomeService.ts`.
 // domain/services/recurso/ExemploService.ts
 import { ExemploSchema } from '@sistema-barbearia/validators';
 
-import { UserRepository } from '../../repositories/UserRepository.js';
+import { BarbershopRepository } from '../../repositories/BarbershopRepository.js';
 import { AppError } from '@/src/errors/AppError.js';
 
 export class ExemploService {
   constructor(
-    private userRepository: UserRepository,
+    private barbershopRepository: BarbershopRepository,
     // demais repositórios necessários...
   ) {}
 
@@ -141,6 +144,7 @@ export class ExemploService {
 Criar o Controller em `infrastructure/http/<recurso>/NomeController.ts`.
 
 **Regras do Controller:**
+
 - Classe com método **`static async handle(req, res)`**
 - Valida o body/params com `Schema.parse()`
 - Instancia os **Adapters concretos**
@@ -154,16 +158,16 @@ import { Request, Response } from 'express';
 
 import { ExemploSchema } from '@sistema-barbearia/validators';
 
-import { PrismaUserAdapter } from '@/src/infrastructure/database/PrismaUserAdapter.js';
+import { PrismaBarbershopAdapter } from '@/src/infrastructure/database/PrismaBarbershopAdapter.js';
 import { ExemploService } from '@/src/domain/services/recurso/ExemploService.js';
 
 export class ExemploController {
   static async handle(req: Request, res: Response) {
     const body = ExemploSchema.parse(req.body);
 
-    const prismaUserAdapter = new PrismaUserAdapter();
+    const prismaBarbershopAdapter = new PrismaBarbershopAdapter();
 
-    const exemploService = new ExemploService(prismaUserAdapter);
+    const exemploService = new ExemploService(prismaBarbershopAdapter);
 
     const result = await exemploService.execute(body);
 
@@ -200,11 +204,11 @@ O auto-loader em `routes/index.ts` registra automaticamente qualquer novo arquiv
 
 Os erros são capturados automaticamente pelo middleware `errorHandling`. Basta lançar:
 
-| Tipo de Erro | Onde Lançar | Exemplo |
-|---|---|---|
-| `AppError` | Service | `throw new AppError('Mensagem', 404)` |
-| `ZodError` | Controller (automático via `.parse()`) | Status 422 automático |
-| `PrismaClientKnownRequestError` | Adapter (automático) | Tratado no middleware |
+| Tipo de Erro                    | Onde Lançar                            | Exemplo                               |
+| ------------------------------- | -------------------------------------- | ------------------------------------- |
+| `AppError`                      | Service                                | `throw new AppError('Mensagem', 404)` |
+| `ZodError`                      | Controller (automático via `.parse()`) | Status 422 automático                 |
+| `PrismaClientKnownRequestError` | Adapter (automático)                   | Tratado no middleware                 |
 
 ---
 

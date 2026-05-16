@@ -1,5 +1,5 @@
 -- DropIndex
-DROP INDEX "User_customerId_key";
+DROP INDEX "Barbershop_customerId_key";
 
 -- AlterTable
-ALTER TABLE "User" ALTER COLUMN "customerId" DROP NOT NULL;
+ALTER TABLE "Barbershop" ALTER COLUMN "customerId" DROP NOT NULL;

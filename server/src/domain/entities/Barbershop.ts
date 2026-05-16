@@ -1,4 +1,4 @@
-interface UserProps {
+interface BarbershopProps {
   id: number;
   name: string;
   email: string;
@@ -10,7 +10,7 @@ interface UserProps {
   customerId?: string | null;
 }
 
-export class User {
+export class Barbershop {
   id: number;
   name: string;
   email: string;
@@ -31,7 +31,7 @@ export class User {
     image,
     status,
     customerId,
-  }: UserProps) {
+  }: BarbershopProps) {
     this.id = id;
     this.name = name;
     this.email = email;

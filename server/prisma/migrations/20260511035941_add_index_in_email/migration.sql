@@ -1,2 +1,2 @@
 -- CreateIndex
-CREATE INDEX "User_email_idx" ON "User"("email");
+CREATE INDEX "Barbershop_email_idx" ON "Barbershop"("email");

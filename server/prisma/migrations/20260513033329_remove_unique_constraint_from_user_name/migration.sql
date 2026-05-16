@@ -1,2 +1,2 @@
 -- DropIndex
-DROP INDEX "User_name_key";
+DROP INDEX "Barbershop_name_key";
