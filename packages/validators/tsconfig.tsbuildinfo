@@ -1,1 +1,1 @@
-{"root":["./src/index.ts","./src/schemas/employeeschema.ts","./src/schemas/userschema.ts"],"version":"6.0.3"}
+{"root":["./src/index.ts","./src/schemas/employeeschema.ts","./src/schemas/loginschema.ts","./src/schemas/userschema.ts"],"version":"6.0.3"}
