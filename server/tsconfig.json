@@ -9,6 +9,7 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "noEmitOnError": true,
     "moduleResolution": "node16",
     "outDir": "dist",
     "paths": {
