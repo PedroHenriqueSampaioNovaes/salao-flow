@@ -21,8 +21,7 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  appointments Appointment[]
-  employees    Employee[]
+  employees Employee[]
 
   @@index([email])
 }
@@ -38,6 +37,8 @@ model Employee {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  appointments Appointment[]
 }
 
 model Appointment {
@@ -50,6 +51,6 @@ model Appointment {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  userId Int
-  user   User @relation(fields: [userId], references: [id])
+  employeeId Int
+  employee   Employee @relation(fields: [employeeId], references: [id])
 }
