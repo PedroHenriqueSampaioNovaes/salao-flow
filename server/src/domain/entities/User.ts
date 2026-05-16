@@ -1,4 +1,5 @@
 interface UserProps {
+  id: number;
   name: string;
   email: string;
   password: string;
@@ -10,6 +11,7 @@ interface UserProps {
 }
 
 export class User {
+  id: number;
   name: string;
   email: string;
   password: string;
@@ -20,6 +22,7 @@ export class User {
   customerId?: string | null;
 
   constructor({
+    id,
     name,
     email,
     password,
@@ -29,6 +32,7 @@ export class User {
     status,
     customerId,
   }: UserProps) {
+    this.id = id;
     this.name = name;
     this.email = email;
     this.password = password;

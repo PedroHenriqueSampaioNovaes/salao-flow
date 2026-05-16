@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma.js';
 
+import { User } from '../../domain/entities/User.js';
 import { UserRepository } from '../../domain/repositories/UserRepository.js';
 import { CreateUserRequest } from '@/src/types/CreateUserRequest.js';
 
@@ -28,7 +29,8 @@ export class PrismaUserAdapter implements UserRepository {
 
     if (!prismaUser) return null;
 
-    return {
+    return new User({
+      id: prismaUser.id,
       name: prismaUser.name,
       email: prismaUser.email,
       password: prismaUser.password,
@@ -36,7 +38,7 @@ export class PrismaUserAdapter implements UserRepository {
       address: prismaUser.address,
       phone: prismaUser.phone,
       status: prismaUser.status,
-      image: prismaUser.image ?? undefined,
-    };
+      image: prismaUser.image,
+    });
   }
 }
