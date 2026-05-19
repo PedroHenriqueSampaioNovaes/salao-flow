@@ -8,15 +8,17 @@ datasource db {
 }
 
 model Barbershop {
-  id         Int     @id @default(autoincrement())
-  email      String  @unique
-  name       String
-  password   String
-  customerId String?
-  image      String?
-  address    String
-  phone      String
-  status     Boolean @default(false)
+  id                   Int       @id @default(autoincrement())
+  email                String    @unique
+  name                 String
+  password             String
+  customerId           String?
+  image                String?
+  address              String
+  phone                String
+  status               Boolean   @default(false)
+  resetPasswordToken   String?
+  resetPasswordExpires DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
