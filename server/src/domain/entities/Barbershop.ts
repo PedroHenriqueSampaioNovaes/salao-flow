@@ -19,6 +19,8 @@ interface BarbershopProps {
   status: boolean;
   customerId: string | null;
   employees: EmployeeData[];
+  resetPasswordToken?: string | null;
+  resetPasswordExpires?: Date | null;
 }
 
 export class Barbershop {
@@ -32,6 +34,8 @@ export class Barbershop {
   private _status: boolean;
   private _customerId: string | null;
   private _employees: EmployeeData[];
+  private _resetPasswordToken: string | null;
+  private _resetPasswordExpires: Date | null;
 
   constructor(props: BarbershopProps) {
     this._id = props.id;
@@ -44,6 +48,8 @@ export class Barbershop {
     this._status = props.status ?? true;
     this._customerId = props.customerId ?? null;
     this._employees = props.employees ?? [];
+    this._resetPasswordToken = props.resetPasswordToken ?? null;
+    this._resetPasswordExpires = props.resetPasswordExpires ?? null;
   }
 
   get id(): number {
@@ -84,6 +90,14 @@ export class Barbershop {
 
   get employees(): EmployeeData[] {
     return [...this._employees];
+  }
+
+  get resetPasswordToken(): string | null {
+    return this._resetPasswordToken;
+  }
+
+  get resetPasswordExpires(): Date | null {
+    return this._resetPasswordExpires;
   }
 
   isActive(): boolean {
