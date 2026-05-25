@@ -23,29 +23,83 @@ model Barbershop {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  employees Employee[]
+  employees      Employee[]
+  services       Service[]
+  subscription   Subscription?
+  operatingTimes OperatingTime[]
 
   @@index([email])
 }
 
-model Employee {
-  id    Int      @id @default(autoincrement())
-  name  String
-  image String?
-  times String[] @default([])
-
-  barbershopId Int
-  barbershop   Barbershop @relation(fields: [barbershopId], references: [id], onDelete: Cascade)
+model Subscription {
+  id      String @id @default(uuid())
+  status  String
+  plan    Plan
+  priceId String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  barbershopId Int        @unique
+  barbershop   Barbershop @relation(fields: [barbershopId], references: [id])
+}
+
+enum Plan {
+  FREE
+  PROFISSIONAL
+}
+
+model OperatingTime {
+  id           Int    @id @default(autoincrement())
+  inicio       String
+  inicioAlmoco String
+  fimAlmoco    String
+  fim          String
+
+  barbershopId Int
+  barbershop   Barbershop @relation(fields: [barbershopId], references: [id])
+
+  employee Employee[]
+}
+
+model Employee {
+  id    Int     @id @default(autoincrement())
+  name  String
+  image String?
+
+  barbershopId Int
+  barbershop   Barbershop    @relation(fields: [barbershopId], references: [id], onDelete: Cascade)
+  operationId  Int
+  operation    OperatingTime @relation(fields: [operationId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  services     Service[]
+  appointments Appointment[]
+}
+
+model Service {
+  id       String  @id @default(uuid())
+  name     String
+  price    Int
+  duration Int
+  status   Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  barbershopId Int
+  barbershop   Barbershop @relation(fields: [barbershopId], references: [id])
+
+  employees    Employee[]
   appointments Appointment[]
 }
 
 model Appointment {
   id    Int      @id @default(autoincrement())
   name  String
+  email String
   phone String
   date  DateTime
   time  String
@@ -55,4 +109,7 @@ model Appointment {
 
   employeeId Int
   employee   Employee @relation(fields: [employeeId], references: [id])
+
+  serviceId Int
+  services  Service[]
 }
