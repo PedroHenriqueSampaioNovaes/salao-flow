@@ -50,11 +50,11 @@ enum Plan {
 }
 
 model OperatingTime {
-  id           Int    @id @default(autoincrement())
-  inicio       String
-  inicioAlmoco String
-  fimAlmoco    String
-  fim          String
+  id         Int    @id @default(autoincrement())
+  start      String
+  startLunch String
+  endLunch   String
+  end        String
 
   barbershopId Int
   barbershop   Barbershop @relation(fields: [barbershopId], references: [id])
@@ -67,10 +67,10 @@ model Employee {
   name  String
   image String?
 
-  barbershopId Int
-  barbershop   Barbershop    @relation(fields: [barbershopId], references: [id], onDelete: Cascade)
-  operationId  Int
-  operation    OperatingTime @relation(fields: [operationId], references: [id])
+  barbershopId    Int
+  barbershop      Barbershop    @relation(fields: [barbershopId], references: [id], onDelete: Cascade)
+  operatingTimeId Int
+  operatingTime   OperatingTime @relation(fields: [operatingTimeId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -110,6 +110,5 @@ model Appointment {
   employeeId Int
   employee   Employee @relation(fields: [employeeId], references: [id])
 
-  serviceId Int
-  services  Service[]
+  services Service[]
 }
