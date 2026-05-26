@@ -16,7 +16,7 @@ model Barbershop {
   image                String?
   address              String
   phone                String
-  status               Boolean   @default(false)
+  status               Boolean   @default(true)
   resetPasswordToken   String?
   resetPasswordExpires DateTime?
 
