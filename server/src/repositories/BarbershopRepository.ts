@@ -32,6 +32,7 @@ export class BarbershopRepository {
               startLunch: '12:00',
               endLunch: '13:00',
               end: '18:00',
+              isDefault: true,
             },
           ],
         },
