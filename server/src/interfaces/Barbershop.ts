@@ -6,5 +6,5 @@ export interface CreateBarbershop {
   address: string;
   phone: string;
   image?: string;
-  slug: string;
+  slug?: string;
 }
