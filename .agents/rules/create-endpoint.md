@@ -1,6 +1,6 @@
 # Regra: Criar um novo Endpoint
 
-Este projeto segue **Arquitetura Hexagonal (Ports & Adapters)**. Todo novo endpoint **deve** seguir as camadas e padrões descritos abaixo, na ordem indicada.
+Este projeto segue uma **Arquitetura em Camadas Tradicional e Simplificada**, focada em agilidade e simplicidade, sem o overhead da Arquitetura Hexagonal. Todo novo endpoint **deve** seguir as camadas e padrões descritos abaixo, na ordem indicada.
 
 ---
 
@@ -8,21 +8,17 @@ Este projeto segue **Arquitetura Hexagonal (Ports & Adapters)**. Todo novo endpo
 
 ```
 server/src/
-├── domain/
-│   ├── entities/           # Entidades de domínio (classes)
-│   ├── repositories/       # Interfaces (Ports) — contratos abstratos
-│   └── services/<recurso>/ # Casos de uso / regras de negócio
-├── infrastructure/
-│   ├── database/           # Adapters de banco (Prisma)
-│   ├── Providers/          # Adapters de libs externas (bcrypt, jwt, etc.)
-│   └── http/<recurso>/     # Controllers (entrada HTTP)
-├── errors/                 # Classes de erro customizadas
-├── middlewares/             # Middlewares Express (errorHandling, auth, etc.)
-├── routes/                 # Arquivos de rota por recurso
-└── types/                  # Tipos auxiliares (Request types, etc.)
+├── controllers/        # Controllers (entrada HTTP, validação de inputs)
+├── errors/             # Classes de erro customizadas
+├── interfaces/         # Interfaces TypeScript / Tipagem de contratos
+├── lib/                # Configurações/instâncias de libs (Prisma, Nodemailer, etc.)
+├── middlewares/        # Middlewares Express (errorHandling, auth, etc.)
+├── repositories/       # Repositórios (acesso direto ao banco via Prisma)
+├── routes/             # Arquivos de rota por recurso
+└── services/<recurso>/ # Casos de uso / regras de negócio de cada recurso
 
 packages/validators/src/
-└── schemas/                # Schemas Zod compartilhados (validação)
+└── schemas/            # Schemas Zod compartilhados (validação)
 ```
 
 ---
@@ -49,144 +45,133 @@ export type ExemploSchema = z.infer<typeof ExemploSchema>;
 export * from './schemas/ExemploSchema.js';
 ```
 
-> **Importante:** Após alterar o pacote de validators, o build em watch (`npm run build`) irá recompilar automaticamente. Caso não esteja rodando, execute `npm run build` em `packages/validators`.
+> **Importante:** Após alterar o pacote de validators, o build em watch (`npm run build`) em `packages/validators` irá recompilar automaticamente. Caso não esteja rodando, execute `npm run build` manualmente para que a aplicação server reconheça os novos schemas.
 
 ---
 
-### 2. Interface / Port (`domain/repositories`)
+### 2. Interface (se necessário) (`server/src/interfaces`)
 
-Se o endpoint exigir uma dependência externa que ainda não possua interface, criar a interface em `domain/repositories/`.
+Definir tipagens personalizadas ou contratos de dados em `server/src/interfaces/<recurso>.ts`.
 
 ```typescript
-// domain/repositories/NomeRepository.ts
-export interface NomeRepository {
-  metodo(param: string): Promise<TipoRetorno>;
+// server/src/interfaces/Exemplo.ts
+export interface CriarExemplo {
+  campo: string;
 }
 ```
 
-**Interfaces já existentes:**
-
-- `BarbershopRepository` — `create`, `findByEmail`
-- `HashRepository` — `hash`, `compare`
-- `TokenRepository` — `sign`, `verify`
-
-> **Regra:** O Service (domínio) **nunca** importa bibliotecas externas diretamente. Ele depende apenas de interfaces.
-
 ---
 
-### 3. Adapter (`infrastructure/database` ou `infrastructure/Providers`)
+### 3. Repositório (`server/src/repositories`)
 
-Implementar a interface criada no passo anterior usando a biblioteca concreta.
-
-- **Banco de dados** → `infrastructure/database/PrismaNomeAdapter.ts`
-- **Libs externas** → `infrastructure/Providers/NomeAdapter.ts`
+Se o endpoint precisar de novas operações com o banco de dados, implemente-as na classe correspondente dentro de `server/src/repositories/` ou crie um novo repositório caso o recurso seja novo.
 
 ```typescript
-// infrastructure/Providers/ExemploAdapter.ts
-import { NomeRepository } from '@/src/domain/repositories/NomeRepository.js';
+// server/src/repositories/ExemploRepository.ts
+import { prisma } from '@/src/lib/prisma.js';
+import { CriarExemplo } from '@/src/interfaces/Exemplo.js';
 
-export class ExemploAdapter implements NomeRepository {
-  async metodo(param: string): Promise<TipoRetorno> {
-    // implementação concreta usando a lib
+export class ExemploRepository {
+  async create(data: CriarExemplo) {
+    const exemplo = await prisma.exemplo.create({
+      data: {
+        campo: data.campo,
+      },
+    });
+
+    return exemplo;
+  }
+
+  async getByCampo(campo: string) {
+    return prisma.exemplo.findUnique({
+      where: { campo },
+    });
   }
 }
 ```
 
-**Adapters já existentes:**
-
-- `PrismaBarbershopAdapter` → implementa `BarbershopRepository`
-- `BcryptHashAdapter` → implementa `HashRepository`
-- `JwtTokenAdapter` → implementa `TokenRepository`
-
 ---
 
-### 4. Service / Caso de uso (`domain/services/<recurso>`)
+### 4. Service / Caso de uso (`server/src/services/<recurso>`)
 
-Criar o Service em `domain/services/<recurso>/NomeService.ts`.
+Criar o Service em `server/src/services/<recurso>/NomeService.ts`.
 
 **Regras do Service:**
 
-- Recebe as interfaces (Ports) via **injeção de dependência no constructor**
+- Instancia os repositórios necessários diretamente dentro do método `execute` (ex: `const exemploRepository = new ExemploRepository()`)
 - Contém **toda a lógica de negócio**
 - Lança `AppError` para erros de negócio (com statusCode adequado)
-- **Não** importa adapters concretos, frameworks ou bibliotecas externas
-- Tipagem do parâmetro de `execute()` vem do schema Zod ou de um tipo em `types/`
+- Utiliza bibliotecas externas (como `bcryptjs`, `jsonwebtoken`) ou utilitários (como `sendMail` de `server/src/lib/nodemailer.js`) diretamente se necessário
+- Tipagem do parâmetro de `execute()` vem do schema Zod ou de interfaces em `interfaces/`
 
 ```typescript
-// domain/services/recurso/ExemploService.ts
-import { ExemploSchema } from '@sistema-barbearia/validators';
-
-import { BarbershopRepository } from '../../repositories/BarbershopRepository.js';
+// server/src/services/recurso/ExemploService.ts
+import { ExemploRepository } from '@/src/repositories/ExemploRepository.js';
+import { CriarExemplo } from '@/src/interfaces/Exemplo.js';
 import { AppError } from '@/src/errors/AppError.js';
 
 export class ExemploService {
-  constructor(
-    private barbershopRepository: BarbershopRepository,
-    // demais repositórios necessários...
-  ) {}
+  async execute(data: CriarExemplo) {
+    const exemploRepository = new ExemploRepository();
 
-  async execute(data: ExemploSchema) {
-    // Validações de negócio
-    // Lançar AppError quando necessário:
-    // throw new AppError('Mensagem de erro', 400);
+    const exemploAlreadyExists = await exemploRepository.getByCampo(data.campo);
 
-    // Operações via repositórios injetados
-    // Retornar resultado
-    return { message: 'Operação realizada com sucesso!' };
+    if (exemploAlreadyExists) {
+      throw new AppError('Este registro já existe.', 409);
+    }
+
+    const result = await exemploRepository.create(data);
+
+    return { 
+      message: 'Criado com sucesso!',
+      result 
+    };
   }
 }
 ```
 
 ---
 
-### 5. Controller (`infrastructure/http/<recurso>`)
+### 5. Controller (`server/src/controllers/<recurso>`)
 
-Criar o Controller em `infrastructure/http/<recurso>/NomeController.ts`.
+Criar o Controller em `server/src/controllers/<recurso>/NomeController.ts`.
 
 **Regras do Controller:**
 
 - Classe com método **`static async handle(req, res)`**
 - Valida o body/params com `Schema.parse()`
-- Instancia os **Adapters concretos**
-- Instancia o **Service** injetando os Adapters
-- Chama `service.execute()` e retorna o resultado via `res.status().json()`
-- **Não** contém lógica de negócio
+- Instancia o **Service** diretamente e chama `service.execute()`
+- Retorna o resultado via `res.status().json()`
+- **Não** contém lógica de negócio ou queries de banco
 
 ```typescript
-// infrastructure/http/recurso/ExemploController.ts
+// server/src/controllers/recurso/ExemploController.ts
 import { Request, Response } from 'express';
-
 import { ExemploSchema } from '@sistema-barbearia/validators';
-
-import { PrismaBarbershopAdapter } from '@/src/infrastructure/database/PrismaBarbershopAdapter.js';
-import { ExemploService } from '@/src/domain/services/recurso/ExemploService.js';
+import { ExemploService } from '@/src/services/recurso/ExemploService.js';
 
 export class ExemploController {
   static async handle(req: Request, res: Response) {
     const body = ExemploSchema.parse(req.body);
 
-    const prismaBarbershopAdapter = new PrismaBarbershopAdapter();
-
-    const exemploService = new ExemploService(prismaBarbershopAdapter);
-
+    const exemploService = new ExemploService();
     const result = await exemploService.execute(body);
 
-    return res.status(200).json(result);
+    return res.status(201).json(result);
   }
 }
 ```
 
 ---
 
-### 6. Rota (`routes/`)
+### 6. Rota (`server/src/routes`)
 
 Adicionar a rota no arquivo de rotas do recurso correspondente em `routes/<recurso>Routes.ts`.
 
 ```typescript
-// routes/recursoRoutes.ts
+// server/src/routes/recursoRoutes.ts
 import { Router } from 'express';
-
-import { ExemploController } from '../infrastructure/http/recurso/ExemploController.js';
+import { ExemploController } from '../controllers/recurso/ExemploController.js';
 
 const router = Router();
 
@@ -204,22 +189,22 @@ O auto-loader em `routes/index.ts` registra automaticamente qualquer novo arquiv
 
 Os erros são capturados automaticamente pelo middleware `errorHandling`. Basta lançar:
 
-| Tipo de Erro                    | Onde Lançar                            | Exemplo                               |
-| ------------------------------- | -------------------------------------- | ------------------------------------- |
-| `AppError`                      | Service                                | `throw new AppError('Mensagem', 404)` |
-| `ZodError`                      | Controller (automático via `.parse()`) | Status 422 automático                 |
-| `PrismaClientKnownRequestError` | Adapter (automático)                   | Tratado no middleware                 |
+| Tipo de Erro                    | Onde Lançar                            | Exemplo                               | Status Retornado      |
+| ------------------------------- | -------------------------------------- | ------------------------------------- | --------------------- |
+| `AppError`                      | Service                                | `throw new AppError('Mensagem', 404)` | Conforme especificado |
+| `ZodError`                      | Controller (automático via `.parse()`) | Status 422 automático                 | 422 Unprocessable     |
+| `PrismaClientKnownRequestError` | Query banco (automático)               | Tratado no middleware                 | Tratado conforme erro |
 
 ---
 
 ## Checklist rápido
 
 - [ ] Schema Zod criado em `packages/validators/src/schemas/` e exportado no `index.ts`
-- [ ] Interface (Port) criada em `domain/repositories/` (se necessário)
-- [ ] Adapter criado em `infrastructure/database/` ou `infrastructure/Providers/` (se necessário)
-- [ ] Service criado em `domain/services/<recurso>/` com injeção de dependência
-- [ ] Controller criado em `infrastructure/http/<recurso>/` com método `static async handle`
-- [ ] Rota registrada em `routes/<recurso>Routes.ts` com export `{ baseUrl, router }`
+- [ ] Interface criada em `server/src/interfaces/` (se necessário)
+- [ ] Repositório criado/atualizado em `server/src/repositories/` (se necessário)
+- [ ] Service criado em `server/src/services/<recurso>/` instanciando o repositório diretamente no `execute()`
+- [ ] Controller criado em `server/src/controllers/<recurso>/` com método `static async handle` instanciando o service
+- [ ] Rota registrada em `server/src/routes/<recurso>Routes.ts` com export `{ baseUrl, router }`
 - [ ] Build do validators executado (se schema foi adicionado/alterado)
 
 ---
@@ -227,10 +212,7 @@ Os erros são capturados automaticamente pelo middleware `errorHandling`. Basta 
 ## Fluxo de dependência
 
 ```
-Rota → Controller → Service → Interface (Port)
-                        ↑              ↑
-                   Adapter ────────────┘
-                (implementa a interface)
+Rota → Controller → Service → Repository → Prisma Client
 ```
 
-**O domínio (Service) nunca conhece a infraestrutura.** Ele depende apenas de interfaces. O Controller é responsável por montar as dependências concretas e injetá-las no Service.
+A arquitetura ficou muito mais direta e simples! Sem o overhead de ports, adapters e interfaces para tudo. O Controller gerencia a validação de dados via Zod e despacha para o Service, que coordena as regras de negócio e utiliza diretamente os repositórios (que interagem com o banco via Prisma) e outras libs utilitárias concretas.

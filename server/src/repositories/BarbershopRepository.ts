@@ -83,6 +83,16 @@ export class BarbershopRepository {
           },
         },
       },
+      omit: {
+        id: true,
+        password: true,
+        createdAt: true,
+        updatedAt: true,
+        customerId: true,
+        status: true,
+        resetPasswordExpires: true,
+        resetPasswordToken: true,
+      },
     });
 
     return barbershop;
