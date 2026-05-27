@@ -53,7 +53,7 @@ enum Plan {
 }
 
 model OperatingTime {
-  id         Int    @id @default(autoincrement())
+  id         String @id @default(uuid())
   name       String
   start      String
   startLunch String
@@ -73,7 +73,7 @@ model Employee {
 
   barbershopId    Int
   barbershop      Barbershop    @relation(fields: [barbershopId], references: [id], onDelete: Cascade)
-  operatingTimeId Int
+  operatingTimeId String
   operatingTime   OperatingTime @relation(fields: [operatingTimeId], references: [id])
 
   createdAt DateTime @default(now())
