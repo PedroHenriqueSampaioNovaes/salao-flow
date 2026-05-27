@@ -25,6 +25,16 @@ export class UpdateBarbershopService {
 
     const { confirmPassword, ...updateData } = data;
 
+    if (updateData.slug) {
+      const slugExists = !!(await barbershopRepository.getBySlug(
+        updateData.slug,
+      ));
+
+      if (slugExists) {
+        throw new AppError('URL não permitida, escolha outra.', 409);
+      }
+    }
+
     if (updateData.password) {
       const salt = await bcrypt.genSalt(10);
       updateData.password = await bcrypt.hash(updateData.password, salt);
