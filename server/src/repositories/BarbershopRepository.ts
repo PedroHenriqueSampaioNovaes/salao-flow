@@ -1,7 +1,7 @@
 import { prisma } from '@/src/lib/prisma.js';
 import { Barbershop, Subscription } from '@/generated/prisma/client.js';
 
-import { CreateBarbershop } from '@/src/interfaces/Barbershop.js';
+import { CreateBarbershop } from '../interfaces/Barbershop.js';
 
 interface UpdateBarbershop extends Partial<Barbershop> {
   subscription: Partial<Subscription>;
@@ -17,7 +17,7 @@ export class BarbershopRepository {
         address: data.address,
         phone: data.phone,
         image: data.image,
-        slug: data.slug,
+        slug: data.slug!,
         subscription: {
           create: {
             plan: 'FREE',
