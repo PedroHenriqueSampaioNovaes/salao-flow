@@ -17,6 +17,7 @@ export class BarbershopRepository {
         address: data.address,
         phone: data.phone,
         image: data.image,
+        slug: data.slug,
         subscription: {
           create: {
             plan: 'FREE',
@@ -44,6 +45,14 @@ export class BarbershopRepository {
     const barbershop = await prisma.barbershop.findUnique({
       where: { email },
       include: { subscription: true },
+    });
+
+    return barbershop;
+  }
+
+  async getBySlug(slug: string) {
+    const barbershop = await prisma.barbershop.findUnique({
+      where: { slug },
     });
 
     return barbershop;
