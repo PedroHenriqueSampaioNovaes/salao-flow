@@ -53,12 +53,13 @@ enum Plan {
 }
 
 model OperatingTime {
-  id         String @id @default(uuid())
+  id         String  @id @default(uuid())
   name       String
   start      String
   startLunch String
   endLunch   String
   end        String
+  isDefault  Boolean @default(false)
 
   barbershopId Int
   barbershop   Barbershop @relation(fields: [barbershopId], references: [id])
