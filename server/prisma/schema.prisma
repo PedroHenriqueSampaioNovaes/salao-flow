@@ -17,7 +17,7 @@ model Barbershop {
   address              String
   phone                String
   status               Boolean   @default(true)
-  resetPasswordToken   String?
+  resetPasswordToken   String?   @unique
   resetPasswordExpires DateTime?
 
   createdAt DateTime @default(now())
@@ -29,10 +29,11 @@ model Barbershop {
   operatingTimes OperatingTime[]
 
   @@index([email])
+  @@index([resetPasswordToken])
 }
 
 model Subscription {
-  id      String @id @default(uuid())
+  id      String  @id @default(uuid())
   status  String
   plan    Plan
   priceId String?
