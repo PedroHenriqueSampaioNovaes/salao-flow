@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 
-import { JwtTokenAdapter } from '@/src/infrastructure/Providers/JwtTokenAdapter.js';
+import jwt from 'jsonwebtoken';
+
 import { AppError } from '@/src/errors/AppError.js';
 
 interface TokenPayload {
@@ -31,9 +32,10 @@ export function verifyToken(req: Request, _res: Response, next: NextFunction) {
   }
 
   try {
-    const jwtTokenAdapter = new JwtTokenAdapter();
-
-    const decoded = jwtTokenAdapter.verify(token) as TokenPayload;
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET as string,
+    ) as TokenPayload;
 
     req.barbershopId = decoded.id;
 

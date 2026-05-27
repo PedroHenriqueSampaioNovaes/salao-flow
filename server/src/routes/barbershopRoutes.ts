@@ -2,11 +2,11 @@ import { Router } from 'express';
 
 import { verifyToken } from '../middlewares/verifyToken.js';
 
-import { CreateBarbershopController } from '../infrastructure/http/barbershops/CreateBarbershopController.js';
-import { LoginBarbershopController } from '../infrastructure/http/barbershops/LoginBarbershopController.js';
-import { DetailsBarbershopController } from '../infrastructure/http/barbershops/DetailsBarbershopController.js';
-import { ForgotPasswordController } from '../infrastructure/http/barbershops/ForgotPasswordController.js';
-import { ResetPasswordController } from '../infrastructure/http/barbershops/ResetPasswordController.js';
+import { CreateBarbershopController } from '../controllers/barbershop/CreateBarbershopController.js';
+import { LoginBarbershopController } from '../controllers/barbershop/LoginBarbershopController.js';
+import { DetailsBarbershopController } from '../controllers/barbershop/DetailsBarbershopController.js';
+import { ForgotPasswordController } from '../controllers/barbershop/ForgotPasswordController.js';
+import { ResetPasswordController } from '../controllers/barbershop/ResetPasswordController.js';
 
 const router = Router();
 
