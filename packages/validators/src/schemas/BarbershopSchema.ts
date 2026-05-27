@@ -1,6 +1,6 @@
 import z from 'zod';
 
-export const BarbershopSchema = z
+export const CreateBarbershopSchema = z
   .object({
     name: z.string().min(3, 'Nome deve conter pelo menos 3 caracteres.'),
     email: z.email('E-mail inválido.'),
@@ -15,4 +15,4 @@ export const BarbershopSchema = z
     path: ['confirmPassword'],
   });
 
-export type BarbershopSchema = z.infer<typeof BarbershopSchema>;
+export type CreateBarbershopSchema = z.infer<typeof CreateBarbershopSchema>;
