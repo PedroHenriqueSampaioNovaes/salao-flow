@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-import { DetailsBarbershopService } from '@/src/services/barbershop/DetailsBarbershopController.js';
+import { DetailsBarbershopService } from '@/src/services/barbershop/DetailsBarbershopService.js';
 
 export class DetailsBarbershopController {
   static async handle(req: Request, res: Response) {
