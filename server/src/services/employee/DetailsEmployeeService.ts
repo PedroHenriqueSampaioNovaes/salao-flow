@@ -27,6 +27,10 @@ export class DetailsEmployeeService {
       throw new AppError('Funcionário não encontrado ou não existe.', 404);
     }
 
-    return employee;
+    return {
+      id: employee.id,
+      name: employee.name,
+      image: employee.image,
+    };
   }
 }
