@@ -62,7 +62,6 @@ export class BarbershopRepository {
   async getById(id: number) {
     const barbershop = await prisma.barbershop.findUnique({
       where: { id },
-      include: { operatingTimes: true, employees: true },
       omit: {
         password: true,
         updatedAt: true,

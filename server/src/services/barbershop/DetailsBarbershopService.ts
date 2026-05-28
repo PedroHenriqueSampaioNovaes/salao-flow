@@ -12,7 +12,7 @@ export class DetailsBarbershopService {
       throw new AppError('Barbearia não encontrada.', 404);
     }
 
-    const { id, employees, operatingTimes, ...data } = barbershop;
+    const { id, ...data } = barbershop;
 
     return data;
   }
