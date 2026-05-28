@@ -102,7 +102,7 @@ model Service {
 }
 
 model Appointment {
-  id    Int      @id @default(autoincrement())
+  id    String   @id @default(uuid())
   name  String
   email String
   phone String
