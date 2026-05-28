@@ -14,5 +14,10 @@ export const UpdateEmployeeSchema = EmployeeSchema.partial().extend({
   id: z.coerce.number('É obrigatório enviar o ID do funcionário.'),
 });
 
+export const DetailsEmployeeSchema = z.object({
+  id: z.coerce.number('É obrigatório enviar o ID do funcionário.'),
+});
+
 export type EmployeeSchema = z.infer<typeof EmployeeSchema>;
 export type UpdateEmployeeSchema = z.infer<typeof UpdateEmployeeSchema>;
+export type DetailsEmployeeSchema = z.infer<typeof DetailsEmployeeSchema>;

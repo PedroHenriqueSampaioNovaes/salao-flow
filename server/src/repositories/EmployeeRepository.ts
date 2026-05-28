@@ -32,6 +32,37 @@ export class EmployeeRepository {
       where: {
         id,
       },
+      omit: {
+        createdAt: true,
+        updatedAt: true,
+        barbershopId: true,
+        operatingTimeId: true,
+      },
+      include: {
+        operatingTime: {
+          omit: {
+            barbershopId: true,
+            isDefault: true,
+            id: true,
+          },
+        },
+        appointments: {
+          omit: {
+            id: true,
+            createdAt: true,
+            updatedAt: true,
+            employeeId: true,
+          },
+        },
+        services: {
+          omit: {
+            id: true,
+            barbershopId: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+        },
+      },
     });
 
     return employee;
