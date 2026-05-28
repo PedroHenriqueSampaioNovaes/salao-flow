@@ -37,6 +37,22 @@ export class EmployeeRepository {
     return employee;
   }
 
+  async listByBarbershopId(barbershopId: number) {
+    const employees = await prisma.employee.findMany({
+      where: {
+        barbershopId,
+      },
+      omit: {
+        barbershopId: true,
+        operatingTimeId: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    return employees;
+  }
+
   async update(data: UpdateEmployeeData) {
     const employee = await prisma.employee.update({
       where: {
