@@ -13,6 +13,6 @@ export class UpdateEmployeeController {
 
     const employee = await updateEmployeeService.execute(body, barbershopId);
 
-    return res.status(201).json(employee);
+    return res.status(200).json(employee);
   }
 }
