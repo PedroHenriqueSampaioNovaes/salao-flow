@@ -12,6 +12,8 @@ export class DetailsBarbershopService {
       throw new AppError('Barbearia não encontrada.', 404);
     }
 
-    return barbershop;
+    const { id, employees, operatingTimes, ...data } = barbershop;
+
+    return data;
   }
 }
