@@ -1,5 +1,7 @@
 import { prisma } from '@/src/lib/prisma.js';
 
+import { UpdateEmployeeData } from '../interfaces/Employee.js';
+
 interface CreateEmployeeData {
   name: string;
   image?: string;
@@ -14,6 +16,35 @@ export class EmployeeRepository {
         name: data.name,
         image: data.image,
         barbershopId: data.barbershopId,
+        operatingTimeId: data.operatingTimeId,
+      },
+      select: {
+        name: true,
+        image: true,
+      },
+    });
+
+    return employee;
+  }
+
+  async getById(id: number) {
+    const employee = await prisma.employee.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    return employee;
+  }
+
+  async update(data: UpdateEmployeeData) {
+    const employee = await prisma.employee.update({
+      where: {
+        id: data.id,
+      },
+      data: {
+        name: data.name,
+        image: data.image,
         operatingTimeId: data.operatingTimeId,
       },
       select: {
