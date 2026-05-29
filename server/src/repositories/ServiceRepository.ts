@@ -1,6 +1,9 @@
 import { prisma } from '@/src/lib/prisma.js';
 
-import { CreateServiceSchema } from '@sistema-barbearia/validators';
+import {
+  CreateServiceSchema,
+  UpdateServiceSchema,
+} from '@sistema-barbearia/validators';
 
 export class ServiceRepository {
   async create(
@@ -31,6 +34,31 @@ export class ServiceRepository {
   async getById(id: string) {
     const service = await prisma.service.findUnique({
       where: { id },
+    });
+
+    return service;
+  }
+
+  async update(
+    data: Omit<UpdateServiceSchema, 'employeeId'>,
+    employeeIds: number[],
+  ) {
+    const service = await prisma.service.update({
+      where: { id: data.id },
+      data: {
+        name: data.name,
+        price: data.price,
+        duration: data.duration,
+        status: data.status,
+        employees: {
+          set: employeeIds.map((id) => ({ id })),
+        },
+      },
+      omit: {
+        createdAt: true,
+        updatedAt: true,
+        barbershopId: true,
+      },
     });
 
     return service;
