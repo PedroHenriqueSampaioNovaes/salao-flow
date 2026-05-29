@@ -13,13 +13,17 @@ export class CreateServiceItemService {
     let employeeIds = data.employeeId ? [data.employeeId] : [];
 
     if (employeeIds.length === 1) {
-      const employee = await employeeRepository.getByBarbershopAndEmployeeId(
-        barbershopId,
-        employeeIds[0],
-      );
+      const employee = await employeeRepository.getById(employeeIds[0]);
 
       if (!employee) {
         throw new AppError('Funcionário não encontrado ou não existe', 404);
+      }
+
+      if (employee.barbershopId !== barbershopId) {
+        throw new AppError(
+          'Você não tem permissão para criar este serviço',
+          403,
+        );
       }
     } else {
       const employees =

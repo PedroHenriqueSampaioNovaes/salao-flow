@@ -10,12 +10,16 @@ export class UpdateEmployeeService {
     const employeeRepository = new EmployeeRepository();
     const operatingTimeRepository = new OperatingTimeRepository();
 
-    const employee = await employeeRepository.getByBarbershopAndEmployeeId(
-      barbershopId,
-      data.id,
-    );
+    const employee = await employeeRepository.getById(data.id);
     if (!employee) {
-      throw new AppError('Funcionário não encontrado ou não existe.', 403);
+      throw new AppError('Funcionário não encontrado ou não existe.', 404);
+    }
+
+    if (employee.barbershopId !== barbershopId) {
+      throw new AppError(
+        'Você não tem permissão para atualizar os dados deste funcionário.',
+        403,
+      );
     }
 
     if (data.operatingTimeId) {

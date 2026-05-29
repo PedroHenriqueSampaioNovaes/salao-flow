@@ -37,17 +37,6 @@ export class EmployeeRepository {
     return employee;
   }
 
-  async getByBarbershopAndEmployeeId(barbershopId: number, employeeId: number) {
-    const employee = await prisma.employee.findUnique({
-      where: {
-        id: employeeId,
-        barbershopId,
-      },
-    });
-
-    return employee;
-  }
-
   async listByBarbershopId(barbershopId: number) {
     const employees = await prisma.employee.findMany({
       where: {
