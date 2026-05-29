@@ -104,7 +104,6 @@ model Service {
 model Appointment {
   id    String   @id @default(uuid())
   name  String
-  email String
   phone String
   date  DateTime
   time  String
