@@ -1,1 +1,1 @@
-{"root":["./src/index.ts","./src/schemas/barbershopschema.ts","./src/schemas/employeeschema.ts","./src/schemas/forgotpasswordschema.ts","./src/schemas/loginschema.ts","./src/schemas/resetpasswordschema.ts","./src/schemas/updatebarbershopschema.ts"],"version":"6.0.3"}
+{"root":["./src/index.ts","./src/schemas/barbershopschema.ts","./src/schemas/employeeschema.ts","./src/schemas/forgotpasswordschema.ts","./src/schemas/loginschema.ts","./src/schemas/resetpasswordschema.ts","./src/schemas/serviceschema.ts","./src/schemas/updatebarbershopschema.ts"],"version":"6.0.3"}
