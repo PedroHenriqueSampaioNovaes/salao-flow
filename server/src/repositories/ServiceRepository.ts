@@ -27,4 +27,18 @@ export class ServiceRepository {
 
     return service;
   }
+
+  async getById(id: string) {
+    const service = await prisma.service.findUnique({
+      where: { id },
+    });
+
+    return service;
+  }
+
+  async delete(id: string) {
+    await prisma.service.delete({
+      where: { id },
+    });
+  }
 }
