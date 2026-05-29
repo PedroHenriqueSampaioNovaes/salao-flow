@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const ServiceSchema = z.object({
+export const ServiceSchema = z.object({
   name: z.string().min(1, 'Nome é obrigatório.'),
   price: z
     .string('Obrigatório definir o preço do serviço.')
@@ -18,11 +18,9 @@ const ServiceSchema = z.object({
     .optional(),
 });
 
-export const CreateServiceSchema = ServiceSchema;
-
 export const UpdateServiceSchema = ServiceSchema.partial().extend({
   id: z.uuid('É obrigatório enviar o ID do serviço.'),
 });
 
-export type CreateServiceSchema = z.infer<typeof CreateServiceSchema>;
+export type ServiceSchema = z.infer<typeof ServiceSchema>;
 export type UpdateServiceSchema = z.infer<typeof UpdateServiceSchema>;

@@ -1,12 +1,12 @@
 import { EmployeeRepository } from '@/src/repositories/EmployeeRepository.js';
 import { ServiceRepository } from '@/src/repositories/ServiceRepository.js';
 
-import { CreateServiceSchema } from '@sistema-barbearia/validators';
+import { ServiceSchema } from '@sistema-barbearia/validators';
 
 import { AppError } from '@/src/errors/AppError.js';
 
 export class CreateServiceItemService {
-  async execute(data: CreateServiceSchema, barbershopId: number) {
+  async execute(data: ServiceSchema, barbershopId: number) {
     const employeeRepository = new EmployeeRepository();
     const serviceRepository = new ServiceRepository();
 
@@ -32,8 +32,10 @@ export class CreateServiceItemService {
       employeeIds = employees.map((e) => e.id);
     }
 
+    const { employeeId, ...serviceData } = data;
+
     const service = await serviceRepository.create(
-      data,
+      serviceData,
       employeeIds,
       barbershopId,
     );

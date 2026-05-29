@@ -1,13 +1,13 @@
 import { prisma } from '@/src/lib/prisma.js';
 
 import {
-  CreateServiceSchema,
+  ServiceSchema,
   UpdateServiceSchema,
 } from '@sistema-barbearia/validators';
 
 export class ServiceRepository {
   async create(
-    data: CreateServiceSchema,
+    data: Omit<ServiceSchema, 'employeeId'>,
     employeeIds: number[],
     barbershopId: number,
   ) {
