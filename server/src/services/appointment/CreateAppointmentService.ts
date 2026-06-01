@@ -99,14 +99,12 @@ export class CreateAppointmentService {
       (service) => service.barbershopId !== barbershopId,
     );
 
-    if (hasInvalidService) {
-      throw notFoundError;
-    }
+    if (hasInvalidService) throw notFoundError;
 
     return services;
   }
 
-  private convertTimeToMinutes(time: string): number {
+  private convertTimeToMinutes(time: string) {
     const [hours, minutes] = time.split(':').map(Number);
     return hours * 60 + minutes;
   }
@@ -115,7 +113,7 @@ export class CreateAppointmentService {
     appointmentStart: number,
     appointmentEnd: number,
     operatingTime: OperatingTime,
-  ): void {
+  ) {
     const startShift = this.convertTimeToMinutes(operatingTime.start);
     const endShift = this.convertTimeToMinutes(operatingTime.end);
     const startLunch = this.convertTimeToMinutes(operatingTime.startLunch);
@@ -139,7 +137,7 @@ export class CreateAppointmentService {
     date: Date,
     newStart: number,
     newEnd: number,
-  ): Promise<void> {
+  ) {
     const reservedTimesOfDay =
       await this.appointmentRepository.getByDateAndEmployeeId(date, employeeId);
 
