@@ -7,3 +7,4 @@ export * from './schemas/LoginSchema.js';
 export * from './schemas/ForgotPasswordSchema.js';
 export * from './schemas/ResetPasswordSchema.js';
 export * from './schemas/ServiceSchema.js';
+export * from './schemas/AppointmentSchema.js';

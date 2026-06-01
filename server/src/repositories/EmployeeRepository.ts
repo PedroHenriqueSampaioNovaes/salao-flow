@@ -37,6 +37,16 @@ export class EmployeeRepository {
     return employee;
   }
 
+  async getByIdWithOperatingTime(id: number) {
+    const employee = await prisma.employee.findUnique({
+      where: { id },
+      include: {
+        operatingTime: true,
+      },
+    });
+    return employee;
+  }
+
   async listByBarbershopId(barbershopId: number) {
     const employees = await prisma.employee.findMany({
       where: {

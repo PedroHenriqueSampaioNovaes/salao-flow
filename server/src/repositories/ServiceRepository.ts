@@ -39,6 +39,18 @@ export class ServiceRepository {
     return service;
   }
 
+  async listByIds(ids: string[]) {
+    const services = await prisma.service.findMany({
+      where: { id: { in: ids } },
+      omit: {
+        createdAt: false,
+        updatedAt: false,
+      },
+    });
+
+    return services;
+  }
+
   async update(
     data: Omit<UpdateServiceSchema, 'employeeId'>,
     employeeIds: number[],
