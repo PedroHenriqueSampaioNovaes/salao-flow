@@ -28,6 +28,7 @@ model Barbershop {
   services       Service[]
   subscription   Subscription?
   operatingTimes OperatingTime[]
+  appointments   Appointment[]
 
   @@index([email])
   @@index([resetPasswordToken])
@@ -102,17 +103,22 @@ model Service {
 }
 
 model Appointment {
-  id    String   @id @default(uuid())
-  name  String
-  phone String
-  date  DateTime
-  time  String
+  id                   String   @id @default(uuid())
+  name                 String
+  phone                String
+  date                 DateTime
+  time                 String
+  totalServiceDuration Int
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  employeeId Int
-  employee   Employee @relation(fields: [employeeId], references: [id])
+  employeeId   Int
+  employee     Employee   @relation(fields: [employeeId], references: [id])
+  barbershopId Int
+  barbershop   Barbershop @relation(fields: [barbershopId], references: [id])
 
   services Service[]
+
+  @@index([date])
 }
