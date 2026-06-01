@@ -57,6 +57,27 @@ export class AppointmentRepository {
     return appointments;
   }
 
+  async getAppointmentsForMonth(date: Date, barbershopId: number) {
+    const startOfMonth = new Date(date);
+    startOfMonth.setUTCDate(1);
+    startOfMonth.setUTCHours(0, 0, 0, 0);
+
+    const endOfMonth = new Date(date);
+    endOfMonth.setUTCMonth(startOfMonth.getUTCMonth() + 1);
+
+    const appointments = await prisma.appointment.findMany({
+      where: {
+        date: {
+          gte: startOfMonth,
+          lt: endOfMonth,
+        },
+        barbershopId,
+      },
+    });
+
+    return appointments;
+  }
+
   async delete(id: string) {
     await prisma.appointment.delete({
       where: { id },
