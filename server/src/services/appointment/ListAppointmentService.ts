@@ -21,6 +21,10 @@ export class ListAppointmentService {
       throw new AppError('Nenhum agendamento encontrado.', 403);
     }
 
-    return appointments;
+    const listAppointment = appointments.map(
+      ({ barbershopId, ...appointment }) => appointment,
+    );
+
+    return listAppointment;
   }
 }

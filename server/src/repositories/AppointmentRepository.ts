@@ -73,6 +73,12 @@ export class AppointmentRepository {
         },
         barbershopId,
       },
+      omit: {
+        createdAt: true,
+        updatedAt: true,
+        employeeId: true,
+        totalServiceDuration: true,
+      },
     });
 
     return appointments;
