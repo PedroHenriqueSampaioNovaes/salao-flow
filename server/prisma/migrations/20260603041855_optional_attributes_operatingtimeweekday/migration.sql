@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "OperatingTimeWeekday" ALTER COLUMN "start" DROP NOT NULL,
+ALTER COLUMN "startLunch" DROP NOT NULL,
+ALTER COLUMN "endLunch" DROP NOT NULL,
+ALTER COLUMN "end" DROP NOT NULL;

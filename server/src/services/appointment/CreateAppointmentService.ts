@@ -7,15 +7,11 @@ import { EmployeeRepository } from '@/src/repositories/EmployeeRepository.js';
 import { ServiceRepository } from '@/src/repositories/ServiceRepository.js';
 import { AppointmentRepository } from '@/src/repositories/AppointmentRepository.js';
 import { CustomerRepository } from '@/src/repositories/CustomerRepository.js';
+import { BarbershopRepository } from '@/src/repositories/BarbershopRepository.js';
+
+import { EmployeeScheduleWeekday } from '@/src/interfaces/Employee.js';
 
 import { AppError } from '@/src/errors/AppError.js';
-
-interface OperatingTime {
-  start: string;
-  startLunch: string;
-  endLunch: string;
-  end: string;
-}
 
 interface CreateAppointmentAndCustomerData
   extends CreateAppointmentSchema, CreateCustomerSchema {}
@@ -23,20 +19,26 @@ interface CreateAppointmentAndCustomerData
 export class CreateAppointmentService {
   constructor(
     private readonly employeeRepository = new EmployeeRepository(),
+    private readonly barbershopRepository = new BarbershopRepository(),
     private readonly serviceRepository = new ServiceRepository(),
     private readonly appointmentRepository = new AppointmentRepository(),
     private readonly customerRepository = new CustomerRepository(),
   ) {}
 
-  async execute(data: CreateAppointmentAndCustomerData, barbershopId: number) {
+  async execute(data: CreateAppointmentAndCustomerData) {
+    const barbershop = await this.barbershopRepository.getBySlug(
+      data.barbershopSlug,
+    );
+    if (!barbershop) throw new AppError('Barbearia não encontrada.');
+
     const employee = await this.getAndValidateEmployee(
       data.employeeId,
-      barbershopId,
+      barbershop.id,
     );
 
     const services = await this.getAndValidateServices(
       data.serviceIds,
-      barbershopId,
+      barbershop.id,
     );
 
     const totalServiceDuration = services.reduce(
@@ -48,10 +50,11 @@ export class CreateAppointmentService {
     const appointmentEndMinutes =
       appointmentStartMinutes + totalServiceDuration;
 
-    this.validateWorkingHours(
+    this.validateEmployeeSchedule(
+      data.date,
       appointmentStartMinutes,
       appointmentEndMinutes,
-      employee.operatingTime,
+      employee.employeeSchedule.employeeScheduleWeekdays,
     );
 
     await this.validateNoScheduleConflicts(
@@ -61,7 +64,7 @@ export class CreateAppointmentService {
       appointmentEndMinutes,
     );
 
-    const customer = await this.getOrCreateOrUpdateCustomer(data, barbershopId);
+    const customer = await this.getOrCreateOrUpdateCustomer(data, barbershop.id);
 
     return this.appointmentRepository.create(
       {
@@ -72,7 +75,7 @@ export class CreateAppointmentService {
         customerId: customer.id,
         serviceIds: data.serviceIds,
       },
-      barbershopId,
+      barbershop.id,
     );
   }
 
@@ -109,7 +112,7 @@ export class CreateAppointmentService {
     barbershopId: number,
   ) {
     const employee =
-      await this.employeeRepository.getByIdWithOperatingTime(employeeId);
+      await this.employeeRepository.getByIdWithEmployeeSchedule(employeeId);
 
     if (!employee || employee.barbershopId !== barbershopId) {
       throw new AppError('Funcionário não encontrado.');
@@ -146,21 +149,40 @@ export class CreateAppointmentService {
     return hours * 60 + minutes;
   }
 
-  private validateWorkingHours(
-    appointmentStart: number,
-    appointmentEnd: number,
-    operatingTime: OperatingTime,
+  private validateEmployeeSchedule(
+    appointmentDay: Date,
+    appointmentStartTime: number,
+    appointmentEndTime: number,
+    employeeSchedule: EmployeeScheduleWeekday[],
   ) {
-    const startShift = this.convertTimeToMinutes(operatingTime.start);
-    const endShift = this.convertTimeToMinutes(operatingTime.end);
-    const startLunch = this.convertTimeToMinutes(operatingTime.startLunch);
-    const endLunch = this.convertTimeToMinutes(operatingTime.endLunch);
+    const weekday = appointmentDay.getUTCDay();
+
+    const employeeScheduleWeekday = employeeSchedule.find(
+      (schedule) => schedule.weekday === weekday,
+    );
+
+    if (!employeeScheduleWeekday || !employeeScheduleWeekday.is_working_day) {
+      throw new AppError(
+        'Horário indisponível. Escolha outro horário ou atualize a página para obter os dados mais recentes.',
+      );
+    }
+
+    const startShift = this.convertTimeToMinutes(
+      employeeScheduleWeekday.start!,
+    );
+    const endShift = this.convertTimeToMinutes(employeeScheduleWeekday.end!);
+    const startLunch = this.convertTimeToMinutes(
+      employeeScheduleWeekday.startLunch!,
+    );
+    const endLunch = this.convertTimeToMinutes(
+      employeeScheduleWeekday.endLunch!,
+    );
 
     const isOutsideShift =
-      appointmentStart < startShift || appointmentEnd > endShift;
+      appointmentStartTime < startShift || appointmentEndTime > endShift;
 
     const overlapsWithLunch =
-      appointmentStart < endLunch && appointmentEnd > startLunch;
+      appointmentStartTime < endLunch && appointmentEndTime > startLunch;
 
     if (isOutsideShift || overlapsWithLunch) {
       throw new AppError(

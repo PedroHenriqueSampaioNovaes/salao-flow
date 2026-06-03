@@ -1,5 +1,5 @@
 import { EmployeeRepository } from '@/src/repositories/EmployeeRepository.js';
-import { OperatingTimeRepository } from '@/src/repositories/OperatingTimeRepository.js';
+import { EmployeeScheduleRepository } from '@/src/repositories/EmployeeScheduleRepository.js';
 
 import { EmployeeSchema } from '@sistema-barbearia/validators';
 
@@ -8,13 +8,13 @@ import { AppError } from '@/src/errors/AppError.js';
 export class CreateEmployeeService {
   async execute(data: EmployeeSchema, barbershopId: number) {
     const employeeRepository = new EmployeeRepository();
-    const operatingTimeRepository = new OperatingTimeRepository();
+    const employeeScheduleRepository = new EmployeeScheduleRepository();
 
-    const operatingTimeExists = await operatingTimeRepository.getById(
-      data.operatingTimeId,
+    const employeeScheduleExists = await employeeScheduleRepository.getById(
+      data.employeeScheduleId,
     );
 
-    if (!operatingTimeExists) {
+    if (!employeeScheduleExists) {
       throw new AppError(
         'Horário de funcionamento não encontrado ou não existe.',
         404,
@@ -29,7 +29,7 @@ export class CreateEmployeeService {
       name: data.name,
       image,
       barbershopId,
-      operatingTimeId: data.operatingTimeId,
+      employeeScheduleId: data.employeeScheduleId,
     });
 
     return employee;

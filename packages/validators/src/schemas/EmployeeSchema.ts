@@ -5,7 +5,7 @@ export const EmployeeSchema = z.object({
     .string('Inserir o nome é obrigatório.')
     .min(3, 'Nome deve conter pelo menos 3 caracteres.'),
   image: z.string().optional(),
-  operatingTimeId: z.uuid(
+  employeeScheduleId: z.uuid(
     'É obrigatório definir um expediente para este funcionário.',
   ),
 });
