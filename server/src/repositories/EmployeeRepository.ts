@@ -6,7 +6,7 @@ interface CreateEmployeeData {
   name: string;
   image?: string;
   barbershopId: number;
-  operatingTimeId: string;
+  employeeScheduleId: string;
 }
 
 export class EmployeeRepository {
@@ -16,7 +16,7 @@ export class EmployeeRepository {
         name: data.name,
         image: data.image,
         barbershopId: data.barbershopId,
-        operatingTimeId: data.operatingTimeId,
+        employeeScheduleId: data.employeeScheduleId,
       },
       select: {
         name: true,
@@ -37,11 +37,15 @@ export class EmployeeRepository {
     return employee;
   }
 
-  async getByIdWithOperatingTime(id: number) {
+  async getByIdWithEmployeeSchedule(id: number) {
     const employee = await prisma.employee.findUnique({
       where: { id },
       include: {
-        operatingTime: true,
+        employeeSchedule: {
+          include: {
+            employeeScheduleWeekdays: true,
+          },
+        },
       },
     });
     return employee;
@@ -54,7 +58,7 @@ export class EmployeeRepository {
       },
       omit: {
         barbershopId: true,
-        operatingTimeId: true,
+        employeeScheduleId: true,
         createdAt: true,
         updatedAt: true,
       },
@@ -71,7 +75,7 @@ export class EmployeeRepository {
       data: {
         name: data.name,
         image: data.image,
-        operatingTimeId: data.operatingTimeId,
+        employeeScheduleId: data.employeeScheduleId,
       },
       select: {
         name: true,

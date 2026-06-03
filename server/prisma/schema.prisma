@@ -27,7 +27,7 @@ model Barbershop {
   employees         Employee[]
   services          Service[]
   subscription      Subscription?
-  operatingTimes    OperatingTime[]
+  employeeSchedules EmployeeSchedule[]
   appointments      Appointment[]
   appointmentBlocks AppointmentBlocking[]
   customers         Customer[]
@@ -55,19 +55,30 @@ enum Plan {
   PROFISSIONAL
 }
 
-model OperatingTime {
-  id         String  @id @default(uuid())
-  name       String
-  start      String
-  startLunch String
-  endLunch   String
-  end        String
-  isDefault  Boolean @default(false)
+model EmployeeSchedule {
+  id        String  @id @default(uuid())
+  name      String
+  isDefault Boolean @default(false)
 
   barbershopId Int
   barbershop   Barbershop @relation(fields: [barbershopId], references: [id])
 
-  employee Employee[]
+  employee                 Employee[]
+  employeeScheduleWeekdays EmployeeScheduleWeekday[]
+}
+
+model EmployeeScheduleWeekday {
+  id                 String           @id @default(uuid())
+  employeeScheduleId String
+  employeeSchedule   EmployeeSchedule @relation(fields: [employeeScheduleId], references: [id], onDelete: Cascade)
+  weekday            Int
+  is_working_day     Boolean          @default(true)
+  start              String?
+  startLunch         String?
+  endLunch           String?
+  end                String?
+
+  @@unique([weekday, employeeScheduleId])
 }
 
 model Employee {
@@ -75,10 +86,10 @@ model Employee {
   name  String
   image String?
 
-  barbershopId    Int
-  barbershop      Barbershop    @relation(fields: [barbershopId], references: [id], onDelete: Cascade)
-  operatingTimeId String
-  operatingTime   OperatingTime @relation(fields: [operatingTimeId], references: [id])
+  barbershopId       Int
+  barbershop         Barbershop       @relation(fields: [barbershopId], references: [id], onDelete: Cascade)
+  employeeScheduleId String
+  employeeSchedule   EmployeeSchedule @relation(fields: [employeeScheduleId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

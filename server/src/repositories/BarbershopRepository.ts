@@ -7,6 +7,14 @@ interface UpdateBarbershop extends Partial<Barbershop> {
   subscription: Partial<Subscription>;
 }
 
+const employeeScheduleWeekdays = Array.from({ length: 7 }).map((_, index) => ({
+  weekday: index,
+  start: '08:00',
+  startLunch: '12:00',
+  endLunch: '13:00',
+  end: '18:00',
+}));
+
 export class BarbershopRepository {
   async create(data: CreateBarbershop) {
     const barbershop = await prisma.barbershop.create({
@@ -24,15 +32,14 @@ export class BarbershopRepository {
             status: 'ACTIVE',
           },
         },
-        operatingTimes: {
+        employeeSchedules: {
           create: [
             {
-              name: 'Horário Padrão',
-              start: '08:00',
-              startLunch: '12:00',
-              endLunch: '13:00',
-              end: '18:00',
+              name: 'Horários de Expediente Padrão',
               isDefault: true,
+              employeeScheduleWeekdays: {
+                create: employeeScheduleWeekdays,
+              },
             },
           ],
         },

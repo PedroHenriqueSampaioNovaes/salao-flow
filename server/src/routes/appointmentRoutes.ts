@@ -8,7 +8,7 @@ import { DeleteAppointmentController } from '../controllers/appointment/DeleteAp
 
 const router = Router();
 
-router.post('/', verifyToken, CreateAppointmentController.handle);
+router.post('/', CreateAppointmentController.handle);
 
 router.get('/', verifyToken, ListAppointmentController.handle);
 

@@ -1,5 +1,5 @@
 import { EmployeeRepository } from '@/src/repositories/EmployeeRepository.js';
-import { OperatingTimeRepository } from '@/src/repositories/OperatingTimeRepository.js';
+import { EmployeeScheduleRepository } from '@/src/repositories/EmployeeScheduleRepository.js';
 
 import { UpdateEmployeeData } from '@/src/interfaces/Employee.js';
 
@@ -8,7 +8,7 @@ import { AppError } from '@/src/errors/AppError.js';
 export class UpdateEmployeeService {
   async execute(data: UpdateEmployeeData, barbershopId: number) {
     const employeeRepository = new EmployeeRepository();
-    const operatingTimeRepository = new OperatingTimeRepository();
+    const employeeScheduleRepository = new EmployeeScheduleRepository();
 
     const employee = await employeeRepository.getById(data.id);
     if (!employee) {
@@ -22,12 +22,10 @@ export class UpdateEmployeeService {
       );
     }
 
-    if (data.operatingTimeId) {
-      const operatingTimeExists = !!(await operatingTimeRepository.getById(
-        data.operatingTimeId,
-      ));
+    if (data.employeeScheduleId) {
+      const employeeScheduleExists = !!(await employeeScheduleRepository.getById(data.employeeScheduleId));
 
-      if (!operatingTimeExists) {
+      if (!employeeScheduleExists) {
         throw new AppError(
           'Horário de funcionamento não encontrado ou não existe.',
           404,
@@ -43,7 +41,7 @@ export class UpdateEmployeeService {
       id: data.id,
       name: data.name,
       image,
-      operatingTimeId: data.operatingTimeId,
+      employeeScheduleId: data.employeeScheduleId,
     });
 
     return employeeUpdated;

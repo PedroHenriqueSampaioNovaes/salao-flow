@@ -12,14 +12,10 @@ export class CreateAppointmentController {
     const body = CreateAppointmentSchema.extend(
       CreateCustomerSchema.shape,
     ).parse(req.body);
-    const barbershopId = Number(req.barbershopId);
 
     const createAppointmentService = new CreateAppointmentService();
 
-    const appointment = await createAppointmentService.execute(
-      body,
-      barbershopId,
-    );
+    const appointment = await createAppointmentService.execute(body);
 
     return res.status(201).json(appointment);
   }
