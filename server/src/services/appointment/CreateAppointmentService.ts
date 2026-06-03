@@ -64,7 +64,10 @@ export class CreateAppointmentService {
       appointmentEndMinutes,
     );
 
-    const customer = await this.getOrCreateOrUpdateCustomer(data, barbershop.id);
+    const customer = await this.getOrCreateOrUpdateCustomer(
+      data,
+      barbershop.id,
+    );
 
     return this.appointmentRepository.create(
       {
@@ -161,7 +164,7 @@ export class CreateAppointmentService {
       (schedule) => schedule.weekday === weekday,
     );
 
-    if (!employeeScheduleWeekday || !employeeScheduleWeekday.is_working_day) {
+    if (!employeeScheduleWeekday || !employeeScheduleWeekday.isWorkingDay) {
       throw new AppError(
         'Horário indisponível. Escolha outro horário ou atualize a página para obter os dados mais recentes.',
       );
