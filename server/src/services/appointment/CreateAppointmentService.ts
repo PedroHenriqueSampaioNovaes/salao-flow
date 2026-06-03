@@ -1,8 +1,12 @@
-import { CreateAppointmentSchema } from '@sistema-barbearia/validators';
+import {
+  CreateAppointmentSchema,
+  CreateCustomerSchema,
+} from '@sistema-barbearia/validators';
 
 import { EmployeeRepository } from '@/src/repositories/EmployeeRepository.js';
 import { ServiceRepository } from '@/src/repositories/ServiceRepository.js';
 import { AppointmentRepository } from '@/src/repositories/AppointmentRepository.js';
+import { CustomerRepository } from '@/src/repositories/CustomerRepository.js';
 
 import { AppError } from '@/src/errors/AppError.js';
 
@@ -13,14 +17,18 @@ interface OperatingTime {
   end: string;
 }
 
+interface CreateAppointmentAndCustomerData
+  extends CreateAppointmentSchema, CreateCustomerSchema {}
+
 export class CreateAppointmentService {
   constructor(
     private readonly employeeRepository = new EmployeeRepository(),
     private readonly serviceRepository = new ServiceRepository(),
     private readonly appointmentRepository = new AppointmentRepository(),
+    private readonly customerRepository = new CustomerRepository(),
   ) {}
 
-  async execute(data: CreateAppointmentSchema, barbershopId: number) {
+  async execute(data: CreateAppointmentAndCustomerData, barbershopId: number) {
     const employee = await this.getAndValidateEmployee(
       data.employeeId,
       barbershopId,
@@ -53,16 +61,45 @@ export class CreateAppointmentService {
       appointmentEndMinutes,
     );
 
+    const customer = await this.getOrCreateOrUpdateCustomer(data, barbershopId);
+
     return this.appointmentRepository.create(
       {
-        name: data.name,
         date: data.date,
-        phone: data.phone,
         time: data.time,
         totalServiceDuration,
         employeeId: data.employeeId,
+        customerId: customer.id,
         serviceIds: data.serviceIds,
       },
+      barbershopId,
+    );
+  }
+
+  private async getOrCreateOrUpdateCustomer(
+    data: CreateCustomerSchema,
+    barbershopId: number,
+  ) {
+    const customer = await this.customerRepository.getByPhone(
+      data.phone,
+      barbershopId,
+    );
+
+    if (customer) {
+      if (customer.isBlocked) {
+        throw new AppError('Não foi possível reservar o horário.');
+      }
+
+      return this.customerRepository.update({
+        id: customer.id,
+        name: data.name,
+        phone: data.phone,
+        email: data.email,
+      });
+    }
+
+    return this.customerRepository.create(
+      { name: data.name, phone: data.phone, email: data.email },
       barbershopId,
     );
   }

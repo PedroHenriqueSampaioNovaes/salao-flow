@@ -2,25 +2,26 @@ import { prisma } from '@/src/lib/prisma.js';
 
 import { CreateAppointmentSchema } from '@sistema-barbearia/validators';
 
-interface CreateAppointmentData extends CreateAppointmentSchema {
+interface CreateAppointment extends CreateAppointmentSchema {
   totalServiceDuration: number;
+  customerId: number;
 }
 
 export class AppointmentRepository {
-  async create(data: CreateAppointmentData, barbershopId: number) {
+  async create(data: CreateAppointment, barbershopId: number) {
     const appointment = await prisma.appointment.create({
       data: {
-        name: data.name,
-        phone: data.phone,
         date: data.date,
         time: data.time,
         barbershopId,
         employeeId: data.employeeId,
         totalServiceDuration: data.totalServiceDuration,
+        customerId: data.customerId,
+        services: {
+          connect: data.serviceIds.map((id) => ({ id })),
+        },
       },
       select: {
-        name: true,
-        phone: true,
         date: true,
         time: true,
       },
