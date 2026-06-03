@@ -72,7 +72,7 @@ model EmployeeScheduleWeekday {
   employeeScheduleId String
   employeeSchedule   EmployeeSchedule @relation(fields: [employeeScheduleId], references: [id], onDelete: Cascade)
   weekday            Int
-  is_working_day     Boolean          @default(true)
+  isWorkingDay       Boolean          @default(true)
   start              String?
   startLunch         String?
   endLunch           String?
