@@ -24,11 +24,13 @@ model Barbershop {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  employees      Employee[]
-  services       Service[]
-  subscription   Subscription?
-  operatingTimes OperatingTime[]
-  appointments   Appointment[]
+  employees         Employee[]
+  services          Service[]
+  subscription      Subscription?
+  operatingTimes    OperatingTime[]
+  appointments      Appointment[]
+  appointmentBlocks AppointmentBlocking[]
+  customers         Customer[]
 
   @@index([email])
   @@index([resetPasswordToken])
@@ -81,8 +83,26 @@ model Employee {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  services     Service[]
+  services          Service[]
+  appointments      Appointment[]
+  appointmentBlocks AppointmentBlocking[]
+}
+
+model Customer {
+  id           Int           @id @default(autoincrement())
+  name         String
+  phone        String
+  email        String?       @unique
+  qtdVisit     Int           @default(1)
+  isBlocked    Boolean       @default(false)
   appointments Appointment[]
+  barbershopId Int
+  barbershop   Barbershop    @relation(fields: [barbershopId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([phone, barbershopId])
 }
 
 model Service {
@@ -104,8 +124,6 @@ model Service {
 
 model Appointment {
   id                   String   @id @default(uuid())
-  name                 String
-  phone                String
   date                 DateTime
   time                 String
   totalServiceDuration Int
@@ -117,8 +135,24 @@ model Appointment {
   employee     Employee   @relation(fields: [employeeId], references: [id])
   barbershopId Int
   barbershop   Barbershop @relation(fields: [barbershopId], references: [id])
+  customerId   Int
+  customer     Customer   @relation(fields: [customerId], references: [id])
 
   services Service[]
 
   @@index([date])
+}
+
+model AppointmentBlocking {
+  id           String     @id @default(uuid())
+  initialDate  DateTime
+  finalDate    DateTime
+  initialTime  String
+  finalTime    String
+  barbershopId Int
+  barbershop   Barbershop @relation(fields: [barbershopId], references: [id])
+  employeeId   Int
+  employee     Employee   @relation(fields: [employeeId], references: [id])
+
+  @@index([initialDate])
 }
