@@ -13,7 +13,7 @@ export interface EmployeeSchedule {
 
 export interface EmployeeScheduleWeekday {
   weekday: number;
-  is_working_day: boolean;
+  isWorkingDay: boolean;
   start: string | null;
   startLunch: string | null;
   endLunch: string | null;
