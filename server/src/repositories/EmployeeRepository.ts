@@ -7,6 +7,7 @@ interface CreateEmployeeData {
   image?: string;
   barbershopId: number;
   employeeScheduleId: string;
+  serviceIds: string[];
 }
 
 export class EmployeeRepository {
@@ -17,6 +18,11 @@ export class EmployeeRepository {
         image: data.image,
         barbershopId: data.barbershopId,
         employeeScheduleId: data.employeeScheduleId,
+        services: {
+          connect: data.serviceIds.map((id) => ({
+            id,
+          })),
+        },
       },
       select: {
         name: true,

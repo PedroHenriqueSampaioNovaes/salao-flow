@@ -1,5 +1,6 @@
 import { EmployeeRepository } from '@/src/repositories/EmployeeRepository.js';
 import { EmployeeScheduleRepository } from '@/src/repositories/EmployeeScheduleRepository.js';
+import { ServiceRepository } from '@/src/repositories/ServiceRepository.js';
 
 import { EmployeeSchema } from '@sistema-barbearia/validators';
 
@@ -9,6 +10,7 @@ export class CreateEmployeeService {
   async execute(data: EmployeeSchema, barbershopId: number) {
     const employeeRepository = new EmployeeRepository();
     const employeeScheduleRepository = new EmployeeScheduleRepository();
+    const serviceRepository = new ServiceRepository();
 
     const employeeScheduleExists = await employeeScheduleRepository.getById(
       data.employeeScheduleId,
@@ -21,6 +23,9 @@ export class CreateEmployeeService {
       );
     }
 
+    const services =
+      await serviceRepository.getServicesAvailableToAllEmployees(barbershopId);
+
     const image =
       data.image ||
       `https://ui-avatars.com/api/?name=${data.name}&size=128&rounded=true`;
@@ -30,6 +35,7 @@ export class CreateEmployeeService {
       image,
       barbershopId,
       employeeScheduleId: data.employeeScheduleId,
+      serviceIds: services.map((service) => service.id),
     });
 
     return employee;
