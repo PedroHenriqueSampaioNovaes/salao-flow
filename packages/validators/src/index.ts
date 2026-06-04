@@ -9,3 +9,4 @@ export * from './schemas/ResetPasswordSchema.js';
 export * from './schemas/ServiceSchema.js';
 export * from './schemas/AppointmentSchema.js';
 export * from './schemas/CustomerSchema.js';
+export * from './schemas/EmployeeScheduleSchema.js';
