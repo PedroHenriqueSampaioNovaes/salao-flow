@@ -3,7 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "server": "npm run dev --workspace=server"
+    "server": "npm run dev --workspace=server",
+    "build:validators": "npm run build --workspace=@sistema-barbearia/validators",
+    "prisma:generate": "npx prisma generate --schema=server/prisma/schema.prisma",
+    "build:server": "npm run build --workspace=server",
+    "build": "npm run build:validators && npm run prisma:generate && npm run build:server",
+    "prepare": "husky"
   },
   "keywords": [],
   "author": "",
@@ -13,5 +18,8 @@
     "client",
     "server",
     "packages/*"
-  ]
+  ],
+  "devDependencies": {
+    "husky": "^9.1.7"
+  }
 }
