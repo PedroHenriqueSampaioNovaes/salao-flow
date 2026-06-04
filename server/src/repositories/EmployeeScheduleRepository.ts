@@ -42,6 +42,31 @@ export class EmployeeScheduleRepository {
   async getById(id: string) {
     const employeeSchedule = await prisma.employeeSchedule.findUnique({
       where: { id },
+      include: {
+        employeeScheduleWeekdays: {
+          omit: {
+            employeeScheduleId: true,
+          },
+        },
+      },
+    });
+
+    return employeeSchedule;
+  }
+
+  async listByBarbershopId(barbershopId: number) {
+    const employeeSchedule = await prisma.employeeSchedule.findMany({
+      where: { barbershopId },
+      include: {
+        employeeScheduleWeekdays: {
+          omit: {
+            employeeScheduleId: true,
+          },
+        },
+      },
+      omit: {
+        isDefault: true,
+      },
     });
 
     return employeeSchedule;
