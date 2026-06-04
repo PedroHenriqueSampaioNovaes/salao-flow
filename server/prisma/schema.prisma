@@ -117,11 +117,12 @@ model Customer {
 }
 
 model Service {
-  id       String  @id @default(uuid())
-  name     String
-  price    Int
-  duration Int
-  status   Boolean @default(true)
+  id                   String  @id @default(uuid())
+  name                 String
+  price                Int
+  duration             Int
+  status               Boolean @default(true)
+  assignToAllEmployees Boolean @default(true)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
