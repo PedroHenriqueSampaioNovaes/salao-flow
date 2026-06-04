@@ -68,6 +68,18 @@ export class ServiceRepository {
     return services;
   }
 
+  async listByBarbershopId(barbershopId: number) {
+    const services = await prisma.service.findMany({
+      where: { barbershopId },
+      omit: {
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    return services;
+  }
+
   async update(
     data: Omit<UpdateServiceSchema, 'employeeId'>,
     employeeIds: number[],
