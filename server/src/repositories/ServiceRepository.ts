@@ -20,6 +20,7 @@ export class ServiceRepository {
         employees: {
           connect: employeeIds.map((id) => ({ id })),
         },
+        assignToAllEmployees: employeeIds.length === 0,
       },
       omit: {
         createdAt: true,
@@ -37,6 +38,22 @@ export class ServiceRepository {
     });
 
     return service;
+  }
+
+  async getServicesAvailableToAllEmployees(barbershopId: number) {
+    const services = await prisma.service.findMany({
+      where: {
+        barbershopId,
+        assignToAllEmployees: true,
+      },
+      omit: {
+        createdAt: true,
+        updatedAt: true,
+        barbershopId: true,
+      },
+    });
+
+    return services;
   }
 
   async listByIds(ids: string[]) {
