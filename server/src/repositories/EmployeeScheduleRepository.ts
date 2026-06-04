@@ -46,4 +46,45 @@ export class EmployeeScheduleRepository {
 
     return employeeSchedule;
   }
+
+  async update(
+    data: Partial<CreateEmployeeSchedule>,
+    employeeScheduleId: string,
+    barbershopId: number,
+  ) {
+    const employeeSchedule = await prisma.employeeSchedule.update({
+      where: { id: employeeScheduleId, barbershopId },
+      data: {
+        name: data.name,
+        employeeScheduleWeekdays: {
+          updateMany: data.weekdays?.map(
+            ({ weekday, isWorkingDay, start, startLunch, endLunch, end }) => ({
+              where: { weekday },
+              data: {
+                start,
+                startLunch,
+                endLunch,
+                end,
+                isWorkingDay,
+              },
+            }),
+          ),
+        },
+        barbershop: {
+          connect: {
+            id: barbershopId,
+          },
+        },
+      },
+      include: {
+        employeeScheduleWeekdays: true,
+      },
+      omit: {
+        isDefault: true,
+        barbershopId: true,
+      },
+    });
+
+    return employeeSchedule;
+  }
 }
