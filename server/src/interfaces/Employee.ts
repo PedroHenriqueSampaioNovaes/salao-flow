@@ -11,10 +11,8 @@ export interface EmployeeSchedule {
   isDefault: boolean;
 }
 
-type Weekday = 0 | 1 | 2 | 3 | 4 | 5 | 6;
-
 export interface EmployeeScheduleWeekday {
-  weekday: Weekday;
+  weekday: number;
   isWorkingDay: boolean;
   start: string | null;
   startLunch: string | null;
