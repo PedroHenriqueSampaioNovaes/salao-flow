@@ -29,7 +29,7 @@ model Barbershop {
   subscription      Subscription?
   employeeSchedules EmployeeSchedule[]
   appointments      Appointment[]
-  appointmentBlocks AppointmentBlocking[]
+  scheduleBlocks    ScheduleBlock[]
   customers         Customer[]
 
   @@index([email])
@@ -94,9 +94,9 @@ model Employee {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  services          Service[]
-  appointments      Appointment[]
-  appointmentBlocks AppointmentBlocking[]
+  services       Service[]
+  appointments   Appointment[]
+  scheduleBlocks ScheduleBlock[]
 }
 
 model Customer {
@@ -155,8 +155,9 @@ model Appointment {
   @@index([date])
 }
 
-model AppointmentBlocking {
+model ScheduleBlock {
   id           String     @id @default(uuid())
+  name         String
   initialDate  DateTime
   finalDate    DateTime
   initialTime  String
@@ -166,5 +167,6 @@ model AppointmentBlocking {
   employeeId   Int
   employee     Employee   @relation(fields: [employeeId], references: [id])
 
-  @@index([initialDate])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
