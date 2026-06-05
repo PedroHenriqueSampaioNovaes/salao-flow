@@ -18,3 +18,26 @@ export const CreateScheduleBlockSchema = z.object({
 export type CreateScheduleBlockSchema = z.infer<
   typeof CreateScheduleBlockSchema
 >;
+
+export const UpdateScheduleBlockSchema = z.object({
+  name: z
+    .string()
+    .min(3, 'O nome deve ter pelo menos 3 caracteres.')
+    .optional(),
+  initialDate: z.coerce.date().optional(),
+  finalDate: z.coerce.date().optional(),
+  initialTime: z
+    .string()
+    .regex(/^\d{2}:\d{2}$/, 'O horário tem que seguir o padrão HH:MM')
+    .optional(),
+  finalTime: z
+    .string()
+    .regex(/^\d{2}:\d{2}$/, 'O horário tem que seguir o padrão HH:MM')
+    .optional(),
+  employeeId: z.number().optional(),
+});
+
+export type UpdateScheduleBlockSchema = z.infer<
+  typeof UpdateScheduleBlockSchema
+>;
+
