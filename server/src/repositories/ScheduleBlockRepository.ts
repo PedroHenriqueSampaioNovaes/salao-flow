@@ -26,6 +26,18 @@ export class ScheduleBlockRepository {
     return scheduleBlock;
   }
 
+  async getById(id: string) {
+    const scheduleBlock = await prisma.scheduleBlock.findUnique({
+      where: { id },
+      omit: {
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    return scheduleBlock;
+  }
+
   async delete(id: string) {
     await prisma.scheduleBlock.delete({
       where: { id },
