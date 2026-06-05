@@ -38,6 +38,18 @@ export class ScheduleBlockRepository {
     return scheduleBlock;
   }
 
+  async listByBarbershopId(barbershopId: number) {
+    const scheduleBlocks = await prisma.scheduleBlock.findMany({
+      where: { barbershopId },
+      omit: {
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    return scheduleBlocks;
+  }
+
   async delete(id: string) {
     await prisma.scheduleBlock.delete({
       where: { id },
