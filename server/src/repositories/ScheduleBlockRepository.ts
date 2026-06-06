@@ -4,8 +4,6 @@ export interface ScheduleBlockData {
   name: string;
   initialDate: Date;
   finalDate: Date;
-  initialTime: string;
-  finalTime: string;
   employeeId: number;
 }
 
@@ -13,8 +11,6 @@ export interface UpdateScheduleBlockData {
   name?: string;
   initialDate?: Date;
   finalDate?: Date;
-  initialTime?: string;
-  finalTime?: string;
   employeeId?: number;
 }
 
@@ -30,8 +26,6 @@ export class ScheduleBlockRepository {
         name: data.name,
         initialDate: data.initialDate,
         finalDate: data.finalDate,
-        initialTime: data.initialTime,
-        finalTime: data.finalTime,
         barbershopId,
         employeeId: data.employeeId,
       },
@@ -93,8 +87,6 @@ export class ScheduleBlockRepository {
         name: data.name,
         initialDate: data.initialDate,
         finalDate: data.finalDate,
-        initialTime: data.initialTime,
-        finalTime: data.finalTime,
         employeeId: data.employeeId,
       },
     });
