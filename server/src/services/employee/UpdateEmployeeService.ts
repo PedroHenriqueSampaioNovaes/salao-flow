@@ -23,13 +23,11 @@ export class UpdateEmployeeService {
     }
 
     if (data.employeeScheduleId) {
-      const employeeScheduleExists = !!(await employeeScheduleRepository.getById(data.employeeScheduleId));
+      const employeeScheduleExists =
+        !!(await employeeScheduleRepository.getById(data.employeeScheduleId));
 
       if (!employeeScheduleExists) {
-        throw new AppError(
-          'Horário de funcionamento não encontrado ou não existe.',
-          404,
-        );
+        throw new AppError('Expediente não encontrado ou não existe.', 404);
       }
     }
 
