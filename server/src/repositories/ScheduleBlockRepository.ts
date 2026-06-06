@@ -18,6 +18,11 @@ export interface UpdateScheduleBlockData {
   employeeId?: number;
 }
 
+interface DateConfig {
+  startDate: Date;
+  endDate: Date;
+}
+
 export class ScheduleBlockRepository {
   async create(data: ScheduleBlockData, barbershopId: number) {
     const scheduleBlock = await prisma.scheduleBlock.create({
@@ -50,6 +55,28 @@ export class ScheduleBlockRepository {
   async listByBarbershopId(barbershopId: number) {
     const scheduleBlocks = await prisma.scheduleBlock.findMany({
       where: { barbershopId },
+      omit: {
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    return scheduleBlocks;
+  }
+
+  async ListByStartAndEndDate(dateConfig: DateConfig, barbershopId: number) {
+    const { startDate, endDate } = dateConfig;
+
+    const scheduleBlocks = await prisma.scheduleBlock.findMany({
+      where: {
+        barbershopId,
+        initialDate: {
+          lte: startDate,
+        },
+        finalDate: {
+          gt: endDate,
+        },
+      },
       omit: {
         createdAt: true,
         updatedAt: true,
