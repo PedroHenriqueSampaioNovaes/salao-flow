@@ -6,6 +6,7 @@ import { CreateEmployeeScheduleController } from '../controllers/employeeSchedul
 import { UpdateEmployeeScheduleController } from '../controllers/employeeSchedule/UpdateEmployeeScheduleController.js';
 import { DetailsEmployeeScheduleController } from '../controllers/employeeSchedule/DetailsEmployeeScheduleController.js';
 import { ListEmployeeScheduleController } from '../controllers/employeeSchedule/ListEmployeeScheduleController.js';
+import { DeleteEmployeeScheduleController } from '../controllers/employeeSchedule/DeleteEmployeeScheduleController.js';
 
 const router = Router();
 
@@ -15,5 +16,7 @@ router.get('/:id', verifyToken, DetailsEmployeeScheduleController.handle);
 router.get('/', verifyToken, ListEmployeeScheduleController.handle);
 
 router.put('/:id', verifyToken, UpdateEmployeeScheduleController.handle);
+
+router.delete('/:id', verifyToken, DeleteEmployeeScheduleController.handle);
 
 export default { baseUrl: '/employee-schedules', router };

@@ -112,4 +112,28 @@ export class EmployeeScheduleRepository {
 
     return employeeSchedule;
   }
+
+  async getDefaultSchedule(barbershopId: number) {
+    const employeeSchedule = await prisma.employeeSchedule.findFirst({
+      where: { barbershopId, isDefault: true },
+    });
+
+    return employeeSchedule;
+  }
+
+  async delete(
+    barbershopId: number,
+    employeeScheduleId: string,
+    defaultScheduleId: string,
+  ) {
+    await prisma.$transaction([
+      prisma.employee.updateMany({
+        where: { employeeScheduleId, barbershopId },
+        data: { employeeScheduleId: defaultScheduleId },
+      }),
+      prisma.employeeSchedule.delete({
+        where: { id: employeeScheduleId, barbershopId },
+      }),
+    ]);
+  }
 }
