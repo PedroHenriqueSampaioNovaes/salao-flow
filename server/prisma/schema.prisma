@@ -160,8 +160,6 @@ model ScheduleBlock {
   name         String
   initialDate  DateTime
   finalDate    DateTime
-  initialTime  String
-  finalTime    String
   barbershopId Int
   barbershop   Barbershop @relation(fields: [barbershopId], references: [id])
   employeeId   Int
