@@ -8,6 +8,7 @@ import { ServiceRepository } from '@/src/repositories/ServiceRepository.js';
 import { AppointmentRepository } from '@/src/repositories/AppointmentRepository.js';
 import { CustomerRepository } from '@/src/repositories/CustomerRepository.js';
 import { BarbershopRepository } from '@/src/repositories/BarbershopRepository.js';
+import { ScheduleBlockRepository } from '@/src/repositories/ScheduleBlockRepository.js';
 
 import { EmployeeScheduleWeekday } from '@/src/interfaces/Employee.js';
 
@@ -20,6 +21,7 @@ export class CreateAppointmentService {
   constructor(
     private readonly employeeRepository = new EmployeeRepository(),
     private readonly barbershopRepository = new BarbershopRepository(),
+    private readonly scheduleBlockRepository = new ScheduleBlockRepository(),
     private readonly serviceRepository = new ServiceRepository(),
     private readonly appointmentRepository = new AppointmentRepository(),
     private readonly customerRepository = new CustomerRepository(),
@@ -46,7 +48,10 @@ export class CreateAppointmentService {
       0,
     );
 
-    const appointmentStartMinutes = this.convertTimeToMinutes(data.time);
+    await this.checkScheduleBlock(data.date, barbershop.id);
+
+    const appointmentStartMinutes =
+      data.date.getUTCHours() * 60 + data.date.getUTCMinutes();
     const appointmentEndMinutes =
       appointmentStartMinutes + totalServiceDuration;
 
@@ -57,7 +62,7 @@ export class CreateAppointmentService {
       employee.employeeSchedule.employeeScheduleWeekdays,
     );
 
-    await this.validateNoScheduleConflicts(
+    await this.checkForAppointmentConflict(
       data.employeeId,
       data.date,
       appointmentStartMinutes,
@@ -72,7 +77,6 @@ export class CreateAppointmentService {
     return this.appointmentRepository.create(
       {
         date: data.date,
-        time: data.time,
         totalServiceDuration,
         employeeId: data.employeeId,
         customerId: customer.id,
@@ -80,6 +84,23 @@ export class CreateAppointmentService {
       },
       barbershop.id,
     );
+  }
+
+  private async checkScheduleBlock(date: Date, barbershopId: number) {
+    const scheduleBlock =
+      await this.scheduleBlockRepository.ListByStartAndEndDate(
+        {
+          startDate: date,
+          endDate: date,
+        },
+        barbershopId,
+      );
+
+    if (scheduleBlock.length > 0) {
+      throw new AppError(
+        'Horário indisponível. Escolha outro horário ou atualize a página para obter os dados mais recentes.',
+      );
+    }
   }
 
   private async getOrCreateOrUpdateCustomer(
@@ -153,12 +174,12 @@ export class CreateAppointmentService {
   }
 
   private validateEmployeeSchedule(
-    appointmentDay: Date,
-    appointmentStartTime: number,
-    appointmentEndTime: number,
+    appointmentDate: Date,
+    appointmentStartMinutes: number,
+    appointmentEndMinutes: number,
     employeeSchedule: EmployeeScheduleWeekday[],
   ) {
-    const weekday = appointmentDay.getUTCDay();
+    const weekday = appointmentDate.getUTCDay();
 
     const employeeScheduleWeekday = employeeSchedule.find(
       (schedule) => schedule.weekday === weekday,
@@ -182,10 +203,10 @@ export class CreateAppointmentService {
     );
 
     const isOutsideShift =
-      appointmentStartTime < startShift || appointmentEndTime > endShift;
+      appointmentStartMinutes < startShift || appointmentEndMinutes > endShift;
 
     const overlapsWithLunch =
-      appointmentStartTime < endLunch && appointmentEndTime > startLunch;
+      appointmentStartMinutes < endLunch && appointmentEndMinutes > startLunch;
 
     if (isOutsideShift || overlapsWithLunch) {
       throw new AppError(
@@ -194,7 +215,7 @@ export class CreateAppointmentService {
     }
   }
 
-  private async validateNoScheduleConflicts(
+  private async checkForAppointmentConflict(
     employeeId: number,
     date: Date,
     newStart: number,
@@ -204,7 +225,8 @@ export class CreateAppointmentService {
       await this.appointmentRepository.getByDateAndEmployeeId(date, employeeId);
 
     const hasConflict = reservedTimesOfDay.some((appointment) => {
-      const existingStart = this.convertTimeToMinutes(appointment.time);
+      const existingStart =
+        appointment.date.getUTCHours() * 60 + appointment.date.getUTCMinutes();
       const existingEnd = existingStart + appointment.totalServiceDuration;
 
       return newStart < existingEnd && newEnd > existingStart;

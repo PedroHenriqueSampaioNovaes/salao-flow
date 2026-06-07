@@ -2,7 +2,6 @@ import { prisma } from '@/src/lib/prisma.js';
 
 export interface AppointmentData {
   date: Date;
-  time: string;
   totalServiceDuration: number;
   employeeId: number;
   customerId: number;
@@ -14,7 +13,6 @@ export class AppointmentRepository {
     const appointment = await prisma.appointment.create({
       data: {
         date: data.date,
-        time: data.time,
         barbershopId,
         employeeId: data.employeeId,
         customerId: data.customerId,
@@ -25,7 +23,6 @@ export class AppointmentRepository {
       },
       select: {
         date: true,
-        time: true,
       },
     });
 

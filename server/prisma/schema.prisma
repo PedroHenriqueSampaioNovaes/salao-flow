@@ -137,7 +137,6 @@ model Service {
 model Appointment {
   id                   String   @id @default(uuid())
   date                 DateTime
-  time                 String
   totalServiceDuration Int
 
   createdAt DateTime @default(now())
