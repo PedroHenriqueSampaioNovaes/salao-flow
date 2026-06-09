@@ -8,7 +8,7 @@
     "prisma:generate": "npx prisma generate --schema=server/prisma/schema.prisma",
     "build:server": "npm run build --workspace=server",
     "build": "npm run build:validators && npm run prisma:generate && npm run build:server",
-    "prepare": "husky"
+    "prepare": "husky || true"
   },
   "keywords": [],
   "author": "",
