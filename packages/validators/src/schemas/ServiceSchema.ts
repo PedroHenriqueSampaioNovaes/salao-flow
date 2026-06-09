@@ -1,7 +1,11 @@
 import { z } from 'zod';
 
-export const ServiceSchema = z.object({
+const BaseServiceSchema = z.object({
   name: z.string().min(1, 'Nome é obrigatório.'),
+  description: z
+    .string()
+    .min(10, 'A descrição deve ter pelo menos 10 caracteres.')
+    .optional(),
   price: z
     .string('Obrigatório definir o preço do serviço.')
     .regex(/^\d+$/, 'Só é permitido números como preço.')
@@ -11,6 +15,7 @@ export const ServiceSchema = z.object({
     .regex(/^\d+$/, 'Só é permitido números como tempo de duração do serviço.')
     .transform((value) => Number(value)),
   status: z.boolean().optional(),
+  assignToAllEmployees: z.boolean(),
   employeeId: z
     .number(
       'É obrigatório informar qual funcionário será responsável por este serviço.',
@@ -18,7 +23,18 @@ export const ServiceSchema = z.object({
     .optional(),
 });
 
-export const UpdateServiceSchema = ServiceSchema.partial().extend({
+export const ServiceSchema = BaseServiceSchema.superRefine((data, ctx) => {
+  if (!data.assignToAllEmployees && !data.employeeId) {
+    ctx.addIssue({
+      code: 'custom',
+      message:
+        'É obrigatório informar qual funcionário será responsável por este serviço.',
+      path: ['employeeId'],
+    });
+  }
+});
+
+export const UpdateServiceSchema = BaseServiceSchema.partial().extend({
   id: z.uuid('É obrigatório enviar o ID do serviço.'),
 });
 

@@ -10,10 +10,17 @@ export class CreateServiceItemService {
     const employeeRepository = new EmployeeRepository();
     const serviceRepository = new ServiceRepository();
 
-    let employeeIds = data.employeeId ? [data.employeeId] : [];
+    let employeeIds = [];
 
-    if (employeeIds.length === 1) {
-      const employee = await employeeRepository.getById(employeeIds[0]);
+    if (data.assignToAllEmployees) {
+      const employees =
+        await employeeRepository.listByBarbershopId(barbershopId);
+
+      employeeIds.push(...employees.map((e) => e.id));
+    } else {
+      const employee = await employeeRepository.getById(
+        Number(data.employeeId),
+      );
 
       if (!employee) {
         throw new AppError('Funcionário não encontrado ou não existe', 404);
@@ -25,11 +32,8 @@ export class CreateServiceItemService {
           403,
         );
       }
-    } else {
-      const employees =
-        await employeeRepository.listByBarbershopId(barbershopId);
 
-      employeeIds = employees.map((e) => e.id);
+      employeeIds.push(employee.id);
     }
 
     const { employeeId, ...serviceData } = data;

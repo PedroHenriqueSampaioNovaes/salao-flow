@@ -14,13 +14,14 @@ export class ServiceRepository {
     const service = await prisma.service.create({
       data: {
         name: data.name,
+        description: data.description,
         price: data.price,
         duration: data.duration,
         barbershopId,
         employees: {
           connect: employeeIds.map((id) => ({ id })),
         },
-        assignToAllEmployees: employeeIds.length === 0,
+        assignToAllEmployees: data.assignToAllEmployees,
       },
       omit: {
         createdAt: true,
@@ -88,6 +89,7 @@ export class ServiceRepository {
       where: { id: data.id },
       data: {
         name: data.name,
+        description: data.description,
         price: data.price,
         duration: data.duration,
         status: data.status,
