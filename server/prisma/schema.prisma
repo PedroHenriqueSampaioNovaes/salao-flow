@@ -166,4 +166,6 @@ model ScheduleBlock {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([initialDate, finalDate])
 }
