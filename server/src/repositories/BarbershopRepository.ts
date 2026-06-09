@@ -114,4 +114,73 @@ export class BarbershopRepository {
 
     return barbershop;
   }
+
+  async getBookingInfoBySlug(slug: string, now: Date, maxDate: Date) {
+    const barbershop = await prisma.barbershop.findUnique({
+      where: { slug },
+      select: {
+        name: true,
+        address: true,
+        phone: true,
+        image: true,
+        employees: {
+          select: {
+            id: true,
+            name: true,
+            image: true,
+            services: {
+              where: { status: true },
+              select: {
+                id: true,
+                name: true,
+                description: true,
+                price: true,
+                duration: true,
+              },
+            },
+            employeeSchedule: {
+              select: {
+                employeeScheduleWeekdays: {
+                  select: {
+                    weekday: true,
+                    isWorkingDay: true,
+                    start: true,
+                    startLunch: true,
+                    endLunch: true,
+                    end: true,
+                  },
+                },
+              },
+            },
+            scheduleBlocks: {
+              where: {
+                finalDate: { gte: now },
+              },
+              select: {
+                id: true,
+                initialDate: true,
+                finalDate: true,
+                employeeId: true,
+              },
+            },
+            appointments: {
+              where: {
+                date: {
+                  gte: now,
+                  lte: maxDate,
+                },
+              },
+              select: {
+                id: true,
+                date: true,
+                totalServiceDuration: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return barbershop;
+  }
 }

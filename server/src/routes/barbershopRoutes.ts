@@ -8,6 +8,7 @@ import { DetailsBarbershopController } from '../controllers/barbershop/DetailsBa
 import { ForgotPasswordController } from '../controllers/barbershop/ForgotPasswordController.js';
 import { ResetPasswordController } from '../controllers/barbershop/ResetPasswordController.js';
 import { UpdateBarbershopController } from '../controllers/barbershop/UpdateBarbershopController.js';
+import { GetBookingInfoController } from '../controllers/barbershop/GetBookingInfoController.js';
 
 const router = Router();
 
@@ -16,9 +17,9 @@ router.post('/login', LoginBarbershopController.handle);
 router.post('/forgot-password', ForgotPasswordController.handle);
 router.post('/reset-password', ResetPasswordController.handle);
 
+router.get('/:slug/booking', GetBookingInfoController.handle);
 router.get('/me', verifyToken, DetailsBarbershopController.handle);
 
 router.put('/', verifyToken, UpdateBarbershopController.handle);
 
 export default { baseUrl: '/barbershops', router };
-
