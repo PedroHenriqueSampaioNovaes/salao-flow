@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "server": "npm run dev --workspace=server",
+    "server": "npm run dev --workspace=apps/server",
     "build:validators": "npm run build --workspace=@sistema-barbearia/validators",
-    "build:server": "npm run build --workspace=server",
-    "prisma:generate": "npx prisma generate --schema=server/prisma/schema.prisma",
-    "prisma:deploy": "npm run prisma:generate && npx prisma migrate deploy --config=server/prisma.config.ts --schema=server/prisma/schema.prisma",
+    "build:server": "npm run build --workspace=apps/server",
+    "prisma:generate": "npx prisma generate --schema=apps/server/prisma/schema.prisma",
+    "prisma:deploy": "npm run prisma:generate && npx prisma migrate deploy --config=apps/server/prisma.config.ts --schema=apps/server/prisma/schema.prisma",
     "build": "npm run build:validators && npm run build:server",
     "vercel-build": "npm run prisma:deploy && npm run build",
     "prepare": "husky || true"
@@ -17,8 +17,7 @@
   "license": "ISC",
   "type": "module",
   "workspaces": [
-    "client",
-    "server",
+    "apps/*",
     "packages/*"
   ],
   "devDependencies": {
