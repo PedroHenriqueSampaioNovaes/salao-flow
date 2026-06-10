@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
+    "client": "npm run dev --workspace=apps/client",
     "server": "npm run dev --workspace=apps/server",
     "build:validators": "npm run build --workspace=@sistema-barbearia/validators",
     "build:server": "npm run build --workspace=apps/server",
