@@ -7,7 +7,8 @@
     "build:validators": "npm run build --workspace=@sistema-barbearia/validators",
     "prisma:generate": "npx prisma generate --schema=server/prisma/schema.prisma",
     "build:server": "npm run build --workspace=server",
-    "build": "npm run build:validators && npm run prisma:generate && npm run build:server",
+    "prisma:deploy": "npm run prisma:generate && npx prisma migrate deploy --schema=server/prisma/schema.prisma",
+    "build": "npm run build:validators && npm run prisma:deploy && npm run build:server",
     "prepare": "husky || true"
   },
   "keywords": [],
