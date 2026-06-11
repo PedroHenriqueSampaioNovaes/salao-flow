@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
 
-import { ForgotPasswordSchema } from '@sistema-barbearia/validators';
+import { forgotPasswordSchema } from '@sistema-barbearia/validators';
 
 import { ForgotPasswordService } from '../../services/barbershop/ForgotPasswordService.js';
 
 export class ForgotPasswordController {
   static async handle(req: Request, res: Response) {
-    const body = ForgotPasswordSchema.parse(req.body);
+    const body = forgotPasswordSchema.parse(req.body);
 
     const forgotPasswordService = new ForgotPasswordService();
 

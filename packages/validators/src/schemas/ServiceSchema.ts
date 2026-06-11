@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const BaseServiceSchema = z.object({
+const baseServiceSchema = z.object({
   name: z.string().min(1, 'Nome é obrigatório.'),
   description: z
     .string()
@@ -23,7 +23,7 @@ const BaseServiceSchema = z.object({
     .optional(),
 });
 
-export const ServiceSchema = BaseServiceSchema.superRefine((data, ctx) => {
+export const serviceSchema = baseServiceSchema.superRefine((data, ctx) => {
   if (!data.assignToAllEmployees && !data.employeeId) {
     ctx.addIssue({
       code: 'custom',
@@ -34,9 +34,9 @@ export const ServiceSchema = BaseServiceSchema.superRefine((data, ctx) => {
   }
 });
 
-export const UpdateServiceSchema = BaseServiceSchema.partial().extend({
+export const updateServiceSchema = baseServiceSchema.partial().extend({
   id: z.uuid('É obrigatório enviar o ID do serviço.'),
 });
 
-export type ServiceSchema = z.infer<typeof ServiceSchema>;
-export type UpdateServiceSchema = z.infer<typeof UpdateServiceSchema>;
+export type ServiceSchema = z.infer<typeof serviceSchema>;
+export type UpdateServiceSchema = z.infer<typeof updateServiceSchema>;

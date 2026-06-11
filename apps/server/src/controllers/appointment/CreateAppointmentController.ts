@@ -1,17 +1,17 @@
 import { Request, Response } from 'express';
 
 import {
-  CreateAppointmentSchema,
-  CreateCustomerSchema,
+  createAppointmentSchema,
+  createCustomerSchema,
 } from '@sistema-barbearia/validators';
 
 import { CreateAppointmentService } from '../../services/appointment/CreateAppointmentService.js';
 
 export class CreateAppointmentController {
   static async handle(req: Request, res: Response) {
-    const body = CreateAppointmentSchema.extend(
-      CreateCustomerSchema.shape,
-    ).parse(req.body);
+    const body = createAppointmentSchema
+      .extend(createCustomerSchema.shape)
+      .parse(req.body);
 
     const createAppointmentService = new CreateAppointmentService();
 

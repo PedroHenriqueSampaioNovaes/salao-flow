@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const CreateCustomerSchema = z.object({
+export const createCustomerSchema = z.object({
   name: z.string().min(1, 'Nome é obrigatório.'),
   phone: z
     .string('Número de contato é obrigatório.')
@@ -8,4 +8,4 @@ export const CreateCustomerSchema = z.object({
   email: z.email('E-mail inválido.').optional(),
 });
 
-export type CreateCustomerSchema = z.infer<typeof CreateCustomerSchema>;
+export type CreateCustomerSchema = z.infer<typeof createCustomerSchema>;

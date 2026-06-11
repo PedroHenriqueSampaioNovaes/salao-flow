@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
 
-import { LoginSchema } from '@sistema-barbearia/validators';
+import { loginSchema } from '@sistema-barbearia/validators';
 
 import { LoginBarbershopService } from '../../services/barbershop/LoginBarbershopService.js';
 
 export class LoginBarbershopController {
   static async handle(req: Request, res: Response) {
-    const body = LoginSchema.parse(req.body);
+    const body = loginSchema.parse(req.body);
 
     const loginBarbershopService = new LoginBarbershopService();
 

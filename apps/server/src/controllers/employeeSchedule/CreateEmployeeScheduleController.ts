@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
 
-import { EmployeeScheduleSchema } from '@sistema-barbearia/validators';
+import { employeeScheduleSchema } from '@sistema-barbearia/validators';
 
 import { CreateEmployeeScheduleService } from '../../services/employeeSchedule/CreateEmployeeScheduleService.js';
 
 export class CreateEmployeeScheduleController {
   static async handle(req: Request, res: Response) {
-    const body = EmployeeScheduleSchema.parse(req.body);
+    const body = employeeScheduleSchema.parse(req.body);
     const barbershopId = Number(req.barbershopId);
 
     const createEmployeeScheduleService = new CreateEmployeeScheduleService();

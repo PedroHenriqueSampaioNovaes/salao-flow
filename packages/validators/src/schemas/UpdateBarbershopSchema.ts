@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const UpdateBarbershopSchema = z
+export const updateBarbershopSchema = z
   .object({
     name: z
       .string()
@@ -30,4 +30,4 @@ export const UpdateBarbershopSchema = z
     },
   );
 
-export type UpdateBarbershopSchema = z.infer<typeof UpdateBarbershopSchema>;
+export type UpdateBarbershopSchema = z.infer<typeof updateBarbershopSchema>;

@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
 
-import { CreateScheduleBlockSchema } from '@sistema-barbearia/validators';
+import { createScheduleBlockSchema } from '@sistema-barbearia/validators';
 
 import { CreateScheduleBlockService } from '../../services/scheduleBlock/CreateScheduleBlockService.js';
 
 export class CreateScheduleBlockController {
   static async handle(req: Request, res: Response) {
-    const body = CreateScheduleBlockSchema.parse(req.body);
+    const body = createScheduleBlockSchema.parse(req.body);
     const barbershopId = Number(req.barbershopId);
 
     const createScheduleBlockService = new CreateScheduleBlockService();

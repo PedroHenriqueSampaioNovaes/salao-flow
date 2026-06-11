@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
 
-import { CreateBarbershopSchema } from '@sistema-barbearia/validators';
+import { createBarbershopSchema } from '@sistema-barbearia/validators';
 
 import { CreateBarbershopService } from '@/src/services/barbershop/CreateBarbershopService.js';
 
 export class CreateBarbershopController {
   static async handle(req: Request, res: Response) {
-    const body = CreateBarbershopSchema.parse(req.body);
+    const body = createBarbershopSchema.parse(req.body);
 
     const createBarbershopService = new CreateBarbershopService();
 

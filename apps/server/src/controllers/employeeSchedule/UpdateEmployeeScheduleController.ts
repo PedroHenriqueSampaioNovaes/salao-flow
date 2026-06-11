@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-import { UpdateEmployeeScheduleSchema } from '@sistema-barbearia/validators';
+import { updateEmployeeScheduleSchema } from '@sistema-barbearia/validators';
 
 import { UpdateEmployeeScheduleService } from '../../services/employeeSchedule/UpdateEmployeeScheduleService.js';
 
@@ -8,7 +8,7 @@ import { AppError } from '@/src/errors/AppError.js';
 
 export class UpdateEmployeeScheduleController {
   static async handle(req: Request, res: Response) {
-    const body = UpdateEmployeeScheduleSchema.parse(req.body);
+    const body = updateEmployeeScheduleSchema.parse(req.body);
     const id = req.params.id as string;
     const barbershopId = Number(req.barbershopId);
 

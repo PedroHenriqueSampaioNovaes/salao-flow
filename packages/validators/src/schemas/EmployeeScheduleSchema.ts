@@ -10,7 +10,7 @@ enum Weekday {
   Sabado = 6,
 }
 
-export const WeekdayScheduleSchema = z.object({
+export const weekdayScheduleSchema = z.object({
   weekday: z.enum(Weekday, {
     error: 'Dia da semana inválido.',
   }),
@@ -37,20 +37,20 @@ export const WeekdayScheduleSchema = z.object({
     .transform((value) => value || null),
 });
 
-export const EmployeeScheduleSchema = z.object({
+export const employeeScheduleSchema = z.object({
   name: z
     .string('Obrigatório inserir o nome.')
     .min(3, 'Nome precisa ter no mínimo 3 caracteres.'),
   weekdays: z
-    .array(WeekdayScheduleSchema)
+    .array(weekdayScheduleSchema)
     .length(7, 'Obrigatório inserir os horários para todos os dias da semana.'),
 });
 
-export const UpdateEmployeeScheduleSchema = EmployeeScheduleSchema.partial().extend({
-  weekdays: z.array(WeekdayScheduleSchema).optional(),
+export const updateEmployeeScheduleSchema = employeeScheduleSchema.partial().extend({
+  weekdays: z.array(weekdayScheduleSchema).optional(),
 });
 
-export type EmployeeScheduleSchema = z.infer<typeof EmployeeScheduleSchema>;
+export type EmployeeScheduleSchema = z.infer<typeof employeeScheduleSchema>;
 export type UpdateEmployeeScheduleSchema = z.infer<
-  typeof UpdateEmployeeScheduleSchema
+  typeof updateEmployeeScheduleSchema
 >;

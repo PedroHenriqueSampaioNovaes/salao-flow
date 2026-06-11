@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
 
-import { UpdateServiceSchema } from '@sistema-barbearia/validators';
+import { updateServiceSchema } from '@sistema-barbearia/validators';
 
 import { UpdateServiceItemService } from '../../services/service/UpdateServiceItemService.js';
 
 export class UpdateServiceItemController {
   static async handle(req: Request, res: Response) {
-    const body = UpdateServiceSchema.parse({ ...req.body, ...req.params });
+    const body = updateServiceSchema.parse({ ...req.body, ...req.params });
     const barbershopId = Number(req.barbershopId);
 
     const updateServiceItemService = new UpdateServiceItemService();

@@ -1,6 +1,6 @@
-import z from 'zod';
+import { z } from 'zod';
 
-export const EmployeeSchema = z.object({
+export const employeeSchema = z.object({
   name: z
     .string('Inserir o nome é obrigatório.')
     .min(3, 'Nome deve conter pelo menos 3 caracteres.'),
@@ -10,14 +10,14 @@ export const EmployeeSchema = z.object({
   ),
 });
 
-export const UpdateEmployeeSchema = EmployeeSchema.partial().extend({
+export const updateEmployeeSchema = employeeSchema.partial().extend({
   id: z.coerce.number('É obrigatório enviar o ID do funcionário.'),
 });
 
-export const DetailsEmployeeSchema = z.object({
+export const detailsEmployeeSchema = z.object({
   id: z.coerce.number('É obrigatório enviar o ID do funcionário.'),
 });
 
-export type EmployeeSchema = z.infer<typeof EmployeeSchema>;
-export type UpdateEmployeeSchema = z.infer<typeof UpdateEmployeeSchema>;
-export type DetailsEmployeeSchema = z.infer<typeof DetailsEmployeeSchema>;
+export type EmployeeSchema = z.infer<typeof employeeSchema>;
+export type UpdateEmployeeSchema = z.infer<typeof updateEmployeeSchema>;
+export type DetailsEmployeeSchema = z.infer<typeof detailsEmployeeSchema>;
