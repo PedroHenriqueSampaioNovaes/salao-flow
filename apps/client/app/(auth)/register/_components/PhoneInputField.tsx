@@ -1,0 +1,54 @@
+'use client';
+
+import React from 'react';
+import { Control, Controller, FieldValues, Path } from 'react-hook-form';
+import { IMaskMixin } from 'react-imask';
+import { Input } from '@/src/components/ui/input';
+import { Field, FieldLabel, FieldError } from '@/src/components/ui/field';
+
+interface PhoneInputFieldProps<TFieldValues extends FieldValues = FieldValues> {
+  label: string;
+  name: Path<TFieldValues>;
+  control: Control<TFieldValues>;
+  error?: string;
+  id?: string;
+  placeholder?: string;
+}
+
+const MaskedInput = IMaskMixin(({ inputRef, ...props }) => (
+  <Input {...props} ref={inputRef as React.Ref<HTMLInputElement>} />
+));
+
+export function PhoneInputField<
+  TFieldValues extends FieldValues = FieldValues,
+>({
+  label,
+  name,
+  control,
+  error,
+  id = 'phone',
+  placeholder = 'Digite seu telefone com DDD',
+}: PhoneInputFieldProps<TFieldValues>) {
+  return (
+    <Field data-invalid={!!error}>
+      <FieldLabel htmlFor={id}>{label}</FieldLabel>
+      <Controller
+        name={name}
+        control={control}
+        render={({ field: { ref, onChange, value, ...fieldProps } }) => (
+          <MaskedInput
+            {...fieldProps}
+            inputRef={ref}
+            mask={[{ mask: '(00) 0000-0000' }, { mask: '(00) 00000-0000' }]}
+            value={value}
+            onAccept={(val: string) => onChange(val)}
+            id={id}
+            placeholder={placeholder}
+            aria-invalid={!!error}
+          />
+        )}
+      />
+      <FieldError>{error}</FieldError>
+    </Field>
+  );
+}
