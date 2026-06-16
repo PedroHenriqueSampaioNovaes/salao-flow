@@ -94,8 +94,8 @@ describe('useRegisterForm', () => {
     const mockRegister = jest.mocked(registerAction);
     const mockLogin = jest.mocked(loginAction);
 
-    mockRegister.mockResolvedValue({ ok: true, data: null, error: null });
-    mockLogin.mockResolvedValue({ ok: true, data: null, error: null });
+    mockRegister.mockResolvedValue({ ok: true, data: null, error: '' });
+    mockLogin.mockResolvedValue({ ok: true, data: null, error: '' });
 
     const { result } = renderHook(() => useRegisterForm());
 
@@ -155,7 +155,7 @@ describe('useRegisterForm', () => {
     mockRegister.mockResolvedValue({
       ok: false,
       data: null,
-      error: 'Registration failed',
+      error: 'Criação de conta falhou!',
     });
 
     const { result } = renderHook(() => useRegisterForm());
@@ -195,9 +195,7 @@ describe('useRegisterForm', () => {
 
     expect(mockRegister).toHaveBeenCalled();
     expect(mockLogin).not.toHaveBeenCalled();
-    expect(consoleSpy).toHaveBeenCalledWith('Não foi possível criar a conta');
-
-    consoleSpy.mockRestore();
+    expect(result.current.error).toBe('Criação de conta falhou!');
   });
 
   it('should log an error if loginAction fails after successful register', async () => {
@@ -205,11 +203,11 @@ describe('useRegisterForm', () => {
     const mockLogin = jest.mocked(loginAction);
     const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
 
-    mockRegister.mockResolvedValue({ ok: true, data: null, error: null });
+    mockRegister.mockResolvedValue({ ok: true, data: null, error: '' });
     mockLogin.mockResolvedValue({
       ok: false,
       data: null,
-      error: 'Login failed',
+      error: 'Login Falhou',
     });
 
     const { result } = renderHook(() => useRegisterForm());

@@ -5,6 +5,8 @@ import {
   type CreateBarbershopSchema,
 } from '@sistema-barbearia/validators';
 
+import { useState } from 'react';
+
 import registerAction from '@/app/actions/register';
 import loginAction from '@/app/actions/login';
 
@@ -21,12 +23,13 @@ export function useRegisterForm() {
         address: '',
       },
     });
+  const [error, setError] = useState('');
 
   const onSubmit = async (data: CreateBarbershopSchema) => {
-    const { ok: registerOk } = await registerAction(data);
+    const { ok: registerOk, error } = await registerAction(data);
 
     if (!registerOk) {
-      console.log('Não foi possível criar a conta');
+      setError(error);
       return;
     }
 
@@ -45,6 +48,7 @@ export function useRegisterForm() {
     register,
     handleSubmit,
     control,
+    error,
     errors: formState.errors,
     isSubmitting: formState.isSubmitting,
     onSubmit,
