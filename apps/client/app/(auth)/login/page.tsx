@@ -1,0 +1,12 @@
+import { Metadata } from 'next';
+import { LoginForm } from './_components/LoginForm';
+
+export const metadata: Metadata = {
+  title: 'Faça Login | SalaoFlow',
+  description:
+    'Entre e gerencie agendamentos, clientes e serviços de forma simples e eficiente.',
+};
+
+export default function LoginPage() {
+  return <LoginForm />;
+}
