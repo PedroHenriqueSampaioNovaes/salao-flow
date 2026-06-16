@@ -73,11 +73,33 @@ export class AppointmentRepository {
         },
         barbershopId,
       },
+      include: {
+        customer: {
+          select: {
+            id: true,
+            name: true,
+            phone: true,
+          },
+        },
+        employee: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        services: {
+          select: {
+            name: true,
+            price: true,
+          },
+        },
+      },
       omit: {
         createdAt: true,
         updatedAt: true,
-        employeeId: true,
         totalServiceDuration: true,
+        customerId: true,
+        employeeId: true,
       },
     });
 
