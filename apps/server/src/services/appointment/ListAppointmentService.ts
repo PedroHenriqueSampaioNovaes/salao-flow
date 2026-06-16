@@ -1,11 +1,9 @@
 import { AppointmentRepository } from '@/src/repositories/AppointmentRepository.js';
 
-import { ListAppointmentForMonth } from '@/src/interfaces/Appointment.js';
-
 import { AppError } from '@/src/errors/AppError.js';
 
 export class ListAppointmentService {
-  async execute({ date }: ListAppointmentForMonth, barbershopId: number) {
+  async execute(date: Date, barbershopId: number) {
     const appointmentRepository = new AppointmentRepository();
 
     const appointments = await appointmentRepository.getAppointmentsForMonth(
