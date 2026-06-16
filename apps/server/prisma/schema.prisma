@@ -104,7 +104,7 @@ model Customer {
   name         String
   phone        String
   email        String?       @unique
-  qtdVisit     Int           @default(1)
+  visitCount   Int           @default(1)
   isBlocked    Boolean       @default(false)
   appointments Appointment[]
   barbershopId Int

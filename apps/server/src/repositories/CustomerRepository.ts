@@ -43,7 +43,7 @@ export class CustomerRepository {
         name: data.name,
         phone: data.phone,
         email: data.email,
-        qtdVisit: {
+        visitCount: {
           increment: 1,
         },
         isBlocked: data.isBlocked,
