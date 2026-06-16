@@ -6,8 +6,15 @@ import { Input } from '@/src/components/ui/input';
 import { PhoneInputField } from './PhoneInputField';
 
 export function RegisterForm() {
-  const { register, handleSubmit, control, errors, isSubmitting, onSubmit } =
-    useRegisterForm();
+  const {
+    register,
+    handleSubmit,
+    control,
+    error,
+    errors,
+    isSubmitting,
+    onSubmit,
+  } = useRegisterForm();
 
   return (
     <div className="w-full max-w-md bg-zinc-900/40 backdrop-blur-xl border border-zinc-800/60 rounded-2xl p-8">
@@ -79,6 +86,8 @@ export function RegisterForm() {
             <FieldError>{errors.confirmPassword?.message}</FieldError>
           </Field>
         </div>
+
+        {error && <span className="text-red-500">{error}</span>}
 
         <button
           type="submit"
