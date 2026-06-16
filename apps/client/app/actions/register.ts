@@ -14,7 +14,7 @@ export default async function registerAction(
       body: accountData,
     });
 
-    return { data: null, ok: true, error: null };
+    return { data: null, ok: true, error: '' };
   } catch (error) {
     return apiError(error);
   }

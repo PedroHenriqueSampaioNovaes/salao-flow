@@ -23,7 +23,7 @@ export default async function loginAction(credentials: LoginRequest) {
       });
     }
 
-    return { data: null, ok: true, error: null };
+    return { data: null, ok: true, error: '' };
   } catch (error) {
     return apiError(error);
   }
