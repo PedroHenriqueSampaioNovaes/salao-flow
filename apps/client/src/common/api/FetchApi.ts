@@ -44,6 +44,17 @@ export default class FetchApi {
     return await FetchApi.extractData<T>(response);
   }
 
+  static async delete<T>(url: string, token?: string) {
+    const response = await fetch(`${URL_BASE}${url}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: token ? `Bearer ${token}` : '',
+      } as HeadersInit,
+    });
+
+    return await FetchApi.extractData<T>(response);
+  }
+
   private static async extractData<T>(response: Response) {
     let content;
 
