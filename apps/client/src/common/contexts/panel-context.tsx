@@ -3,8 +3,8 @@
 import { createContext, useContext } from 'react';
 
 import { IBarbershop } from '@/src/common/interfaces/barbershop';
-import { IAppointment } from '@/app/actions/get-appointments';
-import { IEmployee } from '@/app/actions/get-employees';
+import { IEmployee } from '../interfaces/employee';
+import { IAppointment } from '../interfaces/appointment';
 
 interface IPanelContext {
   barbershop: IBarbershop | null;
@@ -22,7 +22,9 @@ export function usePanelContext() {
   const context = useContext(PanelContext);
 
   if (!context) {
-    throw new Error('usePanelContext deve ser usado dentro de um PanelProvider');
+    throw new Error(
+      'usePanelContext deve ser usado dentro de um PanelProvider',
+    );
   }
 
   return context;
