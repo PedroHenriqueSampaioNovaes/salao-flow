@@ -64,9 +64,6 @@ export class EmployeeScheduleRepository {
           },
         },
       },
-      omit: {
-        isDefault: true,
-      },
     });
 
     return employeeSchedule;
