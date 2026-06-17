@@ -64,7 +64,6 @@ export class EmployeeRepository {
       },
       omit: {
         barbershopId: true,
-        employeeScheduleId: true,
         createdAt: true,
         updatedAt: true,
       },
