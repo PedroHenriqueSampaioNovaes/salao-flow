@@ -15,9 +15,9 @@ export default async function PanelLayout({
 
   return (
     <PanelProvider
-      barbershop={barbershop ?? null}
-      appointments={appointments ?? []}
-      employees={employees ?? []}
+      barbershopData={barbershop ?? null}
+      appointmentsData={appointments ?? []}
+      employeesData={employees ?? []}
     >
       {children}
     </PanelProvider>

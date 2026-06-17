@@ -1,6 +1,12 @@
 'use client';
 
-import { createContext, useContext } from 'react';
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useState,
+} from 'react';
 
 import { IBarbershop } from '@/src/common/interfaces/barbershop';
 import { IEmployee } from '../interfaces/employee';
@@ -10,12 +16,18 @@ interface IPanelContext {
   barbershop: IBarbershop | null;
   employees: IEmployee[];
   appointments: IAppointment[];
+  setBarbershop: Dispatch<SetStateAction<IBarbershop | null>>;
+  setEmployees: Dispatch<SetStateAction<IEmployee[]>>;
+  setAppointments: Dispatch<SetStateAction<IAppointment[]>>;
 }
 
 const PanelContext = createContext<IPanelContext>({
   barbershop: null,
   employees: [],
   appointments: [],
+  setBarbershop: () => {},
+  setEmployees: () => {},
+  setAppointments: () => {},
 });
 
 export function usePanelContext() {
@@ -30,18 +42,34 @@ export function usePanelContext() {
   return context;
 }
 
-interface IPanelProviderProps extends IPanelContext {
+interface IPanelProviderProps {
   children: React.ReactNode;
+  barbershopData: IBarbershop | null;
+  employeesData: IEmployee[];
+  appointmentsData: IAppointment[];
 }
 
 export function PanelProvider({
   children,
-  barbershop,
-  employees,
-  appointments,
+  barbershopData,
+  employeesData,
+  appointmentsData,
 }: IPanelProviderProps) {
+  const [barbershop, setBarbershop] = useState(barbershopData);
+  const [employees, setEmployees] = useState(employeesData);
+  const [appointments, setAppointments] = useState(appointmentsData);
+
   return (
-    <PanelContext.Provider value={{ barbershop, employees, appointments }}>
+    <PanelContext.Provider
+      value={{
+        barbershop,
+        employees,
+        appointments,
+        setBarbershop,
+        setEmployees,
+        setAppointments,
+      }}
+    >
       {children}
     </PanelContext.Provider>
   );
