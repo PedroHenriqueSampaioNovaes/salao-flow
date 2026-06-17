@@ -4,8 +4,7 @@ import { useState } from 'react';
 
 import { usePanelContext } from '@/src/common/contexts/panel-context';
 
-import { IAppointment } from '@/app/actions/get-appointments';
-
+import { IAppointment } from '@/src/common/interfaces/appointment';
 import { formatPrice } from '@/src/common/utils/formatPrice';
 
 export default function Dashboard() {

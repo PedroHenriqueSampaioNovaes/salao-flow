@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 
-import Dashboard from '@/src/components/dashboard';
+import Dashboard from '@/app/panel/dashboard/_components/Dashboard';
 
 export const metadata: Metadata = {
   title: 'Dashboard | SalãoFlow',
