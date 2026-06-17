@@ -12,12 +12,9 @@ export default async function getEmployeesAction() {
   try {
     const cookieStore = await cookies();
 
-    const data = await FetchApi.get<Pick<IEmployee, 'id' | 'name' | 'image'>[]>(
-      '/employees',
-      {
-        token: cookieStore.get('token')?.value,
-      },
-    );
+    const data = await FetchApi.get<IEmployee[]>('/employees', {
+      token: cookieStore.get('token')?.value,
+    });
 
     return { data, ok: true, error: '' };
   } catch (error) {
