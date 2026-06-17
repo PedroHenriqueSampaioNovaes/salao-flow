@@ -1,4 +1,4 @@
-export interface Employee {
+export interface IEmployee {
   id: number;
   barbershop_id: number;
   employeeScheduleId: string;

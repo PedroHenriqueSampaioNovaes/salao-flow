@@ -1,4 +1,4 @@
-export interface Service {
+export interface IService {
   id: string;
   barbershop_id: number;
   name: string;

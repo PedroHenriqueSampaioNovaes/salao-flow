@@ -5,17 +5,8 @@ import { cookies } from 'next/headers';
 import FetchApi from '@/src/common/api/FetchApi';
 
 import { apiError } from '@/src/common/utils/apiError';
-import { Customer } from '@/src/common/interfaces/customer';
-import { Employee } from '@/src/common/interfaces/employee';
-import { Service } from '@/src/common/interfaces/service';
 
-export interface IAppointment {
-  id: string;
-  date: string;
-  customer: Pick<Customer, 'id' | 'name' | 'phone'>;
-  employee: Pick<Employee, 'id' | 'name'>;
-  services: Pick<Service, 'name' | 'price'>[];
-}
+import { IAppointment } from '@/src/common/interfaces/appointment';
 
 export default async function getAppointmentsAction() {
   try {
