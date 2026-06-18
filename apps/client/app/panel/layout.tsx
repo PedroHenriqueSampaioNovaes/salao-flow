@@ -17,9 +17,16 @@ export default async function PanelLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { data: barbershop } = await getBarbershopAction();
-  const { data: appointments } = await getAppointmentsAction();
-  const { data: employees } = await getEmployeesAction();
+  const [barbershopResponse, appointmentsResponse, employeesResponse] =
+    await Promise.all([
+      getBarbershopAction(),
+      getAppointmentsAction(),
+      getEmployeesAction(),
+    ]);
+
+  const { data: barbershop } = barbershopResponse;
+  const { data: appointments } = appointmentsResponse;
+  const { data: employees } = employeesResponse;
 
   return (
     <PanelProvider
