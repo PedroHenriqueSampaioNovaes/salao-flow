@@ -25,6 +25,8 @@ export class EmployeeRepository {
         },
       },
       select: {
+        id: true,
+        employeeScheduleId: true,
         name: true,
         image: true,
       },
