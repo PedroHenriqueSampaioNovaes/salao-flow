@@ -1,7 +1,6 @@
 import EditForm from './_components/EditForm';
 
 import getEmployeeSchedulesAction from '@/app/actions/get-employee-schedules';
-import getEmployeeAction from '@/app/actions/get-employee';
 
 export default async function EditPage({
   params,
@@ -10,23 +9,16 @@ export default async function EditPage({
 }) {
   const { id: professionalId } = await params;
 
-  const [employeeSchedules, employee] = await Promise.all([
-    getEmployeeSchedulesAction(),
-    getEmployeeAction(professionalId),
-  ]);
+  const { data: employeeSchedules } = await getEmployeeSchedulesAction();
 
-  if (!employeeSchedules.ok) {
+  if (!employeeSchedules) {
     return <h1>É necessário ter pelo menos um expediente padrão</h1>;
-  }
-
-  if (!employee.ok) {
-    return <h1>Funcionário não encontrado</h1>;
   }
 
   return (
     <EditForm
-      employee={employee.data!}
-      employeeSchedules={employeeSchedules.data!}
+      employeeId={Number(professionalId)}
+      employeeSchedules={employeeSchedules}
     />
   );
 }
