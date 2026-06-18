@@ -44,6 +44,19 @@ export default class FetchApi {
     return await FetchApi.extractData<T>(response);
   }
 
+  static async put<T>(url: string, options: FetchOptions = {}) {
+    const response = await fetch(`${URL_BASE}${url}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: options.token ? `Bearer ${options.token}` : '',
+      } as HeadersInit,
+      body: options.body ? JSON.stringify(options.body) : null,
+    });
+
+    return await FetchApi.extractData<T>(response);
+  }
+
   static async delete<T>(url: string, token?: string) {
     const response = await fetch(`${URL_BASE}${url}`, {
       method: 'DELETE',
