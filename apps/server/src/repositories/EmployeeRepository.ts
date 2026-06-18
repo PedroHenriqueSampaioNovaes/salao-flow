@@ -38,6 +38,9 @@ export class EmployeeRepository {
       where: {
         id,
       },
+      include: {
+        employeeSchedule: true,
+      },
     });
 
     return employee;

@@ -24,6 +24,7 @@ export class DetailsEmployeeService {
       id: employee.id,
       name: employee.name,
       image: employee.image,
+      employeeScheduleId: employee.employeeScheduleId,
     };
   }
 }
