@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'SalaoFlow',
+  title: 'SalãoFlow',
   description:
     'Tenha um site personalizado para agendamento online e divulgação do seu estabelecimento. Teste grátis por 30 dias!',
 };
