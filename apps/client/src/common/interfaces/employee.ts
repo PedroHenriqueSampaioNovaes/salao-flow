@@ -4,3 +4,9 @@ export interface IEmployee {
   name: string;
   image: string;
 }
+
+export interface ICreateEmployee {
+  name: string;
+  image?: string;
+  employeeScheduleId: string;
+}
