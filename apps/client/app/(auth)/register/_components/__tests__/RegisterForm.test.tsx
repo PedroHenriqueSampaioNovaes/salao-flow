@@ -37,6 +37,7 @@ describe('RegisterForm', () => {
       register: mockRegister,
       handleSubmit: mockHandleSubmit,
       control: {} as Control<CreateBarbershopSchema>,
+      error: '',
       errors: {},
       isSubmitting: false,
       onSubmit: mockOnSubmit,
@@ -62,6 +63,7 @@ describe('RegisterForm', () => {
       register: mockRegister,
       handleSubmit: mockHandleSubmit,
       control: {} as Control<CreateBarbershopSchema>,
+      error: '',
       errors: {
         name: {
           type: 'required',
@@ -102,6 +104,7 @@ describe('RegisterForm', () => {
       register: mockRegister,
       handleSubmit: mockHandleSubmit,
       control: {} as Control<CreateBarbershopSchema>,
+      error: '',
       errors: {},
       isSubmitting: true,
       onSubmit: mockOnSubmit,
