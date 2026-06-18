@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { Suspense } from 'react';
 
 import getAppointmentsAction from '../actions/get-appointments';
 import getEmployeesAction from '../actions/get-employees';
@@ -17,6 +18,17 @@ export default async function PanelLayout({
 }: {
   children: React.ReactNode;
 }) {
+  return (
+    <>
+      <aside>Sou uma sidebar legal</aside>
+      <Suspense fallback={<p>Carregando...</p>}>
+        <BarbershopData>{children}</BarbershopData>
+      </Suspense>
+    </>
+  );
+}
+
+async function BarbershopData({ children }: { children: React.ReactNode }) {
   const [barbershopResponse, appointmentsResponse, employeesResponse] =
     await Promise.all([
       getBarbershopAction(),
