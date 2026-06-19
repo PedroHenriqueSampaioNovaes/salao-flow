@@ -20,7 +20,8 @@ export default function EditForm({
   employeeSchedules,
   employeeId,
 }: IEditFormProps) {
-  const { employees } = usePanelContext();
+  const { employees, setEmployees } = usePanelContext();
+
   const employee = employees.find((e) => e.id === employeeId);
 
   const router = useRouter();
@@ -32,12 +33,20 @@ export default function EditForm({
   async function onSubmit(data: ProfessionalFormData) {
     if (!employee) return;
 
-    const { ok, error } = await updateEmployeeAction({
+    const {
+      data: employeeUpdated,
+      ok,
+      error,
+    } = await updateEmployeeAction({
       id: employee.id,
       employeeData: data,
     });
 
     if (!ok) return alert(error);
+
+    setEmployees((prev) =>
+      prev.map((e) => (e.id === employee.id ? employeeUpdated! : e)),
+    );
 
     router.push('/panel/professionals');
   }
