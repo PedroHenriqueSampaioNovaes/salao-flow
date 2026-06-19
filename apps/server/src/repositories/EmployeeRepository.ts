@@ -35,10 +35,11 @@ export class EmployeeRepository {
     return employee;
   }
 
-  async getById(id: number) {
+  async getById(id: number, barbershopId: number) {
     const employee = await prisma.employee.findUnique({
       where: {
         id,
+        barbershopId,
       },
       include: {
         employeeSchedule: true,
@@ -46,6 +47,19 @@ export class EmployeeRepository {
     });
 
     return employee;
+  }
+
+  async getByIds(ids: number[], barbershopId: number) {
+    const employees = await prisma.employee.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
+        barbershopId,
+      },
+    });
+
+    return employees;
   }
 
   async getByIdWithEmployeeSchedule(id: number) {
