@@ -10,7 +10,7 @@ export class CreateServiceItemService {
     const employeeRepository = new EmployeeRepository();
     const serviceRepository = new ServiceRepository();
 
-    let employeeIds = [];
+    const employeeIds: number[] = [];
 
     if (data.assignToAllEmployees) {
       const employees =
@@ -18,25 +18,26 @@ export class CreateServiceItemService {
 
       employeeIds.push(...employees.map((e) => e.id));
     } else {
-      const employee = await employeeRepository.getById(
-        Number(data.employeeId),
+      const requestedEmployeeIds = data.employeeIds ?? [];
+      const employees = await employeeRepository.getByIds(
+        requestedEmployeeIds,
+        barbershopId,
+      );
+      const foundEmployeeIds = new Set(
+        employees.map((employee) => employee.id),
+      );
+      const hasInvalidEmployee = requestedEmployeeIds.some(
+        (employeeId) => !foundEmployeeIds.has(employeeId),
       );
 
-      if (!employee) {
+      if (hasInvalidEmployee) {
         throw new AppError('Funcionário não encontrado ou não existe', 404);
       }
 
-      if (employee.barbershopId !== barbershopId) {
-        throw new AppError(
-          'Você não tem permissão para criar este serviço',
-          403,
-        );
-      }
-
-      employeeIds.push(employee.id);
+      employeeIds.push(...employees.map((e) => e.id));
     }
 
-    const { employeeId, ...serviceData } = data;
+    const { employeeIds: _, ...serviceData } = data;
 
     const service = await serviceRepository.create(
       serviceData,

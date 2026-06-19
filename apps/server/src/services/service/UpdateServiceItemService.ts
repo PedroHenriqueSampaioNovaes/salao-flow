@@ -23,29 +23,34 @@ export class UpdateServiceItemService {
       );
     }
 
-    let employeeIds = data.employeeId ? [data.employeeId] : [];
+    const employeeIds: number[] = [];
 
-    if (employeeIds.length === 1) {
-      const employee = await employeeRepository.getById(employeeIds[0]);
-
-      if (!employee) {
-        throw new AppError('Funcionário não encontrado ou não existe', 404);
-      }
-
-      if (employee.barbershopId !== barbershopId) {
-        throw new AppError(
-          'Você não tem permissão para criar este serviço',
-          403,
-        );
-      }
-    } else {
+    if (data.assignToAllEmployees) {
       const employees =
         await employeeRepository.listByBarbershopId(barbershopId);
 
-      employeeIds = employees.map((e) => e.id);
+      employeeIds.push(...employees.map((e) => e.id));
+    } else {
+      const requestedEmployeeIds = data.employeeIds ?? [];
+      const employees = await employeeRepository.getByIds(
+        requestedEmployeeIds,
+        barbershopId,
+      );
+      const foundEmployeeIds = new Set(
+        employees.map((employee) => employee.id),
+      );
+      const hasInvalidEmployee = requestedEmployeeIds.some(
+        (employeeId) => !foundEmployeeIds.has(employeeId),
+      );
+
+      if (hasInvalidEmployee) {
+        throw new AppError('Funcionário não encontrado ou não existe', 404);
+      }
+
+      employeeIds.push(...employees.map((e) => e.id));
     }
 
-    const { employeeId, ...updateData } = data;
+    const { employeeIds: _, ...updateData } = data;
 
     const updatedService = await serviceRepository.update(
       updateData,

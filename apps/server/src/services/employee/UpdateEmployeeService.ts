@@ -10,7 +10,7 @@ export class UpdateEmployeeService {
     const employeeRepository = new EmployeeRepository();
     const employeeScheduleRepository = new EmployeeScheduleRepository();
 
-    const employee = await employeeRepository.getById(data.id);
+    const employee = await employeeRepository.getById(data.id, barbershopId);
     if (!employee) {
       throw new AppError('Funcionário não encontrado ou não existe.', 404);
     }

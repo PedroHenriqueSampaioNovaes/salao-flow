@@ -1,5 +1,29 @@
 import { z } from 'zod';
 
+const REQUIRED_EMPLOYEE_MESSAGE =
+  'É obrigatório informar qual funcionário será responsável por este serviço.';
+
+type ServiceEmployeeAssignment = {
+  assignToAllEmployees?: boolean;
+  employeeIds?: number[];
+};
+
+function validateEmployeeAssignment(
+  data: ServiceEmployeeAssignment,
+  ctx: z.RefinementCtx,
+) {
+  if (
+    !data.assignToAllEmployees &&
+    (!data.employeeIds || data.employeeIds.length === 0)
+  ) {
+    ctx.addIssue({
+      code: 'custom',
+      message: REQUIRED_EMPLOYEE_MESSAGE,
+      path: ['employeeIds'],
+    });
+  }
+}
+
 const baseServiceSchema = z.object({
   name: z.string().min(1, 'Nome é obrigatório.'),
   description: z
@@ -16,27 +40,19 @@ const baseServiceSchema = z.object({
     .transform((value) => Number(value)),
   status: z.boolean().optional(),
   assignToAllEmployees: z.boolean(),
-  employeeId: z
-    .number(
-      'É obrigatório informar qual funcionário será responsável por este serviço.',
-    )
-    .optional(),
+  employeeIds: z.array(z.number()).optional(),
 });
 
-export const serviceSchema = baseServiceSchema.superRefine((data, ctx) => {
-  if (!data.assignToAllEmployees && !data.employeeId) {
-    ctx.addIssue({
-      code: 'custom',
-      message:
-        'É obrigatório informar qual funcionário será responsável por este serviço.',
-      path: ['employeeId'],
-    });
-  }
-});
+export const serviceSchema = baseServiceSchema.superRefine(
+  validateEmployeeAssignment,
+);
 
-export const updateServiceSchema = baseServiceSchema.partial().extend({
-  id: z.uuid('É obrigatório enviar o ID do serviço.'),
-});
+export const updateServiceSchema = baseServiceSchema
+  .partial()
+  .extend({
+    id: z.uuid('É obrigatório enviar o ID do serviço.'),
+  })
+  .superRefine(validateEmployeeAssignment);
 
 export type ServiceSchema = z.infer<typeof serviceSchema>;
 export type UpdateServiceSchema = z.infer<typeof updateServiceSchema>;

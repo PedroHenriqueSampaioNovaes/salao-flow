@@ -96,6 +96,7 @@ export class ServiceRepository {
         employees: {
           set: employeeIds.map((id) => ({ id })),
         },
+        assignToAllEmployees: data.assignToAllEmployees || false,
       },
       omit: {
         createdAt: true,

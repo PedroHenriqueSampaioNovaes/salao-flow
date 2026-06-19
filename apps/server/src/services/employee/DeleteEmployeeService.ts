@@ -6,7 +6,7 @@ export class DeleteEmployeeService {
   async execute(employeeId: number, barbershopId: number) {
     const employeeRepository = new EmployeeRepository();
 
-    const employee = await employeeRepository.getById(employeeId);
+    const employee = await employeeRepository.getById(employeeId, barbershopId);
     if (!employee) {
       throw new AppError('Funcionário não encontrado ou não existe.', 404);
     }
