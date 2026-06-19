@@ -88,6 +88,8 @@ export class EmployeeRepository {
         employeeScheduleId: data.employeeScheduleId,
       },
       select: {
+        id: true,
+        employeeScheduleId: true,
         name: true,
         image: true,
       },
