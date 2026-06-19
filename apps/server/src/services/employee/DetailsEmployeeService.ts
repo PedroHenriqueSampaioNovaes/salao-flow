@@ -8,7 +8,7 @@ export class DetailsEmployeeService {
   async execute(data: UpdateEmployeeData, barbershopId: number) {
     const employeeRepository = new EmployeeRepository();
 
-    const employee = await employeeRepository.getById(data.id);
+    const employee = await employeeRepository.getById(data.id, barbershopId);
     if (!employee) {
       throw new AppError('Funcionário não encontrado ou não existe.', 404);
     }

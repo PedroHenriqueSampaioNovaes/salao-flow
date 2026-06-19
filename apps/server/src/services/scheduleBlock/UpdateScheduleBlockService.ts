@@ -29,7 +29,7 @@ export class UpdateScheduleBlockService {
     }
 
     if (data.employeeId) {
-      const employee = await employeeRepository.getById(data.employeeId);
+      const employee = await employeeRepository.getById(data.employeeId, barbershopId);
 
       if (!employee) {
         throw new AppError('Funcionário não encontrado.', 404);

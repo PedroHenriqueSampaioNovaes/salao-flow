@@ -10,7 +10,7 @@ export class CreateScheduleBlockService {
     const scheduleBlockRepository = new ScheduleBlockRepository();
     const employeeRepository = new EmployeeRepository();
 
-    const employee = await employeeRepository.getById(data.employeeId);
+    const employee = await employeeRepository.getById(data.employeeId, barbershopId);
 
     if (!employee) {
       throw new AppError('Esse funcionário não encontrado.', 404);
