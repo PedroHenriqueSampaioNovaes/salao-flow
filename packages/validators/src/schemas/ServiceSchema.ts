@@ -1,8 +1,5 @@
 import { z } from 'zod';
 
-const REQUIRED_EMPLOYEE_MESSAGE =
-  'É obrigatório informar qual funcionário será responsável por este serviço.';
-
 type ServiceEmployeeAssignment = {
   assignToAllEmployees?: boolean;
   employeeIds?: number[];
@@ -18,7 +15,7 @@ function validateEmployeeAssignment(
   ) {
     ctx.addIssue({
       code: 'custom',
-      message: REQUIRED_EMPLOYEE_MESSAGE,
+      message: 'Selecione ao menos um funcionário para atribuir o serviço.',
       path: ['employeeIds'],
     });
   }
@@ -26,18 +23,9 @@ function validateEmployeeAssignment(
 
 const baseServiceSchema = z.object({
   name: z.string().min(1, 'Nome é obrigatório.'),
-  description: z
-    .string()
-    .min(10, 'A descrição deve ter pelo menos 10 caracteres.')
-    .optional(),
-  price: z
-    .string('Obrigatório definir o preço do serviço.')
-    .regex(/^\d+$/, 'Só é permitido números como preço.')
-    .transform((value) => Number(value)),
-  duration: z
-    .string('Obrigatório definir o tempo de duração do serviço.')
-    .regex(/^\d+$/, 'Só é permitido números como tempo de duração do serviço.')
-    .transform((value) => Number(value)),
+  description: z.string().optional(),
+  price: z.number('Obrigatório definir o preço do serviço.').min(0.01),
+  duration: z.number('Obrigatório definir o tempo de duração do serviço.'),
   status: z.boolean(),
   assignToAllEmployees: z.boolean(),
   employeeIds: z.array(z.number()).optional(),
