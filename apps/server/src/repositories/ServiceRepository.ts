@@ -16,6 +16,7 @@ export class ServiceRepository {
         name: data.name,
         description: data.description,
         price: data.price,
+        status: data.status,
         duration: data.duration,
         barbershopId,
         employees: {

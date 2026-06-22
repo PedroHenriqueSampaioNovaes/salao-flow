@@ -38,7 +38,7 @@ const baseServiceSchema = z.object({
     .string('Obrigatório definir o tempo de duração do serviço.')
     .regex(/^\d+$/, 'Só é permitido números como tempo de duração do serviço.')
     .transform((value) => Number(value)),
-  status: z.boolean().optional(),
+  status: z.boolean(),
   assignToAllEmployees: z.boolean(),
   employeeIds: z.array(z.number()).optional(),
 });
