@@ -16,12 +16,21 @@ export class ServiceRepository {
         name: data.name,
         description: data.description,
         price: data.price,
+        status: data.status,
         duration: data.duration,
         barbershopId,
         employees: {
           connect: employeeIds.map((id) => ({ id })),
         },
         assignToAllEmployees: data.assignToAllEmployees,
+      },
+      include: {
+        employees: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
       },
       omit: {
         createdAt: true,
@@ -36,6 +45,18 @@ export class ServiceRepository {
   async getById(id: string) {
     const service = await prisma.service.findUnique({
       where: { id },
+      include: {
+        employees: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+      omit: {
+        createdAt: true,
+        updatedAt: true,
+      },
     });
 
     return service;
@@ -60,6 +81,14 @@ export class ServiceRepository {
   async listByIds(ids: string[]) {
     const services = await prisma.service.findMany({
       where: { id: { in: ids } },
+      include: {
+        employees: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
       omit: {
         createdAt: false,
         updatedAt: false,
@@ -72,6 +101,14 @@ export class ServiceRepository {
   async listByBarbershopId(barbershopId: number) {
     const services = await prisma.service.findMany({
       where: { barbershopId },
+      include: {
+        employees: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
       omit: {
         createdAt: true,
         updatedAt: true,
@@ -97,6 +134,14 @@ export class ServiceRepository {
           set: employeeIds.map((id) => ({ id })),
         },
         assignToAllEmployees: data.assignToAllEmployees || false,
+      },
+      include: {
+        employees: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
       },
       omit: {
         createdAt: true,

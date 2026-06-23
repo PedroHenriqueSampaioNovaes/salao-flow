@@ -11,23 +11,28 @@ import {
 import { IBarbershop } from '@/src/common/interfaces/barbershop';
 import { IEmployee } from '../interfaces/employee';
 import { IAppointment } from '../interfaces/appointment';
+import { IService } from '../interfaces/service';
 
 interface IPanelContext {
   barbershop: IBarbershop | null;
   employees: IEmployee[];
   appointments: IAppointment[];
+  services: IService[];
   setBarbershop: Dispatch<SetStateAction<IBarbershop | null>>;
   setEmployees: Dispatch<SetStateAction<IEmployee[]>>;
   setAppointments: Dispatch<SetStateAction<IAppointment[]>>;
+  setServices: Dispatch<SetStateAction<IService[]>>;
 }
 
 const PanelContext = createContext<IPanelContext>({
   barbershop: null,
   employees: [],
   appointments: [],
+  services: [],
   setBarbershop: () => {},
   setEmployees: () => {},
   setAppointments: () => {},
+  setServices: () => {},
 });
 
 export function usePanelContext() {
@@ -47,6 +52,7 @@ interface IPanelProviderProps {
   barbershopData: IBarbershop | null;
   employeesData: IEmployee[];
   appointmentsData: IAppointment[];
+  servicesData: IService[];
 }
 
 export function PanelProvider({
@@ -54,10 +60,12 @@ export function PanelProvider({
   barbershopData,
   employeesData,
   appointmentsData,
+  servicesData,
 }: IPanelProviderProps) {
   const [barbershop, setBarbershop] = useState(barbershopData);
   const [employees, setEmployees] = useState(employeesData);
   const [appointments, setAppointments] = useState(appointmentsData);
+  const [services, setServices] = useState(servicesData);
 
   return (
     <PanelContext.Provider
@@ -65,9 +73,11 @@ export function PanelProvider({
         barbershop,
         employees,
         appointments,
+        services,
         setBarbershop,
         setEmployees,
         setAppointments,
+        setServices,
       }}
     >
       {children}
