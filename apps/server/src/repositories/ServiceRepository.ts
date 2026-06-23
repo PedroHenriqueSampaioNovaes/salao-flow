@@ -24,6 +24,14 @@ export class ServiceRepository {
         },
         assignToAllEmployees: data.assignToAllEmployees,
       },
+      include: {
+        employees: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
       omit: {
         createdAt: true,
         updatedAt: true,
