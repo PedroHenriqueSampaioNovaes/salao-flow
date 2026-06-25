@@ -6,12 +6,12 @@ import FetchApi from '@/src/common/api/FetchApi';
 
 import { apiError } from '@/src/common/utils/apiError';
 
-export default async function deleteExpedientAction(serviceId: string) {
+export default async function deleteExpedientAction(expedientId: string) {
   try {
     const cookieStore = await cookies();
 
     await FetchApi.delete(
-      `/employee-schedules/${serviceId}`,
+      `/employee-schedules/${expedientId}`,
       cookieStore.get('token')?.value,
     );
 
