@@ -1,4 +1,3 @@
-import { EmployeeRepository } from '@/src/repositories/EmployeeRepository.js';
 import { ScheduleBlockRepository } from '@/src/repositories/ScheduleBlockRepository.js';
 
 import { UpdateScheduleBlockSchema } from '@sistema-barbearia/validators';
@@ -12,7 +11,6 @@ export class UpdateScheduleBlockService {
     barbershopId: number,
   ) {
     const scheduleBlockRepository = new ScheduleBlockRepository();
-    const employeeRepository = new EmployeeRepository();
 
     const scheduleBlock =
       await scheduleBlockRepository.getById(scheduleBlockId);
@@ -28,21 +26,11 @@ export class UpdateScheduleBlockService {
       );
     }
 
-    if (data.employeeId) {
-      const employee = await employeeRepository.getById(data.employeeId, barbershopId);
-
-      if (!employee) {
-        throw new AppError('Funcionário não encontrado.', 404);
-      }
-
-      if (employee.barbershopId !== barbershopId) {
-        throw new AppError('Funcionário não pertence a esta barbearia.', 403);
-      }
-    }
-
     const updatedScheduleBlock = await scheduleBlockRepository.update(
       data,
       scheduleBlockId,
+      barbershopId,
+      data.employeeIds,
     );
 
     return updatedScheduleBlock;

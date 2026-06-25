@@ -4,7 +4,6 @@ export interface ScheduleBlockData {
   name: string;
   initialDate: Date;
   finalDate: Date;
-  employeeId: number;
 }
 
 export interface UpdateScheduleBlockData {
@@ -20,14 +19,20 @@ interface DateConfig {
 }
 
 export class ScheduleBlockRepository {
-  async create(data: ScheduleBlockData, barbershopId: number) {
+  async create(
+    data: ScheduleBlockData,
+    employeeIds: number[],
+    barbershopId: number,
+  ) {
     const scheduleBlock = await prisma.scheduleBlock.create({
       data: {
         name: data.name,
         initialDate: data.initialDate,
         finalDate: data.finalDate,
         barbershopId,
-        employeeId: data.employeeId,
+        employees: {
+          connect: employeeIds.map((id) => ({ id, barbershopId })),
+        },
       },
     });
 
@@ -80,14 +85,21 @@ export class ScheduleBlockRepository {
     return scheduleBlocks;
   }
 
-  async update(data: UpdateScheduleBlockData, id: string) {
+  async update(
+    data: UpdateScheduleBlockData,
+    id: string,
+    barbershopId: number,
+    employeeIds?: number[],
+  ) {
     const scheduleBlock = await prisma.scheduleBlock.update({
       where: { id },
       data: {
         name: data.name,
         initialDate: data.initialDate,
         finalDate: data.finalDate,
-        employeeId: data.employeeId,
+        employees: {
+          set: employeeIds?.map((id) => ({ id, barbershopId })),
+        },
       },
     });
 
