@@ -16,10 +16,10 @@ export class EmployeeScheduleRepository {
           create: data.weekdays.map(
             ({ weekday, isWorkingDay, start, startLunch, endLunch, end }) => ({
               weekday,
-              start,
-              startLunch,
-              endLunch,
-              end,
+              start: isWorkingDay ? start : null,
+              startLunch: isWorkingDay ? startLunch : null,
+              endLunch: isWorkingDay ? endLunch : null,
+              end: isWorkingDay ? end : null,
               isWorkingDay,
             }),
           ),
@@ -83,10 +83,10 @@ export class EmployeeScheduleRepository {
             ({ weekday, isWorkingDay, start, startLunch, endLunch, end }) => ({
               where: { weekday },
               data: {
-                start,
-                startLunch,
-                endLunch,
-                end,
+                start: isWorkingDay ? start : null,
+                startLunch: isWorkingDay ? startLunch : null,
+                endLunch: isWorkingDay ? endLunch : null,
+                end: isWorkingDay ? end : null,
                 isWorkingDay,
               },
             }),

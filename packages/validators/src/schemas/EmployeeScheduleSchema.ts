@@ -14,27 +14,33 @@ export const weekdayScheduleSchema = z.object({
   weekday: z.enum(Weekday, {
     error: 'Dia da semana inválido.',
   }),
-  isWorkingDay: z.coerce.boolean('Obrigatório informar se é dia útil.'),
+  isWorkingDay: z.coerce.boolean<boolean>(
+    'Obrigatório informar se é dia útil.',
+  ),
   start: z
     .string('O horário tem que seguir o padrão HH:MM')
     .regex(/^\d{2}:\d{2}$/, 'O horário tem que seguir o padrão HH:MM')
-    .optional()
-    .transform((value) => value || null),
+    .transform((value) => value || null)
+    .nullable()
+    .optional(),
   startLunch: z
     .string('O horário tem que seguir o padrão HH:MM')
     .regex(/^\d{2}:\d{2}$/, 'O horário tem que seguir o padrão HH:MM')
-    .optional()
-    .transform((value) => value || null),
+    .transform((value) => value || null)
+    .nullable()
+    .optional(),
   endLunch: z
     .string('O horário tem que seguir o padrão HH:MM')
     .regex(/^\d{2}:\d{2}$/, 'O horário tem que seguir o padrão HH:MM')
-    .optional()
-    .transform((value) => value || null),
+    .transform((value) => value || null)
+    .nullable()
+    .optional(),
   end: z
     .string('O horário tem que seguir o padrão HH:MM')
     .regex(/^\d{2}:\d{2}$/, 'O horário tem que seguir o padrão HH:MM')
-    .optional()
-    .transform((value) => value || null),
+    .transform((value) => value || null)
+    .nullable()
+    .optional(),
 });
 
 export const employeeScheduleSchema = z.object({
@@ -46,9 +52,11 @@ export const employeeScheduleSchema = z.object({
     .length(7, 'Obrigatório inserir os horários para todos os dias da semana.'),
 });
 
-export const updateEmployeeScheduleSchema = employeeScheduleSchema.partial().extend({
-  weekdays: z.array(weekdayScheduleSchema).optional(),
-});
+export const updateEmployeeScheduleSchema = employeeScheduleSchema
+  .partial()
+  .extend({
+    weekdays: z.array(weekdayScheduleSchema).optional(),
+  });
 
 export type EmployeeScheduleSchema = z.infer<typeof employeeScheduleSchema>;
 export type UpdateEmployeeScheduleSchema = z.infer<
