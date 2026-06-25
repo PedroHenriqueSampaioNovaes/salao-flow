@@ -162,8 +162,7 @@ model ScheduleBlock {
   finalDate    DateTime
   barbershopId Int
   barbershop   Barbershop @relation(fields: [barbershopId], references: [id])
-  employeeId   Int
-  employee     Employee   @relation(fields: [employeeId], references: [id])
+  employees    Employee[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
