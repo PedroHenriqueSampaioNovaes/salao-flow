@@ -10,3 +10,26 @@ export interface ICreateEmployee {
   image?: string;
   employeeScheduleId: string;
 }
+
+export interface IWeekdayExpedient {
+  id: string;
+  weekday: number;
+  isWorkingDay: boolean;
+  start?: string | null;
+  startLunch?: string | null;
+  endLunch?: string | null;
+  end?: string | null;
+}
+
+export interface IExpedient {
+  id: string;
+  name: string;
+  isDefault: boolean;
+  barbershopId: number;
+  employeeScheduleWeekdays: IWeekdayExpedient[];
+}
+
+export interface IUpdateExpedient {
+  name?: string;
+  weekdays: Partial<IWeekdayExpedient>[];
+}
