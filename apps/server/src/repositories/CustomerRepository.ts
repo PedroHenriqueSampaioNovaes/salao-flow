@@ -34,14 +34,13 @@ export class CustomerRepository {
     return customer;
   }
 
-  async update(data: UpdateCustomer) {
+  async updateProfileAndVisitCount(data: UpdateCustomer) {
     return prisma.customer.update({
       where: {
         id: data.id,
       },
       data: {
         name: data.name,
-        phone: data.phone,
         email: data.email,
         visitCount: {
           increment: 1,
