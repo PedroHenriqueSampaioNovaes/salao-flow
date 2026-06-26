@@ -15,3 +15,24 @@ interface ScheduleWeekday {
   endLunch: string | null;
   end: string | null;
 }
+
+export interface IBlockedTime {
+  id: string;
+  name: string;
+  initialDate: string;
+  finalDate: string;
+  barbershopId: number;
+  employees: {
+    id: number;
+    name: string;
+  }[];
+}
+
+export interface ICreateBlockedTime {
+  name: string;
+  initialDate: string;
+  finalDate: string;
+  initialTime: string;
+  finalTime: string;
+  employeeIds: number[];
+}
