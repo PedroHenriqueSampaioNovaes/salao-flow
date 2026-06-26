@@ -54,6 +54,14 @@ export class ScheduleBlockRepository {
   async listByBarbershopId(barbershopId: number) {
     const scheduleBlocks = await prisma.scheduleBlock.findMany({
       where: { barbershopId },
+      include: {
+        employees: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
       omit: {
         createdAt: true,
         updatedAt: true,
@@ -100,6 +108,18 @@ export class ScheduleBlockRepository {
         employees: {
           set: employeeIds?.map((id) => ({ id, barbershopId })),
         },
+      },
+      include: {
+        employees: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+      omit: {
+        createdAt: true,
+        updatedAt: true,
       },
     });
 
