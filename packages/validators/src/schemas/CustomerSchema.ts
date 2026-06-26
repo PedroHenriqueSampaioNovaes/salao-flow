@@ -8,4 +8,10 @@ export const createCustomerSchema = z.object({
   email: z.email('E-mail inválido.').optional(),
 });
 
+export const updateCustomerSchema = createCustomerSchema.partial().extend({
+  id: z.coerce.number('É obrigatório enviar o ID do cliente.'),
+  isBlocked: z.boolean().optional(),
+});
+
 export type CreateCustomerSchema = z.infer<typeof createCustomerSchema>;
+export type UpdateCustomerSchema = z.infer<typeof updateCustomerSchema>;

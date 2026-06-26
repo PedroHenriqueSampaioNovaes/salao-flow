@@ -34,14 +34,13 @@ export class CustomerRepository {
     return customer;
   }
 
-  async update(data: UpdateCustomer) {
+  async updateProfileAndVisitCount(data: UpdateCustomer) {
     return prisma.customer.update({
       where: {
         id: data.id,
       },
       data: {
         name: data.name,
-        phone: data.phone,
         email: data.email,
         visitCount: {
           increment: 1,
@@ -51,6 +50,42 @@ export class CustomerRepository {
       omit: {
         updatedAt: true,
       },
+    });
+  }
+
+  async getById(id: number, barbershopId: number) {
+    const customer = await prisma.customer.findFirst({
+      where: { id, barbershopId },
+    });
+    return customer;
+  }
+
+  async update(data: UpdateCustomer) {
+    return prisma.customer.update({
+      where: { id: data.id },
+      data: {
+        name: data.name,
+        phone: data.phone,
+        email: data.email,
+        isBlocked: data.isBlocked,
+      },
+      omit: {
+        updatedAt: true,
+        barbershopId: true,
+      },
+    });
+  }
+
+  async listByBarbershopId(barbershopId: number) {
+    const customers = await prisma.customer.findMany({
+      where: { barbershopId },
+    });
+    return customers;
+  }
+
+  async delete(id: number) {
+    await prisma.customer.delete({
+      where: { id },
     });
   }
 

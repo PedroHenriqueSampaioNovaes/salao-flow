@@ -117,10 +117,9 @@ export class CreateAppointmentService {
         throw new AppError('Não foi possível reservar o horário.');
       }
 
-      return this.customerRepository.update({
+      return this.customerRepository.updateProfileAndVisitCount({
         id: customer.id,
         name: data.name,
-        phone: data.phone,
         email: data.email,
       });
     }
