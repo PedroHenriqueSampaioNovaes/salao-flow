@@ -1,7 +1,21 @@
 export interface ICustomer {
-  id: string;
-  barbershop_id: number;
+  id: number;
   name: string;
+  email?: string;
   phone: string;
-  visit_count: number;
+  visitCount: number;
+  isBlocked: boolean;
+}
+
+export interface ICreateCustomer {
+  name: string;
+  email?: string;
+  phone: string;
+}
+
+export interface IUpdateCustomer {
+  name?: string;
+  email?: string;
+  phone?: string;
+  isBlocked?: boolean;
 }
