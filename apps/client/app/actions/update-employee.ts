@@ -8,15 +8,10 @@ import { apiError } from '@/src/common/utils/apiError';
 
 import { IEmployee } from '@/src/common/interfaces/employee';
 
-interface IUpdateEmployeeAction {
-  id: number;
-  employeeData: Partial<IEmployee>;
-}
-
-export default async function updateEmployeeAction({
-  id,
-  employeeData,
-}: IUpdateEmployeeAction) {
+export default async function updateEmployeeAction(
+  id: number,
+  employeeData: Partial<IEmployee>,
+) {
   try {
     const cookieStore = await cookies();
 

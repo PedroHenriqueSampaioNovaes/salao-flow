@@ -37,10 +37,7 @@ export default function EditForm({
       data: employeeUpdated,
       ok,
       error,
-    } = await updateEmployeeAction({
-      id: employee.id,
-      employeeData: data,
-    });
+    } = await updateEmployeeAction(employee.id, data);
 
     if (!ok) return alert(error);
 
