@@ -60,6 +60,12 @@ export class CustomerRepository {
     return customer;
   }
 
+  async getByEmail(email: string, barbershopId: number) {
+    return prisma.customer.findFirst({
+      where: { email, barbershopId },
+    });
+  }
+
   async update(data: UpdateCustomer) {
     return prisma.customer.update({
       where: { id: data.id },
