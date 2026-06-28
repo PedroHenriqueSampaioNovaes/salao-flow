@@ -24,6 +24,7 @@ export function useClientForm({ defaultValues }: UseClientFormProps) {
       name: '',
       phone: '',
       email: '',
+      isBlocked: false,
       ...defaultValues,
     },
   });

@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 
+import { Controller } from 'react-hook-form';
 import { Field, FieldLabel, FieldError } from '@/src/components/ui/field';
 import { Input } from '@/src/components/ui/input';
 
@@ -10,6 +11,7 @@ import { CreateCustomerSchema } from '@sistema-barbearia/validators';
 import { useClientForm } from '../_hooks/useClientForm';
 
 import { PhoneInputField } from '@/app/(auth)/register/_components/PhoneInputField';
+import { Switch } from '@/src/components/ui/switch';
 
 interface ClientFormProps {
   onSubmit: (data: CreateCustomerSchema) => Promise<void>;
@@ -56,6 +58,22 @@ export function ClientForm({
           {...register('email')}
         />
         <FieldError>{errors.email?.message}</FieldError>
+      </Field>
+
+      <Field data-invalid={!!errors.isBlocked}>
+        <FieldLabel htmlFor="isBlocked">Bloquear Cliente</FieldLabel>
+        <Controller
+          name="isBlocked"
+          control={control}
+          render={({ field }) => (
+            <Switch
+              id="isBlocked"
+              checked={field.value}
+              onCheckedChange={field.onChange}
+            />
+          )}
+        />
+        <FieldError>{errors.isBlocked?.message}</FieldError>
       </Field>
 
       <div className="flex items-center gap-20">

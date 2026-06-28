@@ -125,7 +125,12 @@ export class CreateAppointmentService {
     }
 
     return this.customerRepository.create(
-      { name: data.name, phone: data.phone, email: data.email },
+      {
+        name: data.name,
+        phone: data.phone,
+        email: data.email,
+        isBlocked: false,
+      },
       barbershopId,
     );
   }

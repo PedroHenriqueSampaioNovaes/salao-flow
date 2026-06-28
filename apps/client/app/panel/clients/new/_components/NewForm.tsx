@@ -26,7 +26,7 @@ export default function NewForm() {
 
     if (!ok) return alert(error);
 
-    setClients((prev) => [...prev, { ...clientResponse!, isBlocked: false }]);
+    setClients((prev) => [...prev, clientResponse!]);
     router.push('/panel/clients');
   }
 

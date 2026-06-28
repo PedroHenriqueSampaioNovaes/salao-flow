@@ -11,6 +11,7 @@ export interface ICreateCustomer {
   name: string;
   email?: string;
   phone: string;
+  isBlocked: boolean;
 }
 
 export interface IUpdateCustomer {

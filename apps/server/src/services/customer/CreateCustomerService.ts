@@ -27,7 +27,12 @@ export class CreateCustomerService {
     }
 
     const customer = await customerRepository.create(
-      { name: data.name, phone: data.phone, email: data.email },
+      {
+        name: data.name,
+        phone: data.phone,
+        email: data.email,
+        isBlocked: data.isBlocked,
+      },
       barbershopId,
     );
 

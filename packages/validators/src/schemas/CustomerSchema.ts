@@ -6,6 +6,7 @@ export const createCustomerSchema = z.object({
     .string('Número de contato é obrigatório.')
     .regex(/^(\(?\d{2}\)?\s?)(9?\d{4})-\d{4}$/, 'Número de contato inválido.'),
   email: z.email('E-mail inválido.').optional().or(z.literal('')),
+  isBlocked: z.boolean(),
 });
 
 export const updateCustomerSchema = createCustomerSchema.partial().extend({

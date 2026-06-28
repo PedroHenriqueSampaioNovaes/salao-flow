@@ -8,7 +8,7 @@ import { apiError } from '@/src/common/utils/apiError';
 
 import { ICreateCustomer, ICustomer } from '@/src/common/interfaces/customer';
 
-type ICreateClientResponse = Omit<ICustomer, 'isBlocked'>;
+type ICreateClientResponse = ICustomer;
 
 export default async function createClientAction(clientData: ICreateCustomer) {
   try {

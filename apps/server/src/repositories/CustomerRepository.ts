@@ -4,6 +4,7 @@ interface CreateCustomer {
   name: string;
   email?: string;
   phone: string;
+  isBlocked: boolean;
 }
 
 interface UpdateCustomer {
@@ -21,11 +22,11 @@ export class CustomerRepository {
         name: data.name,
         email: data.email,
         phone: data.phone,
+        isBlocked: data.isBlocked,
         barbershopId,
       },
       omit: {
         updatedAt: true,
-        isBlocked: true,
         barbershopId: true,
         createdAt: true,
       },

@@ -53,6 +53,7 @@ export default function EditForm({ clientId }: IEditFormProps) {
         name: client.name,
         email: client.email ?? '',
         phone: client.phone,
+        isBlocked: client.isBlocked,
       }}
     />
   );
