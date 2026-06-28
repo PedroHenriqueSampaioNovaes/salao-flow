@@ -23,6 +23,17 @@ export class UpdateCustomerService {
       }
     }
 
+    if (data.email && data.email !== customer.email) {
+      const existingCustomer = await customerRepository.getByEmail(
+        data.email,
+        barbershopId,
+      );
+
+      if (existingCustomer) {
+        throw new AppError('Este e-mail já está em uso, utilize outro.', 409);
+      }
+    }
+
     const updatedCustomer = await customerRepository.update({
       id: data.id,
       name: data.name,

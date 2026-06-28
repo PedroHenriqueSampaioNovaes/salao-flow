@@ -15,6 +15,17 @@ export class CreateCustomerService {
 
     if (existingCustomer) throw new AppError('Cliente já é cadastrado.');
 
+    if (data.email) {
+      const existingCustomer = await customerRepository.getByEmail(
+        data.email,
+        barbershopId,
+      );
+
+      if (existingCustomer) {
+        throw new AppError('Este e-mail já está em uso, utilize outro.', 409);
+      }
+    }
+
     const customer = await customerRepository.create(
       { name: data.name, phone: data.phone, email: data.email },
       barbershopId,
