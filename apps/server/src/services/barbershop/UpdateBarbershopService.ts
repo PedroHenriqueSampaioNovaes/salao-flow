@@ -23,28 +23,57 @@ export class UpdateBarbershopService {
       }
     }
 
-    const { confirmPassword, ...updateData } = data;
+    const newBarbershopData: UpdateBarbershopSchema = {
+      email: data.email,
+      name: data.name,
+      phone: data.phone,
+      address: data.address,
+    };
 
-    if (updateData.slug && updateData.slug !== barbershop.slug) {
-      const slugExists = !!(await barbershopRepository.getBySlug(
-        updateData.slug,
-      ));
+    if (data.slug && data.slug !== barbershop.slug) {
+      const slugExists = !!(await barbershopRepository.getBySlug(data.slug));
 
       if (slugExists) {
         throw new AppError('Slug não permitido, escolha outro.', 409);
       }
+
+      newBarbershopData.slug = data.slug;
     }
 
-    if (updateData.password) {
+    if (data.password) {
+      if (!data.currentPassword) {
+        throw new AppError(
+          'Para alterar a senha, digite também a senha atual.',
+          400,
+        );
+      }
+
+      const currentPasswordIsValid = await bcrypt.compare(
+        data.currentPassword,
+        barbershop.password,
+      );
+
+      if (!currentPasswordIsValid) {
+        throw new AppError('Senha atual incorreta.', 401);
+      }
+
       const salt = await bcrypt.genSalt(10);
-      updateData.password = await bcrypt.hash(updateData.password, salt);
+      newBarbershopData.password = await bcrypt.hash(data.password, salt);
     }
 
-    updateData.image = `https://ui-avatars.com/api/?name=${data.name}&size=128&rounded=true`;
+    newBarbershopData.image = `https://ui-avatars.com/api/?name=${data.name}&size=128&rounded=true`;
 
     const updatedBarbershop = await barbershopRepository.updateProfile(
       barbershopId,
-      updateData,
+      {
+        email: newBarbershopData.email,
+        password: newBarbershopData.password,
+        name: newBarbershopData.name,
+        phone: newBarbershopData.phone,
+        address: newBarbershopData.address,
+        image: newBarbershopData.image,
+        slug: newBarbershopData.slug,
+      },
     );
 
     return updatedBarbershop;
