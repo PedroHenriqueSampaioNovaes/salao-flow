@@ -12,8 +12,14 @@ export class DetailsBarbershopService {
       throw new AppError('Barbearia não encontrada.', 404);
     }
 
-    const { id, ...data } = barbershop;
-
-    return data;
+    return {
+      email: barbershop.email,
+      name: barbershop.name,
+      image: barbershop.image,
+      address: barbershop.address,
+      phone: barbershop.phone,
+      status: barbershop.status,
+      slug: barbershop.slug,
+    };
   }
 }

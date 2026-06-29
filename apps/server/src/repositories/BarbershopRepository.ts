@@ -70,7 +70,6 @@ export class BarbershopRepository {
     const barbershop = await prisma.barbershop.findUnique({
       where: { id },
       omit: {
-        password: true,
         updatedAt: true,
         customerId: true,
         resetPasswordExpires: true,
