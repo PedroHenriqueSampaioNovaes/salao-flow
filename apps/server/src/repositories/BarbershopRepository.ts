@@ -160,7 +160,6 @@ export class BarbershopRepository {
                 id: true,
                 initialDate: true,
                 finalDate: true,
-                employeeId: true,
               },
             },
             appointments: {
