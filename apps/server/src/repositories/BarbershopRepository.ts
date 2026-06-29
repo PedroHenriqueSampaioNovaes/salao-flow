@@ -93,7 +93,13 @@ export class BarbershopRepository {
     const barbershop = await prisma.barbershop.update({
       where: { id },
       data: {
-        ...data,
+        name: data.name,
+        email: data.email,
+        password: data.password,
+        phone: data.phone,
+        address: data.address,
+        image: data.image,
+        slug: data.slug,
         subscription: {
           update: {
             status: data.subscription?.status,
