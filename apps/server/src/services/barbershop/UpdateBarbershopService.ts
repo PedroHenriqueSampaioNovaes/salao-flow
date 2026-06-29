@@ -25,13 +25,13 @@ export class UpdateBarbershopService {
 
     const { confirmPassword, ...updateData } = data;
 
-    if (updateData.slug) {
+    if (updateData.slug && updateData.slug !== barbershop.slug) {
       const slugExists = !!(await barbershopRepository.getBySlug(
         updateData.slug,
       ));
 
       if (slugExists) {
-        throw new AppError('URL não permitida, escolha outra.', 409);
+        throw new AppError('Slug não permitido, escolha outro.', 409);
       }
     }
 
