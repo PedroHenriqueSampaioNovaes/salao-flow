@@ -47,9 +47,6 @@ export class UpdateBarbershopService {
       updateData,
     );
 
-    return {
-      message: 'Dados atualizados com sucesso!',
-      data: updatedBarbershop,
-    };
+    return updatedBarbershop;
   }
 }
