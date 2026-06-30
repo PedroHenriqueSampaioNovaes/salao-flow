@@ -162,7 +162,6 @@ export class BarbershopRepository {
                 finalDate: { gte: now },
               },
               select: {
-                id: true,
                 initialDate: true,
                 finalDate: true,
               },
@@ -175,7 +174,6 @@ export class BarbershopRepository {
                 },
               },
               select: {
-                id: true,
                 date: true,
                 totalServiceDuration: true,
               },
