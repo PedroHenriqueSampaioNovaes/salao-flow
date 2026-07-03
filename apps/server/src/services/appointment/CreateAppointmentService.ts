@@ -48,7 +48,7 @@ export class CreateAppointmentService {
       0,
     );
 
-    await this.checkScheduleBlock(data.date, barbershop.id);
+    await this.checkScheduleBlock(data.date, barbershop.id, employee.id);
 
     const appointmentStartMinutes =
       data.date.getUTCHours() * 60 + data.date.getUTCMinutes();
@@ -86,14 +86,19 @@ export class CreateAppointmentService {
     );
   }
 
-  private async checkScheduleBlock(date: Date, barbershopId: number) {
+  private async checkScheduleBlock(
+    date: Date,
+    barbershopId: number,
+    employeeId: number,
+  ) {
     const scheduleBlock =
-      await this.scheduleBlockRepository.ListByStartAndEndDate(
+      await this.scheduleBlockRepository.ListByStartAndEndDateAndEmployeeId(
         {
           startDate: date,
           endDate: date,
         },
         barbershopId,
+        employeeId,
       );
 
     if (scheduleBlock.length > 0) {

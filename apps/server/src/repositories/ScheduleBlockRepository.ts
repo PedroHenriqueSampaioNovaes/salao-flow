@@ -71,12 +71,22 @@ export class ScheduleBlockRepository {
     return scheduleBlocks;
   }
 
-  async ListByStartAndEndDate(dateConfig: DateConfig, barbershopId: number) {
+  async ListByStartAndEndDateAndEmployeeId(
+    dateConfig: DateConfig,
+    barbershopId: number,
+    employeeId: number,
+  ) {
     const { startDate, endDate } = dateConfig;
 
     const scheduleBlocks = await prisma.scheduleBlock.findMany({
       where: {
         barbershopId,
+        employees: {
+          some: {
+            id: employeeId,
+            barbershopId,
+          },
+        },
         initialDate: {
           lte: startDate,
         },
