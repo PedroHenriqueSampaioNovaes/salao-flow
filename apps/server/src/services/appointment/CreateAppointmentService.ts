@@ -1,7 +1,4 @@
-import {
-  CreateAppointmentSchema,
-  CreateCustomerSchema,
-} from '@sistema-barbearia/validators';
+import { CreateAppointmentSchema } from '@sistema-barbearia/validators';
 
 import { EmployeeRepository } from '@/src/repositories/EmployeeRepository.js';
 import { ServiceRepository } from '@/src/repositories/ServiceRepository.js';
@@ -14,9 +11,6 @@ import { EmployeeScheduleWeekday } from '@/src/interfaces/Employee.js';
 
 import { AppError } from '@/src/errors/AppError.js';
 
-interface CreateAppointmentAndCustomerData
-  extends CreateAppointmentSchema, CreateCustomerSchema {}
-
 export class CreateAppointmentService {
   constructor(
     private readonly employeeRepository = new EmployeeRepository(),
@@ -27,7 +21,7 @@ export class CreateAppointmentService {
     private readonly customerRepository = new CustomerRepository(),
   ) {}
 
-  async execute(data: CreateAppointmentAndCustomerData) {
+  async execute(data: CreateAppointmentSchema) {
     const barbershop = await this.barbershopRepository.getBySlug(
       data.barbershopSlug,
     );
@@ -109,7 +103,7 @@ export class CreateAppointmentService {
   }
 
   private async getOrCreateOrUpdateCustomer(
-    data: CreateCustomerSchema,
+    data: Pick<CreateAppointmentSchema, 'name' | 'phone' | 'email'>,
     barbershopId: number,
   ) {
     const customer = await this.customerRepository.getByPhone(
