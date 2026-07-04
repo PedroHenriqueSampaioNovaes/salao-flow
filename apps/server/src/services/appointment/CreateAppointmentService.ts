@@ -42,7 +42,16 @@ export class CreateAppointmentService {
       0,
     );
 
-    await this.checkScheduleBlock(data.date, barbershop.id, employee.id);
+    const initialDateService = data.date;
+    const finalDateService = new Date(data.date);
+    finalDateService.setMinutes(data.date.getMinutes() + totalServiceDuration);
+
+    await this.checkScheduleBlock(
+      initialDateService,
+      finalDateService,
+      barbershop.id,
+      employee.id,
+    );
 
     const appointmentStartMinutes =
       data.date.getUTCHours() * 60 + data.date.getUTCMinutes();
@@ -81,16 +90,15 @@ export class CreateAppointmentService {
   }
 
   private async checkScheduleBlock(
-    date: Date,
+    startDate: Date,
+    endDate: Date,
     barbershopId: number,
     employeeId: number,
   ) {
     const scheduleBlock =
-      await this.scheduleBlockRepository.ListByStartAndEndDateAndEmployeeId(
-        {
-          startDate: date,
-          endDate: date,
-        },
+      await this.scheduleBlockRepository.findByDateRangeAndEmployeeId(
+        startDate,
+        endDate,
         barbershopId,
         employeeId,
       );
