@@ -23,9 +23,8 @@ export class GetBookingInfoService {
       throw new AppError('Barbearia não encontrada.', 404);
     }
 
-    const timezone = formatDateToTimezone(new Date(), bookingInfo.timezone);
-    bookingInfo.timezone = timezone;
+    const localtime = formatDateToTimezone(new Date(), bookingInfo.timezone);
 
-    return bookingInfo;
+    return { ...bookingInfo, localtime };
   }
 }
