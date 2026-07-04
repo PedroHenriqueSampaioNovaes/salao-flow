@@ -112,6 +112,25 @@ export class EmployeeRepository {
     return employee;
   }
 
+  async listByBarbershopIdWithSchedule(barbershopId: number) {
+    const employees = await prisma.employee.findMany({
+      where: { barbershopId },
+      include: {
+        employeeSchedule: {
+          include: {
+            employeeScheduleWeekdays: true,
+          },
+        },
+      },
+      omit: {
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    return employees;
+  }
+
   async delete(id: number) {
     await prisma.employee.delete({
       where: {
