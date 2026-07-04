@@ -2,6 +2,8 @@ import { AppError } from '@/src/errors/AppError.js';
 
 import { BarbershopRepository } from '@/src/repositories/BarbershopRepository.js';
 
+import { formatDateToTimezone } from '@/src/utils/formatDateToTimezone.js';
+
 export class GetBookingInfoService {
   async execute(slug: string) {
     const barbershopRepository = new BarbershopRepository();
@@ -20,6 +22,9 @@ export class GetBookingInfoService {
     if (!bookingInfo) {
       throw new AppError('Barbearia não encontrada.', 404);
     }
+
+    const timezone = formatDateToTimezone(new Date(), bookingInfo.timezone);
+    bookingInfo.timezone = timezone;
 
     return bookingInfo;
   }
