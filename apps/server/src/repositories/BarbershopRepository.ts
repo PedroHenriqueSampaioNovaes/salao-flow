@@ -26,6 +26,7 @@ export class BarbershopRepository {
         phone: data.phone,
         image: data.image,
         slug: data.slug!,
+        timezone: data.timezone,
         subscription: {
           create: {
             plan: 'FREE',
@@ -99,6 +100,7 @@ export class BarbershopRepository {
         address: data.address,
         image: data.image,
         slug: data.slug,
+        timezone: data.timezone,
         subscription: {
           update: {
             status: data.subscription?.status,
@@ -128,6 +130,7 @@ export class BarbershopRepository {
         address: true,
         phone: true,
         image: true,
+        timezone: true,
         employees: {
           select: {
             id: true,

@@ -8,6 +8,7 @@ import { AppError } from '@/src/errors/AppError.js';
 
 import { slugify } from '@/src/utils/slugify.js';
 import { generateRandomChars } from '@/src/utils/generateRandomChars.js';
+import { isValidTimeZone } from '@/src/utils/isValidTimeZone.js';
 
 export class CreateBarbershopService {
   async execute(data: CreateBarbershop) {
@@ -19,6 +20,10 @@ export class CreateBarbershopService {
 
     if (barbershopAlreadyExists) {
       throw new AppError('Este e-mail já está em uso, escolha outro.', 409);
+    }
+
+    if (!isValidTimeZone(data.timezone)) {
+      throw new AppError('Fuso horário inválido.', 400);
     }
 
     const salt = await bcrypt.genSalt(10);

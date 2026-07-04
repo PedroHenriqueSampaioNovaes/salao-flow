@@ -24,6 +24,9 @@ export const baseBarbershopSchema = z.object({
   phone: z
     .string('Obrigatório o telefone')
     .regex(/^(\(?\d{2}\)?\s?)(9?\d{4})-\d{4}$/, 'Número de contato inválido'),
+  timezone: z
+    .string('Não foi possível obter o horário local (timezone)')
+    .min(1, 'Timezone inválida'),
 });
 
 export const createBarbershopSchema = baseBarbershopSchema.refine(
