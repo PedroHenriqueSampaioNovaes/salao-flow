@@ -20,6 +20,7 @@ export class DetailsBarbershopService {
       phone: barbershop.phone,
       status: barbershop.status,
       slug: barbershop.slug,
+      timezone: barbershop.timezone,
     };
   }
 }

@@ -1,10 +1,6 @@
-export interface CreateBarbershop {
-  name: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  address: string;
-  phone: string;
+import { CreateBarbershopSchema } from '@sistema-barbearia/validators';
+
+export interface CreateBarbershop extends CreateBarbershopSchema {
   image?: string;
   slug?: string;
 }

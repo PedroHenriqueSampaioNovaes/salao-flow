@@ -12,6 +12,7 @@ model Barbershop {
   email                String    @unique
   name                 String
   password             String
+  timezone             String
   customerId           String?
   image                String?
   address              String

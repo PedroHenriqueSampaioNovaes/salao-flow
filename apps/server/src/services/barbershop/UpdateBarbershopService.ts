@@ -6,6 +6,8 @@ import { UpdateBarbershopSchema } from '@sistema-barbearia/validators';
 
 import { AppError } from '@/src/errors/AppError.js';
 
+import { isValidTimeZone } from '@/src/utils/isValidTimeZone.js';
+
 export class UpdateBarbershopService {
   async execute(barbershopId: number, data: UpdateBarbershopSchema) {
     const barbershopRepository = new BarbershopRepository();
@@ -23,11 +25,16 @@ export class UpdateBarbershopService {
       }
     }
 
+    if (data.timezone && !isValidTimeZone(data.timezone)) {
+      throw new AppError('Fuso horário inválido.', 400);
+    }
+
     const newBarbershopData: UpdateBarbershopSchema = {
       email: data.email,
       name: data.name,
       phone: data.phone,
       address: data.address,
+      timezone: data.timezone,
     };
 
     if (data.slug && data.slug !== barbershop.slug) {
@@ -65,15 +72,7 @@ export class UpdateBarbershopService {
 
     const updatedBarbershop = await barbershopRepository.updateProfile(
       barbershopId,
-      {
-        email: newBarbershopData.email,
-        password: newBarbershopData.password,
-        name: newBarbershopData.name,
-        phone: newBarbershopData.phone,
-        address: newBarbershopData.address,
-        image: newBarbershopData.image,
-        slug: newBarbershopData.slug,
-      },
+      newBarbershopData,
     );
 
     return updatedBarbershop;
