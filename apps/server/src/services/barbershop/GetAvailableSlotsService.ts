@@ -8,8 +8,6 @@ import { AppError } from '@/src/errors/AppError.js';
 import { getBarbershopLocalTimeInMinutes } from '@/src/utils/getBarbershopLocalTimeInMinutes.js';
 import { convertTimeToMinutes } from '@/src/utils/convertTImeToMinutes.js';
 
-const BARBERSHOP_TIMEZONE = 'America/Sao_Paulo';
-
 export class GetAvailableSlotsService {
   constructor(
     private readonly employeeRepository = new EmployeeRepository(),
@@ -33,14 +31,15 @@ export class GetAvailableSlotsService {
     endOfDay.setUTCHours(23, 59, 59, 999);
 
     const todayLocalDate = new Date().toLocaleDateString('en-CA', {
-      timeZone: BARBERSHOP_TIMEZONE,
+      timeZone: barbershop.timezone,
     });
     const isToday = dateString === todayLocalDate;
 
     let currentLocalMinutes: number | undefined;
     if (isToday) {
-      currentLocalMinutes =
-        getBarbershopLocalTimeInMinutes(BARBERSHOP_TIMEZONE);
+      currentLocalMinutes = getBarbershopLocalTimeInMinutes(
+        barbershop.timezone,
+      );
     }
 
     let employees = [];
