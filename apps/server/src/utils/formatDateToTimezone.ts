@@ -10,5 +10,5 @@ export function formatDateToTimezone(date: Date, timezone: string) {
     hour12: false,
   });
 
-  return formatter.format(date).replace(',', '');
+  return new Date(formatter.format(date));
 }
