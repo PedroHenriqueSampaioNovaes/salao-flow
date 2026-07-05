@@ -7,18 +7,25 @@ import { GetAvailableSlotsService } from '@/src/services/barbershop/GetAvailable
 export class GetAvailableSlotsController {
   static async handle(req: Request, res: Response) {
     const slug = req.params.slug as string;
-    const { date, employeeId } = req.query as {
+    const { date, employeeId, lookForNextAvailableTimeSlot } = req.query as {
       date: string;
+      lookForNextAvailableTimeSlot: string;
       employeeId?: string;
     };
 
     if (!date) throw new AppError('Parâmetro date é obrigatório.', 400);
+    if (!lookForNextAvailableTimeSlot)
+      throw new AppError(
+        'Parâmetro lookForNextAvailableTimeSlot é obrigatório.',
+        400,
+      );
 
     const getAvailableSlotsService = new GetAvailableSlotsService();
 
     const result = await getAvailableSlotsService.execute(
       slug,
       date,
+      Boolean(Number(lookForNextAvailableTimeSlot)),
       employeeId ? Number(employeeId) : undefined,
     );
 
