@@ -68,7 +68,9 @@ export class UpdateBarbershopService {
       newBarbershopData.password = await bcrypt.hash(data.password, salt);
     }
 
-    newBarbershopData.image = `https://ui-avatars.com/api/?name=${data.name}&size=128&rounded=true`;
+    if (data.name) {
+      newBarbershopData.image = `https://ui-avatars.com/api/?name=${data.name}&size=128&rounded=true`;
+    }
 
     const updatedBarbershop = await barbershopRepository.updateProfile(
       barbershopId,
