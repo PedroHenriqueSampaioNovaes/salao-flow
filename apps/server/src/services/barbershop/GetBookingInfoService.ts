@@ -8,23 +8,26 @@ export class GetBookingInfoService {
   async execute(slug: string) {
     const barbershopRepository = new BarbershopRepository();
 
-    const now = new Date();
+    const barbershop = await barbershopRepository.getBySlug(slug);
 
-    const threeMonthsFromNow = new Date(now);
-    threeMonthsFromNow.setMonth(threeMonthsFromNow.getMonth() + 3);
+    if (!barbershop) {
+      throw new AppError('Barbearia não encontrada.', 404);
+    }
+
+    const now = Temporal.Now.zonedDateTimeISO(barbershop.timezone);
+
+    const threeMonthsFromNow = now.add({ months: 3 });
 
     const bookingInfo = await barbershopRepository.getBookingInfoBySlug(
       slug,
-      now,
-      threeMonthsFromNow,
+      now.toInstant().toString(),
+      threeMonthsFromNow.toInstant().toString(),
     );
 
     if (!bookingInfo) {
       throw new AppError('Barbearia não encontrada.', 404);
     }
 
-    const barbershopInstant = Temporal.Now.instant();
-
-    return { ...bookingInfo, instantLocalTime: barbershopInstant };
+    return { ...bookingInfo, instantLocalTime: now.toInstant() };
   }
 }

@@ -122,7 +122,7 @@ export class BarbershopRepository {
     return barbershop;
   }
 
-  async getBookingInfoBySlug(slug: string, now: Date, maxDate: Date) {
+  async getBookingInfoBySlug(slug: string, now: string, maxDate: string) {
     const barbershop = await prisma.barbershop.findUnique({
       where: { slug },
       select: {
