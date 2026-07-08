@@ -2,7 +2,7 @@ import { AppError } from '@/src/errors/AppError.js';
 
 import { BarbershopRepository } from '@/src/repositories/BarbershopRepository.js';
 
-import { formatDateToTimezone } from '@/src/utils/formatDateToTimezone.js';
+import { Temporal } from '@js-temporal/polyfill';
 
 export class GetBookingInfoService {
   async execute(slug: string) {
@@ -23,8 +23,8 @@ export class GetBookingInfoService {
       throw new AppError('Barbearia não encontrada.', 404);
     }
 
-    const localtime = formatDateToTimezone(new Date(), bookingInfo.timezone);
+    const barbershopInstant = Temporal.Now.instant();
 
-    return { ...bookingInfo, localtime };
+    return { ...bookingInfo, instantLocalTime: barbershopInstant };
   }
 }
