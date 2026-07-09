@@ -2,23 +2,20 @@ import { prisma } from '@/src/lib/prisma.js';
 
 export interface ScheduleBlockData {
   name: string;
-  initialDate: Date;
-  finalDate: Date;
+  initialDate: string;
+  finalDate: string;
+  employeeIds: number[];
 }
 
 export interface UpdateScheduleBlockData {
   name?: string;
-  initialDate?: Date;
-  finalDate?: Date;
-  employeeId?: number;
+  initialDate?: string;
+  finalDate?: string;
+  employeeIds?: number[];
 }
 
 export class ScheduleBlockRepository {
-  async create(
-    data: ScheduleBlockData,
-    employeeIds: number[],
-    barbershopId: number,
-  ) {
+  async create(data: ScheduleBlockData, barbershopId: number) {
     const scheduleBlock = await prisma.scheduleBlock.create({
       data: {
         name: data.name,
@@ -26,7 +23,7 @@ export class ScheduleBlockRepository {
         finalDate: data.finalDate,
         barbershopId,
         employees: {
-          connect: employeeIds.map((id) => ({ id, barbershopId })),
+          connect: data.employeeIds.map((id) => ({ id, barbershopId })),
         },
       },
     });
@@ -67,8 +64,8 @@ export class ScheduleBlockRepository {
   }
 
   async findByDateRangeAndEmployeeId(
-    startDate: Date,
-    endDate: Date,
+    startDate: string,
+    endDate: string,
     barbershopId: number,
     employeeId: number,
   ) {
@@ -93,7 +90,6 @@ export class ScheduleBlockRepository {
     data: UpdateScheduleBlockData,
     id: string,
     barbershopId: number,
-    employeeIds?: number[],
   ) {
     const scheduleBlock = await prisma.scheduleBlock.update({
       where: { id },
@@ -102,7 +98,7 @@ export class ScheduleBlockRepository {
         initialDate: data.initialDate,
         finalDate: data.finalDate,
         employees: {
-          set: employeeIds?.map((id) => ({ id, barbershopId })),
+          set: data.employeeIds?.map((id) => ({ id, barbershopId })),
         },
       },
       include: {
