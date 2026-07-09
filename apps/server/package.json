@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "tsx watch ./src/index.ts",
     "build": "tsc --build && tsc-alias",
-    "vercel-build": "npm run vercel-build-server --prefix ../.."
+    "vercel-build": "npm run vercel-build-server --prefix ../..",
+    "postinstall": "prisma generate"
   },
   "keywords": [],
   "author": "",
