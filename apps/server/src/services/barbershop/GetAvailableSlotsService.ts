@@ -1,3 +1,5 @@
+import { Temporal } from '@js-temporal/polyfill';
+
 import { EmployeeRepository } from '@/src/repositories/EmployeeRepository.js';
 import { BarbershopRepository } from '@/src/repositories/BarbershopRepository.js';
 import { ScheduleBlockRepository } from '@/src/repositories/ScheduleBlockRepository.js';
@@ -5,11 +7,36 @@ import { AppointmentRepository } from '@/src/repositories/AppointmentRepository.
 
 import { AppError } from '@/src/errors/AppError.js';
 
-import { EmployeeScheduleWeekday } from '@/src/interfaces/Employee.js';
+import {
+  getWorkdaySchedule,
+  parseShiftScheduleToMinutes,
+  getDayBoundariesUTC,
+  parseDateWithCurrentZonedDateTime,
+  isSlotDuringLunch,
+  isSlotInPast,
+  isSlotBlocked,
+  hasAppointmentConflict,
+  formatMinutesAsTime,
+  ShiftSchedule,
+  ScheduleBlock,
+  Appointment,
+  EmployeeWithSchedule,
+} from '@/src/utils/scheduleHelpers.js';
 
-import { getBarbershopLocalTimeInMinutes } from '@/src/utils/getBarbershopLocalTimeInMinutes.js';
-import { convertTimeToMinutes } from '@/src/utils/convertTImeToMinutes.js';
-import { formatDateToTimezone } from '@/src/utils/formatDateToTimezone.js';
+const SLOT_DURATION_MINUTES = 30;
+const MAX_LOOKAHEAD_DAYS = 10;
+
+interface BarbershopContext {
+  id: number;
+  timezone: string;
+}
+
+interface EmployeeSlotResult {
+  id: number;
+  name: string;
+  date: string;
+  availableSlots: string[];
+}
 
 export class GetAvailableSlotsService {
   constructor(
@@ -28,116 +55,34 @@ export class GetAvailableSlotsService {
     const barbershop = await this.barbershopRepository.getBySlug(slug);
     if (!barbershop) throw new AppError('Barbearia não encontrada.', 404);
 
-    const date = new Date(dateString);
+    const targetDate = parseDateWithCurrentZonedDateTime(
+      dateString,
+      barbershop.timezone,
+    );
+    const today = Temporal.Now.zonedDateTimeISO(barbershop.timezone);
 
-    const todayLocalDate = new Date().toLocaleDateString('en-CA', {
-      timeZone: barbershop.timezone,
-    });
+    const employees = await this.getEmployees(barbershop, employeeId);
 
-    let employees = [];
+    const isOldTargetDate =
+      today.day > targetDate.day &&
+      today.month >= targetDate.month &&
+      today.year >= targetDate.year;
+    const isToday = today.toPlainDate().equals(targetDate);
 
-    if (employeeId) {
-      const employee =
-        await this.employeeRepository.getByIdWithEmployeeSchedule(employeeId);
-
-      if (!employee || employee.barbershopId !== barbershop.id) {
-        throw new AppError('Funcionário não encontrado.', 404);
-      }
-
-      employees = [employee];
-    } else {
-      employees = await this.employeeRepository.listByBarbershopIdWithSchedule(
-        barbershop.id,
-      );
-    }
-
-    const employeesResult: {
-      id: number;
-      name: string;
-      date: string;
-      availableSlots: string[];
-    }[] = [];
-
-    const today = formatDateToTimezone(new Date(), barbershop.timezone);
-    const isOldDate =
-      today.getDate() > date.getUTCDate() &&
-      today.getMonth() >= date.getUTCMonth();
+    const employeesResult: EmployeeSlotResult[] = [];
 
     for (const employee of employees) {
-      if (isOldDate) {
-        employeesResult.push({
-          id: employee.id,
-          name: employee.name,
-          date: dateString,
-          availableSlots: [],
-        });
-        continue;
-      }
-
-      const slots = await this.getSlotsForDay(
+      const result = await this.retrievesEmployeesAvailableSchedules(
         barbershop,
         employee,
-        date,
+        targetDate,
         dateString,
-        todayLocalDate,
+        isToday,
+        isOldTargetDate,
+        lookForNextAvailableTimeSlot,
       );
 
-      if (slots.length > 0) {
-        employeesResult.push({
-          id: employee.id,
-          name: employee.name,
-          date: dateString,
-          availableSlots: slots,
-        });
-        continue;
-      }
-
-      let foundSlots: string[] = [];
-      let foundDate = dateString;
-
-      if (!lookForNextAvailableTimeSlot) {
-        foundSlots = await this.getSlotsForDay(
-          barbershop,
-          employee,
-          date,
-          dateString,
-          todayLocalDate,
-        );
-
-        employeesResult.push({
-          id: employee.id,
-          name: employee.name,
-          date: foundDate,
-          availableSlots: foundSlots,
-        });
-        continue;
-      }
-
-      for (let i = 1; i <= 10; i++) {
-        const nextDate = new Date(date);
-        nextDate.setUTCDate(nextDate.getUTCDate() + i);
-        const nextDateString = nextDate.toISOString().split('T')[0];
-
-        foundSlots = await this.getSlotsForDay(
-          barbershop,
-          employee,
-          nextDate,
-          nextDateString,
-          todayLocalDate,
-        );
-
-        if (foundSlots.length > 0) {
-          foundDate = nextDateString;
-          break;
-        }
-      }
-
-      employeesResult.push({
-        id: employee.id,
-        name: employee.name,
-        date: foundDate,
-        availableSlots: foundSlots,
-      });
+      employeesResult.push(result);
     }
 
     return {
@@ -146,106 +91,172 @@ export class GetAvailableSlotsService {
     };
   }
 
-  private async getSlotsForDay(
-    barbershop: { id: number; timezone: string },
-    employee: {
-      id: number;
-      name: string;
-      employeeSchedule?: {
-        employeeScheduleWeekdays?: EmployeeScheduleWeekday[];
-      };
-    },
-    date: Date,
+  private async retrievesEmployeesAvailableSchedules(
+    barbershop: BarbershopContext,
+    employee: EmployeeWithSchedule,
+    targetDate: Temporal.ZonedDateTime,
     dateString: string,
-    todayLocalDate: string,
+    isToday: boolean,
+    isOldTargetDate: boolean,
+    lookForNextAvailableTimeSlot: boolean,
   ) {
-    const weekday = date.getUTCDay();
-
-    const scheduleWeekday =
-      employee.employeeSchedule?.employeeScheduleWeekdays?.find(
-        (s) => s.weekday === weekday,
-      );
-
-    if (!scheduleWeekday || !scheduleWeekday.isWorkingDay) {
-      return [];
+    if (isOldTargetDate) {
+      return this.createSlotResult(employee, dateString, []);
     }
 
-    const startOfDay = new Date(date);
-    startOfDay.setUTCHours(0, 0, 0, 0);
+    const slots = await this.getSlotsForDay(
+      barbershop,
+      employee,
+      targetDate,
+      dateString,
+      isToday,
+    );
 
-    const endOfDay = new Date(date);
-    endOfDay.setUTCHours(23, 59, 59, 999);
-
-    const isToday = dateString === todayLocalDate;
-
-    let currentLocalMinutes: number | undefined;
-    if (isToday) {
-      currentLocalMinutes = getBarbershopLocalTimeInMinutes(
-        barbershop.timezone,
-      );
+    if (slots.length > 0 || !lookForNextAvailableTimeSlot) {
+      return this.createSlotResult(employee, dateString, slots);
     }
 
-    const startShift = convertTimeToMinutes(scheduleWeekday.start!);
-    const endShift = convertTimeToMinutes(scheduleWeekday.end!);
-    const startLunch = convertTimeToMinutes(scheduleWeekday.startLunch!);
-    const endLunch = convertTimeToMinutes(scheduleWeekday.endLunch!);
+    return this.findSlotsWithLookahead(
+      barbershop,
+      employee,
+      targetDate,
+      dateString,
+    );
+  }
+
+  private async findSlotsWithLookahead(
+    barbershop: BarbershopContext,
+    employee: EmployeeWithSchedule,
+    targetDate: Temporal.ZonedDateTime,
+    fallbackDateString: string,
+  ) {
+    for (let i = 1; i <= MAX_LOOKAHEAD_DAYS; i++) {
+      const futureDate = targetDate.add({ days: i });
+      const futureDateString = futureDate.toPlainDate().toString();
+
+      const slots = await this.getSlotsForDay(
+        barbershop,
+        employee,
+        futureDate,
+        futureDateString,
+        false,
+      );
+
+      if (slots.length > 0) {
+        return this.createSlotResult(employee, futureDateString, slots);
+      }
+    }
+
+    return this.createSlotResult(employee, fallbackDateString, []);
+  }
+
+  private async getEmployees(
+    barbershop: BarbershopContext,
+    employeeId?: number,
+  ) {
+    if (employeeId) {
+      const employee =
+        await this.employeeRepository.getByIdWithEmployeeSchedule(employeeId);
+
+      if (!employee || employee.barbershopId !== barbershop.id) {
+        throw new AppError('Funcionário não encontrado.', 404);
+      }
+
+      return [employee];
+    }
+
+    return this.employeeRepository.listByBarbershopIdWithSchedule(
+      barbershop.id,
+    );
+  }
+
+  private async getSlotsForDay(
+    barbershop: BarbershopContext,
+    employee: EmployeeWithSchedule,
+    zonedDateTime: Temporal.ZonedDateTime,
+    dateString: string,
+    isToday: boolean,
+  ) {
+    const scheduleWeekday = getWorkdaySchedule(employee, zonedDateTime);
+    if (!scheduleWeekday) return [];
+
+    const shift = parseShiftScheduleToMinutes(scheduleWeekday);
+    const { startOfDayUTC, endOfDayUTC } = getDayBoundariesUTC(zonedDateTime);
+
+    const currentLocalMinutes = isToday
+      ? zonedDateTime.hour * 60 + zonedDateTime.minute
+      : undefined;
 
     const blocks =
       await this.scheduleBlockRepository.findByDateRangeAndEmployeeId(
-        startOfDay,
-        endOfDay,
+        startOfDayUTC,
+        endOfDayUTC,
         barbershop.id,
         employee.id,
       );
 
     const appointments =
       await this.appointmentRepository.getByDateAndEmployeeId(
-        date,
+        dateString,
         employee.id,
       );
 
+    return this.generateAvailableSlots(
+      zonedDateTime,
+      shift,
+      currentLocalMinutes,
+      blocks,
+      appointments,
+      barbershop.timezone,
+    );
+  }
+
+  private generateAvailableSlots(
+    zonedDateTime: Temporal.ZonedDateTime,
+    shift: ShiftSchedule,
+    currentLocalMinutes: number | undefined,
+    blocks: ScheduleBlock[],
+    appointments: Appointment[],
+    timezone: string,
+  ) {
     const slots: string[] = [];
-    const step = 30;
 
-    for (let minutes = startShift; minutes < endShift; minutes += step) {
+    for (
+      let minutes = shift.startShift;
+      minutes < shift.endShift;
+      minutes += SLOT_DURATION_MINUTES
+    ) {
       const slotStart = minutes;
-      const slotEnd = minutes + step;
+      const slotEnd = minutes + SLOT_DURATION_MINUTES;
 
-      if (slotStart < endLunch && slotEnd > startLunch) continue;
+      if (isSlotDuringLunch(slotStart, slotEnd, shift)) continue;
+      if (isSlotInPast(slotStart, currentLocalMinutes)) continue;
 
-      if (
-        currentLocalMinutes !== undefined &&
-        slotStart <= currentLocalMinutes
-      ) {
+      const zonedSlotDate = zonedDateTime.with({
+        hour: Math.floor(slotStart / 60),
+        minute: slotStart % 60,
+      });
+
+      if (isSlotBlocked(zonedSlotDate, blocks)) continue;
+      if (hasAppointmentConflict(slotStart, slotEnd, appointments, timezone))
         continue;
-      }
 
-      const slotDate = new Date(date);
-      slotDate.setUTCHours(Math.floor(slotStart / 60), slotStart % 60, 0, 0);
-
-      const isBlocked = blocks.some((block) => {
-        const blockStart = new Date(block.initialDate).getTime();
-        const blockEnd = new Date(block.finalDate).getTime();
-        const slotTime = slotDate.getTime();
-        return slotTime >= blockStart && slotTime < blockEnd;
-      });
-
-      if (isBlocked) continue;
-
-      const hasConflict = appointments.some((appt) => {
-        const apptStart =
-          appt.date.getUTCHours() * 60 + appt.date.getUTCMinutes();
-        const apptEnd = apptStart + appt.totalServiceDuration;
-        return slotStart < apptEnd && slotEnd > apptStart;
-      });
-
-      if (hasConflict) continue;
-
-      const hours = String(Math.floor(slotStart / 60)).padStart(2, '0');
-      const mins = String(slotStart % 60).padStart(2, '0');
-      slots.push(`${hours}:${mins}`);
+      slots.push(formatMinutesAsTime(slotStart));
     }
 
     return slots;
+  }
+
+  private createSlotResult(
+    employee: EmployeeWithSchedule,
+    date: string,
+    availableSlots: string[],
+  ) {
+    return {
+      id: employee.id,
+      name: employee.name,
+      date,
+      availableSlots,
+    };
   }
 }

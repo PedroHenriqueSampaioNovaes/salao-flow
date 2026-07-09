@@ -1,7 +1,15 @@
 import { z } from 'zod';
 
 export const createAppointmentSchema = z.object({
-  date: z.coerce.date(),
+  date: z
+    .string('Data é obrigatória (YYYY-MM-DD).')
+    .regex(
+      /^\d{4}-\d{2}-\d{2}$/,
+      'A data tem que seguir o formato YYYY-MM-DD.',
+    ),
+  time: z
+    .string('Horário é obrigatório (HH:mm).')
+    .regex(/^\d{2}:\d{2}$/, 'O horário tem que seguir o formato HH:mm.'),
   barbershopSlug: z.string('É necessário informar o slug da barbearia.'),
   employeeId: z.number(),
   serviceIds: z.array(z.uuid()),

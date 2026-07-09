@@ -1,7 +1,7 @@
 import { prisma } from '@/src/lib/prisma.js';
 
 export interface AppointmentData {
-  date: Date;
+  dateString: string;
   totalServiceDuration: number;
   employeeId: number;
   customerId: number;
@@ -12,7 +12,7 @@ export class AppointmentRepository {
   async create(data: AppointmentData, barbershopId: number) {
     const appointment = await prisma.appointment.create({
       data: {
-        date: data.date,
+        date: data.dateString,
         barbershopId,
         employeeId: data.employeeId,
         customerId: data.customerId,
@@ -37,11 +37,11 @@ export class AppointmentRepository {
     return appointment;
   }
 
-  async getByDateAndEmployeeId(date: Date, employeeId: number) {
-    const startOfDay = new Date(date);
+  async getByDateAndEmployeeId(dateString: string, employeeId: number) {
+    const startOfDay = new Date(dateString);
     startOfDay.setUTCHours(0, 0, 0, 0);
 
-    const endOfDay = new Date(date);
+    const endOfDay = new Date(dateString);
     endOfDay.setUTCHours(23, 59, 59, 999);
 
     const appointments = await prisma.appointment.findMany({
