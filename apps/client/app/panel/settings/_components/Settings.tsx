@@ -5,6 +5,17 @@ import { useSettingsForm } from '../_hooks/useSettingsForm';
 import { Input } from '@/src/components/ui/input';
 import { Field, FieldError, FieldLabel } from '@/src/components/ui/field';
 import { PhoneInputField } from '@/app/(auth)/register/_components/PhoneInputField';
+import {
+  NativeSelect,
+  NativeSelectOption,
+} from '@/src/components/ui/native-select';
+
+const timezones = [
+  { label: 'Brasília (GMT-3)', value: 'America/Sao_Paulo' },
+  { label: 'Fernando de Noronha (GMT-2)', value: 'America/Noronha' },
+  { label: 'Amazonas (GMT-4)', value: 'America/Manaus' },
+  { label: 'Acre (GMT-5)', value: 'America/Rio_Branco' },
+];
 
 export default function Settings() {
   const { register, onSubmit, handleSubmit, control, errors } =
@@ -52,6 +63,22 @@ export default function Settings() {
           {...register('address')}
         />
         <FieldError>{errors.address?.message}</FieldError>
+      </Field>
+
+      <Field data-invalid={!!errors.timezone}>
+        <FieldLabel htmlFor="timezone">Fuso horário</FieldLabel>
+        <NativeSelect
+          id="timezone"
+          aria-invalid={!!errors.timezone}
+          {...register('timezone')}
+        >
+          {timezones.map((timezone) => (
+            <NativeSelectOption key={timezone.value} value={timezone.value}>
+              {timezone.label}
+            </NativeSelectOption>
+          ))}
+        </NativeSelect>
+        <FieldError>{errors.timezone?.message}</FieldError>
       </Field>
 
       <Field data-invalid={!!errors.slug}>
