@@ -23,6 +23,7 @@ export function useSettingsForm() {
     image: barbershop?.image || '',
     status: barbershop?.status || false,
     slug: barbershop?.slug || '',
+    timezone: barbershop?.timezone || '',
   };
 
   const {

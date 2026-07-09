@@ -7,4 +7,5 @@ export interface IBarbershop {
   phone: string;
   status: boolean;
   slug: string;
+  timezone: string;
 }
