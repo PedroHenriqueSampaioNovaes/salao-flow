@@ -30,22 +30,35 @@ export default async function PanelLayout({
 }
 
 async function BarbershopData({ children }: { children: React.ReactNode }) {
-  const [barbershopResponse, appointmentsResponse, employeesResponse, servicesResponse] =
-    await Promise.all([
-      getBarbershopAction(),
-      getAppointmentsAction(),
-      getEmployeesAction(),
-      getServicesAction(),
-    ]);
+  const [
+    barbershopResponse,
+    appointmentsResponse,
+    employeesResponse,
+    servicesResponse,
+  ] = await Promise.all([
+    getBarbershopAction(),
+    getAppointmentsAction(),
+    getEmployeesAction(),
+    getServicesAction(),
+  ]);
 
   const { data: barbershop } = barbershopResponse;
   const { data: appointments } = appointmentsResponse;
   const { data: employees } = employeesResponse;
   const { data: services } = servicesResponse;
 
+  if (!barbershop) {
+    return (
+      <h1>
+        Desculpe, não foi possível buscar os dados de sua barbearia. Tente fazer
+        o login novamente!
+      </h1>
+    );
+  }
+
   return (
     <PanelProvider
-      barbershopData={barbershop ?? null}
+      barbershopData={barbershop}
       appointmentsData={appointments ?? []}
       employeesData={employees ?? []}
       servicesData={services ?? []}
