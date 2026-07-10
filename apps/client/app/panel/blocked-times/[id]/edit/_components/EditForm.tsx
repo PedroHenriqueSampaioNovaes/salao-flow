@@ -11,6 +11,8 @@ import { useBlockedTimesContext } from '@/src/common/contexts/blocked-times-cont
 import { dateToInputDate } from '@/src/common/utils/dateToInputDate';
 import { dateToInputTime } from '@/src/common/utils/dateToInputTime';
 
+import { usePanelContext } from '@/src/common/contexts/panel-context';
+
 import { CreateScheduleBlockFormData } from '../../../_hooks/useBlockedTimesForm';
 
 interface IEditFormProps {
@@ -19,6 +21,7 @@ interface IEditFormProps {
 
 export default function EditForm({ blockedTimeId }: IEditFormProps) {
   const { blockedTimes, setBlockedTimes } = useBlockedTimesContext();
+  const { barbershop } = usePanelContext();
 
   const blockedTime = blockedTimes.find((e) => e.id === blockedTimeId);
 
@@ -37,9 +40,7 @@ export default function EditForm({ blockedTimeId }: IEditFormProps) {
       error,
     } = await updateBlockedTimesAction(blockedTime.id, {
       ...data,
-      initialDate: data.initialDate,
-      finalDate: data.finalDate,
-      employeeIds: data.employeeIds?.map((id) => Number(id)),
+      employeeIds: data.employeeIds?.map(Number),
     });
 
     if (!ok) return alert(error);
@@ -57,10 +58,16 @@ export default function EditForm({ blockedTimeId }: IEditFormProps) {
       submitLabel="Editar"
       defaultValues={{
         name: blockedTime.name,
-        initialDate: dateToInputDate(blockedTime.initialDate),
-        finalDate: dateToInputDate(blockedTime.finalDate),
-        initialTime: dateToInputTime(blockedTime.initialDate),
-        finalTime: dateToInputTime(blockedTime.finalDate),
+        initialDate: dateToInputDate(
+          blockedTime.initialDate,
+          barbershop.timezone,
+        ),
+        finalDate: dateToInputDate(blockedTime.finalDate, barbershop.timezone),
+        initialTime: dateToInputTime(
+          blockedTime.initialDate,
+          barbershop.timezone,
+        ),
+        finalTime: dateToInputTime(blockedTime.finalDate, barbershop.timezone),
         employeeIds: blockedTime.employees.map((e) => String(e.id)),
       }}
     />

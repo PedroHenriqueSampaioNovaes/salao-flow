@@ -1,4 +1,5 @@
-export function dateToInputDate(date: Date | string): string {
-  const newDate = new Date(date);
-  return `${newDate.getFullYear()}-${String(newDate.getMonth() + 1).padStart(2, '0')}-${String(newDate.getDate()).padStart(2, '0')}`;
+export function dateToInputDate(date: Date | string, timezone: string): string {
+  return Intl.DateTimeFormat('en-CA', { timeZone: timezone }).format(
+    new Date(date),
+  );
 }

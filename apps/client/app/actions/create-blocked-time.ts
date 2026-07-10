@@ -18,20 +18,9 @@ export default async function createBlockedTimeAction(
     const cookieStore = await cookies();
     const token = cookieStore.get('token')?.value;
 
-    const initialDate = new Date(
-      `${blockedTimeData.initialDate}T${blockedTimeData.initialTime}`,
-    ).toISOString();
-    const finalDate = new Date(
-      `${blockedTimeData.finalDate}T${blockedTimeData.finalTime}`,
-    ).toISOString();
-
     const data = await FetchApi.post<IBlockedTime>('/schedule-blocks', {
       token,
-      body: {
-        ...blockedTimeData,
-        initialDate,
-        finalDate,
-      },
+      body: blockedTimeData,
     });
 
     return { data, ok: true, error: '' };

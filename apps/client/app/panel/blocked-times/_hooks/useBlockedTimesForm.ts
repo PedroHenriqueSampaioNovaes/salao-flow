@@ -8,6 +8,8 @@ import { createScheduleBlockSchema } from '@sistema-barbearia/validators';
 
 import { dateToInputDate } from '@/src/common/utils/dateToInputDate';
 
+import { usePanelContext } from '@/src/common/contexts/panel-context';
+
 const createScheduleBlockFormData = createScheduleBlockSchema
   .omit({ initialDate: true, finalDate: true, employeeIds: true })
   .extend({
@@ -33,6 +35,8 @@ const date = new Date();
 export function useBlockedTimesForm({
   defaultValues,
 }: UseBlockedTimesFormProps) {
+  const { barbershop } = usePanelContext();
+
   const {
     register,
     handleSubmit,
@@ -42,8 +46,8 @@ export function useBlockedTimesForm({
     resolver: zodResolver(createScheduleBlockFormData),
     defaultValues: {
       name: '',
-      initialDate: dateToInputDate(date),
-      finalDate: dateToInputDate(date),
+      initialDate: dateToInputDate(date, barbershop.timezone),
+      finalDate: dateToInputDate(date, barbershop.timezone),
       initialTime: '',
       finalTime: '',
       employeeIds: [],
