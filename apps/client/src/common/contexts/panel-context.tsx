@@ -14,18 +14,18 @@ import { IAppointment } from '../interfaces/appointment';
 import { IService } from '../interfaces/service';
 
 interface IPanelContext {
-  barbershop: IBarbershop | null;
+  barbershop: IBarbershop;
   employees: IEmployee[];
   appointments: IAppointment[];
   services: IService[];
-  setBarbershop: Dispatch<SetStateAction<IBarbershop | null>>;
+  setBarbershop: Dispatch<SetStateAction<IBarbershop>>;
   setEmployees: Dispatch<SetStateAction<IEmployee[]>>;
   setAppointments: Dispatch<SetStateAction<IAppointment[]>>;
   setServices: Dispatch<SetStateAction<IService[]>>;
 }
 
 const PanelContext = createContext<IPanelContext>({
-  barbershop: null,
+  barbershop: {} as IBarbershop,
   employees: [],
   appointments: [],
   services: [],
@@ -49,7 +49,7 @@ export function usePanelContext() {
 
 interface IPanelProviderProps {
   children: React.ReactNode;
-  barbershopData: IBarbershop | null;
+  barbershopData: IBarbershop;
   employeesData: IEmployee[];
   appointmentsData: IAppointment[];
   servicesData: IService[];
