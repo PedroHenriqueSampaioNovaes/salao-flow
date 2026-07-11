@@ -8,6 +8,11 @@ export interface AppointmentData {
   serviceIds: string[];
 }
 
+interface EmployeeShift {
+  employeeShiftStart: string;
+  employeeShiftEnd: string;
+}
+
 export class AppointmentRepository {
   async create(data: AppointmentData, barbershopId: number) {
     const appointment = await prisma.appointment.create({
@@ -37,18 +42,15 @@ export class AppointmentRepository {
     return appointment;
   }
 
-  async getByDateAndEmployeeId(dateString: string, employeeId: number) {
-    const startOfDay = new Date(dateString);
-    startOfDay.setUTCHours(0, 0, 0, 0);
-
-    const endOfDay = new Date(dateString);
-    endOfDay.setUTCHours(23, 59, 59, 999);
-
+  async getByEmployeeShiftUtcAndEmployeeId(
+    { employeeShiftStart, employeeShiftEnd }: EmployeeShift,
+    employeeId: number,
+  ) {
     const appointments = await prisma.appointment.findMany({
       where: {
         date: {
-          gte: startOfDay,
-          lte: endOfDay,
+          gte: employeeShiftStart,
+          lt: employeeShiftEnd,
         },
         employeeId,
       },

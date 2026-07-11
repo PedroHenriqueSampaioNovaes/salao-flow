@@ -9,15 +9,14 @@ import { CustomerRepository } from '@/src/repositories/CustomerRepository.js';
 import { BarbershopRepository } from '@/src/repositories/BarbershopRepository.js';
 import { ScheduleBlockRepository } from '@/src/repositories/ScheduleBlockRepository.js';
 
-import { EmployeeScheduleWeekday } from '@/src/interfaces/Employee.js';
-
 import { AppError } from '@/src/errors/AppError.js';
 
 import {
-  getWorkdaySchedule,
+  getEmployeeWorkdaySchedule,
   parseShiftScheduleToMinutes,
   isSlotDuringLunch,
   hasAppointmentConflict,
+  EmployeeWithSchedule,
 } from '@/src/utils/scheduleHelpers.js';
 
 export class CreateAppointmentService {
@@ -96,12 +95,12 @@ export class CreateAppointmentService {
       zonedTargetDate,
       appointmentStartMinutes,
       appointmentEndMinutes,
-      employee.employeeSchedule.employeeScheduleWeekdays,
+      employee,
     );
 
     await this.checkForAppointmentConflict(
-      data.employeeId,
-      zonedTargetDate.toPlainDate().toString(),
+      employee,
+      zonedTargetDate,
       appointmentStartMinutes,
       appointmentEndMinutes,
       barbershop.timezone,
@@ -218,14 +217,10 @@ export class CreateAppointmentService {
     zonedDate: Temporal.ZonedDateTime,
     appointmentStartMinutes: number,
     appointmentEndMinutes: number,
-    employeeSchedule: EmployeeScheduleWeekday[],
+    employee: EmployeeWithSchedule,
   ) {
-    const employeeScheduleWeekday = getWorkdaySchedule(
-      {
-        id: 0,
-        name: '',
-        employeeSchedule: { employeeScheduleWeekdays: employeeSchedule },
-      },
+    const employeeScheduleWeekday = getEmployeeWorkdaySchedule(
+      employee,
       zonedDate,
     );
 
@@ -255,22 +250,48 @@ export class CreateAppointmentService {
   }
 
   private async checkForAppointmentConflict(
-    employeeId: number,
-    dateString: string,
+    employee: EmployeeWithSchedule,
+    zonedDateTime: Temporal.ZonedDateTime,
     newStart: number,
     newEnd: number,
     timezone: string,
   ) {
-    const reservedTimesOfDay =
-      await this.appointmentRepository.getByDateAndEmployeeId(
-        dateString,
-        employeeId,
+    const employeeScheduleWeekday = getEmployeeWorkdaySchedule(
+      employee,
+      zonedDateTime,
+    );
+
+    if (!employeeScheduleWeekday) {
+      throw new AppError(
+        'Horário indisponível. Escolha outro horário ou atualize a página para obter os dados mais recentes.',
+      );
+    }
+
+    const shift = parseShiftScheduleToMinutes(employeeScheduleWeekday);
+
+    const employeeShiftStart = zonedDateTime.with({
+      hour: Math.floor(shift.startShift / 60),
+      minute: shift.startShift % 60,
+    });
+
+    const employeeShiftEnd = zonedDateTime.with({
+      hour: Math.floor(shift.endShift / 60),
+      minute: shift.endShift % 60,
+    });
+
+    const appointmentsOfDay =
+      await this.appointmentRepository.getByEmployeeShiftUtcAndEmployeeId(
+        {
+          employeeShiftStart: employeeShiftStart.toInstant().toString(),
+          employeeShiftEnd: employeeShiftEnd.toInstant().toString(),
+        },
+        employee.id,
       );
 
     const hasConflict = hasAppointmentConflict(
       newStart,
       newEnd,
-      reservedTimesOfDay,
+      appointmentsOfDay,
       timezone,
     );
 

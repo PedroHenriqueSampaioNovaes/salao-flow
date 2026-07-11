@@ -8,7 +8,7 @@ import { AppointmentRepository } from '@/src/repositories/AppointmentRepository.
 import { AppError } from '@/src/errors/AppError.js';
 
 import {
-  getWorkdaySchedule,
+  getEmployeeWorkdaySchedule,
   parseShiftScheduleToMinutes,
   getDayBoundariesUTC,
   parseDateWithCurrentZonedDateTime,
@@ -104,11 +104,10 @@ export class GetAvailableSlotsService {
       return this.createSlotResult(employee, dateString, []);
     }
 
-    const slots = await this.getSlotsForDay(
+    const slots = await this.getSlotsOfDay(
       barbershop,
       employee,
       targetDate,
-      dateString,
       isToday,
     );
 
@@ -134,11 +133,10 @@ export class GetAvailableSlotsService {
       const futureDate = targetDate.add({ days: i });
       const futureDateString = futureDate.toPlainDate().toString();
 
-      const slots = await this.getSlotsForDay(
+      const slots = await this.getSlotsOfDay(
         barbershop,
         employee,
         futureDate,
-        futureDateString,
         false,
       );
 
@@ -170,14 +168,13 @@ export class GetAvailableSlotsService {
     );
   }
 
-  private async getSlotsForDay(
+  private async getSlotsOfDay(
     barbershop: BarbershopContext,
     employee: EmployeeWithSchedule,
     zonedDateTime: Temporal.ZonedDateTime,
-    dateString: string,
     isToday: boolean,
   ) {
-    const scheduleWeekday = getWorkdaySchedule(employee, zonedDateTime);
+    const scheduleWeekday = getEmployeeWorkdaySchedule(employee, zonedDateTime);
     if (!scheduleWeekday) return [];
 
     const shift = parseShiftScheduleToMinutes(scheduleWeekday);
@@ -195,9 +192,22 @@ export class GetAvailableSlotsService {
         employee.id,
       );
 
+    const employeeShiftStart = zonedDateTime.with({
+      hour: Math.floor(shift.startShift / 60),
+      minute: shift.startShift % 60,
+    });
+
+    const employeeShiftEnd = zonedDateTime.with({
+      hour: Math.floor(shift.endShift / 60),
+      minute: shift.endShift % 60,
+    });
+
     const appointments =
-      await this.appointmentRepository.getByDateAndEmployeeId(
-        dateString,
+      await this.appointmentRepository.getByEmployeeShiftUtcAndEmployeeId(
+        {
+          employeeShiftStart: employeeShiftStart.toInstant().toString(),
+          employeeShiftEnd: employeeShiftEnd.toInstant().toString(),
+        },
         employee.id,
       );
 

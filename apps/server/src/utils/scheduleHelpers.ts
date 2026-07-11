@@ -24,8 +24,8 @@ export interface Appointment {
 export interface EmployeeWithSchedule {
   id: number;
   name: string;
-  employeeSchedule?: {
-    employeeScheduleWeekdays?: EmployeeScheduleWeekday[];
+  employeeSchedule: {
+    employeeScheduleWeekdays: EmployeeScheduleWeekday[];
   };
 }
 
@@ -37,10 +37,7 @@ export function isSlotDuringLunch(
   return slotStart < shift.endLunch && slotEnd > shift.startLunch;
 }
 
-export function isSlotInPast(
-  slotStart: number,
-  currentLocalMinutes?: number,
-) {
+export function isSlotInPast(slotStart: number, currentLocalMinutes?: number) {
   return currentLocalMinutes !== undefined && slotStart <= currentLocalMinutes;
 }
 
@@ -80,14 +77,14 @@ export function hasAppointmentConflict(
   });
 }
 
-export function getWorkdaySchedule(
+export function getEmployeeWorkdaySchedule(
   employee: EmployeeWithSchedule,
   zonedDateTime: Temporal.ZonedDateTime,
 ) {
   const weekday = zonedDateTime.dayOfWeek;
 
   const scheduleWeekday =
-    employee.employeeSchedule?.employeeScheduleWeekdays?.find(
+    employee.employeeSchedule.employeeScheduleWeekdays.find(
       (s) => s.weekday === weekday,
     );
 
@@ -98,9 +95,7 @@ export function getWorkdaySchedule(
   return scheduleWeekday;
 }
 
-export function parseShiftScheduleToMinutes(
-  weekday: EmployeeScheduleWeekday,
-) {
+export function parseShiftScheduleToMinutes(weekday: EmployeeScheduleWeekday) {
   return {
     startShift: convertTimeToMinutes(weekday.start!),
     endShift: convertTimeToMinutes(weekday.end!),
