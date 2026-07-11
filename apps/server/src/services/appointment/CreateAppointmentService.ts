@@ -124,15 +124,15 @@ export class CreateAppointmentService {
   }
 
   private async checkScheduleBlock(
-    initialDateISOString: string,
-    finalDateISOString: string,
+    initialAppointmentDateString: string,
+    finalAppointmentDateString: string,
     barbershopId: number,
     employeeId: number,
   ) {
     const scheduleBlock =
       await this.scheduleBlockRepository.findByDateRangeAndEmployeeId(
-        initialDateISOString,
-        finalDateISOString,
+        initialAppointmentDateString,
+        finalAppointmentDateString,
         barbershopId,
         employeeId,
       );
