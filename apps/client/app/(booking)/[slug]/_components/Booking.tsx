@@ -22,25 +22,26 @@ export default function Booking({
 }: IBookingProps) {
   const { slug } = useParams() as { slug: string };
 
-  const minimumInputDate = availableTimeSlots.date;
+  const professional = availableTimeSlots.employees.find(({ id }) => id === 2); //! POR ENQUANTO SÓ ESTÁ BUSCANDO PELA AGENDA DO FUNCIONÁRIO CAIO
+
+  const [date, setDate] = useState(professional?.date || '');
+  const [times, setTimes] = useState<string[]>(
+    professional?.availableSlots || [],
+  );
+  const [selectedTime, setSelectedTime] = useState('');
+
+  if (!professional) {
+    return <p>Nenhum profissional foi encontrado</p>;
+  }
+
+  const professionalId = professional.id;
+  const minimumInputDate = professional.date;
 
   const maxInputDate = new Date(
     barbershopLocalDateUTC.getUTCFullYear(),
     barbershopLocalDateUTC.getUTCMonth(),
     barbershopLocalDateUTC.getUTCDate() + 90,
   ).toLocaleDateString('en-CA');
-
-  const [date, setDate] = useState(minimumInputDate);
-  const [times, setTimes] = useState<string[]>(() => {
-    const employeeShift = availableTimeSlots.employees.find(
-      ({ id: employeeId }) => employeeId === 2, //! POR ENQUANTO SÓ ESTÁ BUSCANDO PELA AGENDA DO FUNCIONÁRIO CAIO
-    );
-
-    if (!employeeShift) return [];
-
-    return employeeShift.availableSlots;
-  });
-  const [selectedTime, setSelectedTime] = useState('');
 
   async function handleInputDateChange(e: React.ChangeEvent<HTMLInputElement>) {
     const inputValue = e.target.value;
@@ -53,14 +54,14 @@ export default function Booking({
     }
 
     const {
-      data: availableTimeSlots,
+      data: updatedTimeSlots,
       ok,
       error,
     } = await getAvailableTimeSlotsForBookingAction({
       slug,
       dateString: inputValue,
-      employeeId: 2, //! POR ENQUANTO SÓ ESTÁ BUSCANDO PELA AGENDA DO FUNCIONÁRIO CAIO
-      lookForNextAvailableTimeSlot: 1,
+      employeeId: professionalId,
+      lookForNextAvailableTimeSlot: 0,
     });
 
     if (!ok) {
@@ -69,7 +70,7 @@ export default function Booking({
       return;
     }
 
-    const employee = availableTimeSlots.employees[0];
+    const employee = updatedTimeSlots.employees[0];
 
     setTimes(employee.availableSlots);
     setDate(inputValue);
@@ -114,7 +115,7 @@ export default function Booking({
             name: 'Pedro',
             phone: '(11) 98814-8020',
             barbershopSlug: 'teste-do-pedrão-maneirão',
-            employeeId: 2,
+            employeeId: professionalId,
             serviceIds: [
               '00dc745f-9e2a-4dfb-a58e-7a0d4b594ab7',
               '3d6d8564-8f86-4871-a5d8-63ceda6610b1',
