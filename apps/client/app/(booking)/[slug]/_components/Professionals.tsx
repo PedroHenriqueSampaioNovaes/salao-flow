@@ -34,7 +34,9 @@ export default function Professionals({
         const employeeShiftDate = new Date(employeeShift.date);
 
         function getMessage() {
-          if (!firstAvailableSlot) return 'Nenhum horário disponível';
+          if (!firstAvailableSlot) {
+            return 'Nenhum horário disponível foi encontrado nos próximos 10 dias pesquisados';
+          }
 
           const isToday =
             barbershopLocalDateUTC.getUTCDate() ===
