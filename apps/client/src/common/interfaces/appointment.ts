@@ -9,3 +9,13 @@ export interface IAppointment {
   employee: Pick<IEmployee, 'id' | 'name'>;
   services: Pick<IService, 'name' | 'price'>[];
 }
+
+export interface ICreateAppointment {
+  name: string;
+  phone: string;
+  date: string;
+  time: string;
+  serviceIds: string[];
+  barbershopSlug: string;
+  employeeId: number;
+}
