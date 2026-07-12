@@ -14,7 +14,7 @@ interface UseProfessionalFormProps {
 
 function buildDefaultWeekdays(): EmployeeScheduleSchema['weekdays'] {
   return Array.from({ length: 7 }, (_, i) => ({
-    weekday: i as 0 | 1 | 2 | 3 | 4 | 5 | 6,
+    weekday: i || 7,
     isWorkingDay: true,
     start: '08:00',
     startLunch: '12:00',

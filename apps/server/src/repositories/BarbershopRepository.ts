@@ -8,7 +8,7 @@ interface UpdateBarbershop extends Partial<Barbershop> {
 }
 
 const employeeScheduleWeekdays = Array.from({ length: 7 }).map((_, index) => ({
-  weekday: index,
+  weekday: index || 7,
   start: '08:00',
   startLunch: '12:00',
   endLunch: '13:00',
