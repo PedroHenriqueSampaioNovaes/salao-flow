@@ -3,8 +3,7 @@ import Image from 'next/image';
 import getBarbershopBookingInfosAction from '@/app/actions/get-barbershop-booking-infos';
 import getAvailableTimeSlotsForBookingAction from '@/app/actions/get-available-time-slots-for-booking';
 
-import Professionals from './_components/Professionals';
-import Booking from './_components/Booking';
+import BookingFormContainer from './_components/BookingFormContainer';
 
 import { dateToInputDate } from '@/src/common/utils/dateToInputDate';
 import { getLocalDateAsUTCDate } from '@/src/common/utils/getLocalDateAsUTCDate';
@@ -18,8 +17,6 @@ export default async function BookingPage({
 
   const { data: bookingInfos } = await getBarbershopBookingInfosAction(slug);
 
-  console.log(bookingInfos);
-
   if (!bookingInfos) {
     return <h1 className="text-3xl">Barbearia não encontrada</h1>;
   }
@@ -29,8 +26,6 @@ export default async function BookingPage({
     barbershopLocalDate,
     bookingInfos.timezone,
   );
-
-  // console.log(getEmployeeNextAvailableTime(bookingInfos.employees[2]));
 
   const {
     data: availableTimeSlots,
@@ -48,24 +43,27 @@ export default async function BookingPage({
   }
 
   return (
-    <main>
-      <h1>
+    <main className="min-h-screen py-10 px-4 md:px-8 bg-linear-to-br from-background to-background/95">
+      <div className="max-w-4xl mx-auto mb-8 flex items-center gap-4">
         <Image
-          className="rounded-full"
+          className="rounded-full shadow-lg border border-border/80"
           width={64}
           height={64}
           src={bookingInfos.image}
           alt={bookingInfos.name}
         />
-        {bookingInfos.name}
-      </h1>
+        <div>
+          <h1 className="text-3xl font-extrabold tracking-tight text-foreground">
+            {bookingInfos.name}
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            Escolha profissional, serviços e horário desejados
+          </p>
+        </div>
+      </div>
 
-      <Professionals
+      <BookingFormContainer
         professionals={bookingInfos.employees}
-        barbershopLocalDateUTC={barbershopLocalDateUTC}
-        employeesShiftData={availableTimeSlots.employees}
-      />
-      <Booking
         barbershopLocalDateUTC={barbershopLocalDateUTC}
         availableTimeSlots={availableTimeSlots}
       />
