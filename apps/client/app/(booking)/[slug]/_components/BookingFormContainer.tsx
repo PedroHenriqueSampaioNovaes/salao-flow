@@ -151,8 +151,6 @@ function StepperFooter() {
   const handleSubmit = async () => {
     if (!isBookingValid) return;
 
-    console.log(slug);
-
     const { error, ok } = await createAppointmentAction({
       name: 'Pedro',
       phone: '(11) 98814-8020',
