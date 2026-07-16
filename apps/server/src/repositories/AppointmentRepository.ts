@@ -26,8 +26,34 @@ export class AppointmentRepository {
           connect: data.serviceIds.map((id) => ({ id })),
         },
       },
-      select: {
-        date: true,
+      include: {
+        customer: {
+          select: {
+            id: true,
+            name: true,
+            phone: true,
+          },
+        },
+        employee: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        services: {
+          select: {
+            name: true,
+            price: true,
+          },
+        },
+      },
+      omit: {
+        createdAt: true,
+        updatedAt: true,
+        totalServiceDuration: true,
+        customerId: true,
+        employeeId: true,
+        barbershopId: true,
       },
     });
 

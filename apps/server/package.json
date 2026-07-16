@@ -14,6 +14,7 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "@js-temporal/polyfill": "^0.5.1",
     "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.8.0",
     "@sistema-barbearia/validators": "*",
@@ -23,7 +24,7 @@
     "jsonwebtoken": "^9.0.3",
     "nodemailer": "^8.0.9",
     "pg": "^8.20.0",
-    "@js-temporal/polyfill": "^0.5.1"
+    "socket.io": "^4.8.3"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",

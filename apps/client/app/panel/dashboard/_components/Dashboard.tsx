@@ -1,17 +1,48 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { usePanelContext } from '@/src/common/contexts/panel-context';
 
 import { IAppointment } from '@/src/common/interfaces/appointment';
 import { formatPrice } from '@/src/common/utils/formatPrice';
 
-export default function Dashboard() {
-  const { barbershop, appointments, employees } = usePanelContext();
+import { connectToSocket, disconnectSocket } from '@/src/common/lib/socket';
+
+interface DashboardProps {
+  token?: string;
+  apiUrl: string;
+}
+
+export default function Dashboard({ token, apiUrl }: DashboardProps) {
+  const { barbershop, appointments, employees, setAppointments } =
+    usePanelContext();
 
   const [date, setDate] = useState(new Date());
   const [employee, setEmployee] = useState<number | ''>('');
+
+  const socketConnected = useRef(false);
+
+  const handleNewAppointment = useCallback(
+    (newAppointment: IAppointment) => {
+      setAppointments((prev) => [...prev, newAppointment]);
+    },
+    [setAppointments],
+  );
+
+  useEffect(() => {
+    if (!token || socketConnected.current) return;
+
+    const socket = connectToSocket(token, apiUrl);
+    socket.on('new-appointment', handleNewAppointment);
+    socketConnected.current = true;
+
+    return () => {
+      socket.off('new-appointment', handleNewAppointment);
+      disconnectSocket(token, apiUrl);
+      socketConnected.current = false;
+    };
+  }, [token, apiUrl, handleNewAppointment]);
 
   const appointmentsOfCurrentDate = filterAppointments(
     appointments,
