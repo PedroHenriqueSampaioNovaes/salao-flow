@@ -10,7 +10,7 @@ export default function Clients() {
   const { clients, setClients } = useClientsContext();
 
   return (
-    <>
+    <div>
       <div className="mb-10 flex items-center gap-10">
         <h1>Clientes:</h1>
         <Link className="cursor-pointer" href="/panel/clients/new">
@@ -40,6 +40,6 @@ export default function Clients() {
           </button>
         </div>
       ))}
-    </>
+    </div>
   );
 }

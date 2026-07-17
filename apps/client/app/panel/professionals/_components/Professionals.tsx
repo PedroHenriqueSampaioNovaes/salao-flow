@@ -10,7 +10,7 @@ export default function Professionals() {
   const { employees, setEmployees } = usePanelContext();
 
   return (
-    <>
+    <div>
       <div className="mb-10 flex items-center gap-10">
         <h1>Profissionais:</h1>
         <Link className="cursor-pointer" href="/panel/professionals/new">
@@ -40,6 +40,6 @@ export default function Professionals() {
           </button>
         </div>
       ))}
-    </>
+    </div>
   );
 }

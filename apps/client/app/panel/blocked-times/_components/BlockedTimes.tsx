@@ -10,7 +10,7 @@ export default function BlockedTimes() {
   const { blockedTimes, setBlockedTimes } = useBlockedTimesContext();
 
   return (
-    <>
+    <div>
       <div className="mb-10 flex items-center gap-10">
         <h1>Horários bloqueados:</h1>
         <Link className="cursor-pointer" href="/panel/blocked-times/new">
@@ -42,6 +42,6 @@ export default function BlockedTimes() {
           </button>
         </div>
       ))}
-    </>
+    </div>
   );
 }

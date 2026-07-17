@@ -8,6 +8,8 @@ import getServicesAction from '../actions/get-services';
 
 import { PanelProvider } from '@/src/common/contexts/panel-context';
 
+import Aside from './_components/Aside';
+
 export const metadata: Metadata = {
   title: 'SalãoFlow',
   description:
@@ -20,12 +22,12 @@ export default async function PanelLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
-      <aside>Sou uma sidebar legal</aside>
+    <div className="grid grid-cols-[260px_1fr]">
+      <Aside />
       <Suspense fallback={<p>Carregando...</p>}>
         <BarbershopData>{children}</BarbershopData>
       </Suspense>
-    </>
+    </div>
   );
 }
 
