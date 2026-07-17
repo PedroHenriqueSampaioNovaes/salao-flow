@@ -10,7 +10,7 @@ export default function Expedients() {
   const { expedients, setExpedients } = useExpedientsContext();
 
   return (
-    <>
+    <div>
       <div className="mb-10 flex items-center gap-10">
         <h1>Expedientes:</h1>
         <Link className="cursor-pointer" href="/panel/expedients/new">
@@ -40,6 +40,6 @@ export default function Expedients() {
           </button>
         </div>
       ))}
-    </>
+    </div>
   );
 }

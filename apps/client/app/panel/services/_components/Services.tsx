@@ -12,7 +12,7 @@ export default function Services() {
   const { services, setServices } = usePanelContext();
 
   return (
-    <>
+    <div>
       <div className="mb-10 flex items-center gap-10">
         <h1>Serviços:</h1>
         <Link className="cursor-pointer" href="/panel/services/new">
@@ -45,6 +45,6 @@ export default function Services() {
           </button>
         </div>
       ))}
-    </>
+    </div>
   );
 }
