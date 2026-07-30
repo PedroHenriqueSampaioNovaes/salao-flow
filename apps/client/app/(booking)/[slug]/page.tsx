@@ -1,4 +1,6 @@
 import Image from 'next/image';
+import { MapPin, Phone } from 'lucide-react';
+import { notFound } from 'next/navigation';
 
 import getBarbershopBookingInfosAction from '@/app/actions/get-barbershop-booking-infos';
 import getAvailableTimeSlotsForBookingAction from '@/app/actions/get-available-time-slots-for-booking';
@@ -18,7 +20,7 @@ export default async function BookingPage({
   const { data: bookingInfos } = await getBarbershopBookingInfosAction(slug);
 
   if (!bookingInfos) {
-    return <h1 className="text-3xl">Barbearia não encontrada</h1>;
+    return notFound();
   }
 
   const barbershopLocalDate = new Date(bookingInfos.instantLocalTime);
@@ -43,30 +45,47 @@ export default async function BookingPage({
   }
 
   return (
-    <main className="min-h-screen py-10 px-4 md:px-8 bg-linear-to-br from-background to-background/95">
-      <div className="max-w-4xl mx-auto mb-8 flex items-center gap-4">
-        <Image
-          className="rounded-full shadow-lg border border-border/80"
-          width={64}
-          height={64}
-          src={bookingInfos.image}
-          alt={bookingInfos.name}
-        />
-        <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-foreground">
-            {bookingInfos.name}
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            Escolha profissional, serviços e horário desejados
-          </p>
-        </div>
-      </div>
+    <main className="min-h-screen bg-appointment-background text-foreground">
+      <header className="w-full bg-appointment-foreground border-b border-appointment-border p-4">
+        <div className="max-w-6xl mx-auto flex items-center gap-5">
+          <div className="size-20 rounded-2xl border border-appointment-border flex items-center justify-center overflow-hidden shrink-0">
+            <Image
+              src={bookingInfos.image}
+              alt={bookingInfos.name}
+              width={96}
+              height={96}
+              loading="eager"
+              className="object-cover rounded-lg"
+            />
+          </div>
 
-      <BookingFormContainer
-        professionals={bookingInfos.employees}
-        barbershopLocalDateUTC={barbershopLocalDateUTC}
-        availableTimeSlots={availableTimeSlots}
-      />
+          <div className="flex flex-col justify-center">
+            <h1 className="text-lg md:text-2xl font-bold text-appointment-text mb-2">
+              {bookingInfos.name}
+            </h1>
+
+            <div className="flex max-md:flex-col md:items-center gap-y-1 gap-x-16">
+              <div className="flex items-center gap-2 text-appointment-text-muted text-sm md:text-base">
+                <MapPin className="size-3.5 text-cta-accent shrink-0" />
+                <span>{bookingInfos.address}</span>
+              </div>
+
+              <div className="flex items-center gap-2 text-appointment-text-muted text-sm md:text-base">
+                <Phone className="size-3.5 text-cta-accent shrink-0" />
+                <span>{bookingInfos.phone}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div className="py-8 px-4 md:px-8">
+        <BookingFormContainer
+          professionals={bookingInfos.employees}
+          barbershopLocalDateUTC={barbershopLocalDateUTC}
+          availableTimeSlots={availableTimeSlots}
+        />
+      </div>
     </main>
   );
 }
