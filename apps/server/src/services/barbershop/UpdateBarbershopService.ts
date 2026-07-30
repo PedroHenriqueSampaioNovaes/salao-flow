@@ -69,7 +69,7 @@ export class UpdateBarbershopService {
     }
 
     if (data.name) {
-      newBarbershopData.image = `https://ui-avatars.com/api/?name=${data.name}&size=128&rounded=true`;
+      newBarbershopData.image = `https://ui-avatars.com/api/?name=${data.name}&size=96`;
     }
 
     const updatedBarbershop = await barbershopRepository.updateProfile(
