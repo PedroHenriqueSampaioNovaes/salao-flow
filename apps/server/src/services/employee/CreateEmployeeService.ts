@@ -27,8 +27,7 @@ export class CreateEmployeeService {
       await serviceRepository.getServicesAvailableToAllEmployees(barbershopId);
 
     const image =
-      data.image ||
-      `https://ui-avatars.com/api/?name=${data.name}&size=128&rounded=true`;
+      data.image || `https://ui-avatars.com/api/?name=${data.name}&size=80`;
 
     const employee = await employeeRepository.create({
       name: data.name,
