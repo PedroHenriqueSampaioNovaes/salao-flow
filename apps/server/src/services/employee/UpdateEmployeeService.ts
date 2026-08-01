@@ -32,8 +32,7 @@ export class UpdateEmployeeService {
     }
 
     const image =
-      data.image ||
-      `https://ui-avatars.com/api/?name=${data.name}&size=128&rounded=true`;
+      data.image || `https://ui-avatars.com/api/?name=${data.name}&size=80`;
 
     const employeeUpdated = await employeeRepository.update({
       id: data.id,
