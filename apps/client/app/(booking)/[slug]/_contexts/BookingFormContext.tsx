@@ -19,6 +19,14 @@ export const bookingFormSchema = z.object({
   time: z
     .string({ message: 'Por favor, selecione um horário.' })
     .min(1, 'Por favor, selecione um horário.'),
+  name: z.string().min(1, 'Por favor, informe seu nome.'),
+  phone: z
+    .string({ message: 'Por favor, informe seu telefone.' })
+    .regex(
+      /^(\(?\d{2}\)?\s?)(9?\d{4})-\d{4}$/,
+      'Por favor, informe um telefone válido.',
+    ),
+  email: z.email('Por favor, informe um e-mail válido.'),
 });
 
 export type BookingFormValues = z.infer<typeof bookingFormSchema>;
@@ -42,7 +50,7 @@ export function BookingFormProvider({
   children: React.ReactNode;
 }) {
   const [currentStep, setCurrentStep] = useState(1);
-  const totalSteps = 2;
+  const totalSteps = 4;
 
   const form = useForm<BookingFormValues>({
     resolver: zodResolver(bookingFormSchema),
@@ -51,17 +59,28 @@ export function BookingFormProvider({
       serviceIds: [],
       date: '',
       time: '',
+      name: '',
+      phone: '',
+      email: '',
     },
     mode: 'onTouched',
   });
 
   const validateStep = async (step: number) => {
     if (step === 1) {
-      const result = await form.trigger(['employeeId', 'serviceIds']);
+      const result = await form.trigger(['employeeId']);
       return result;
     }
     if (step === 2) {
+      const result = await form.trigger(['serviceIds']);
+      return result;
+    }
+    if (step === 3) {
       const result = await form.trigger(['date', 'time']);
+      return result;
+    }
+    if (step === 4) {
+      const result = await form.trigger(['name', 'phone']);
       return result;
     }
     return true;

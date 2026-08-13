@@ -8,4 +8,5 @@ export interface IBarbershop {
   status: boolean;
   slug: string;
   timezone: string;
+  instantLocalTime: string;
 }

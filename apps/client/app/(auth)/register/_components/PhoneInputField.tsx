@@ -3,6 +3,7 @@
 import React from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import { IMaskMixin } from 'react-imask';
+
 import { Input } from '@/src/components/ui/input';
 import { Field, FieldLabel, FieldError } from '@/src/components/ui/field';
 
@@ -13,10 +14,15 @@ interface PhoneInputFieldProps<TFieldValues extends FieldValues = FieldValues> {
   error?: string;
   id?: string;
   placeholder?: string;
+  className?: string;
 }
 
-const MaskedInput = IMaskMixin(({ inputRef, ...props }) => (
-  <Input {...props} ref={inputRef as React.Ref<HTMLInputElement>} />
+const MaskedInput = IMaskMixin(({ inputRef, className, ...props }) => (
+  <Input
+    {...props}
+    ref={inputRef as React.Ref<HTMLInputElement>}
+    className={className}
+  />
 ));
 
 export function PhoneInputField<
@@ -27,7 +33,8 @@ export function PhoneInputField<
   control,
   error,
   id = 'phone',
-  placeholder = 'Digite seu telefone com DDD',
+  placeholder,
+  className,
 }: PhoneInputFieldProps<TFieldValues>) {
   return (
     <Field data-invalid={!!error}>
@@ -45,6 +52,7 @@ export function PhoneInputField<
             id={id}
             placeholder={placeholder}
             aria-invalid={!!error}
+            className={className}
           />
         )}
       />

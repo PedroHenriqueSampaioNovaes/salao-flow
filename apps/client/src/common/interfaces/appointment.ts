@@ -13,6 +13,7 @@ export interface IAppointment {
 export interface ICreateAppointment {
   name: string;
   phone: string;
+  email: string;
   date: string;
   time: string;
   serviceIds: string[];

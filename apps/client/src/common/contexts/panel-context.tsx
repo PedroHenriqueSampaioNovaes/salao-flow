@@ -8,7 +8,7 @@ import {
   useState,
 } from 'react';
 
-import { IBarbershop } from '@/src/common/interfaces/barbershop';
+import { IBarbershop } from '../interfaces/barbershop';
 import { IEmployee } from '../interfaces/employee';
 import { IAppointment } from '../interfaces/appointment';
 import { IService } from '../interfaces/service';

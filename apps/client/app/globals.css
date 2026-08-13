@@ -8,6 +8,7 @@
   --background: #f1f3f8;
   --appointment-background: #0e0e0f;
   --appointment-foreground: #18181b;
+  --appointment-card-background: #131315;
   --foreground: #e0edff;
   --neutral: #49515d;
   --accent: #2572e9;
@@ -17,6 +18,20 @@
   --appointment-text-muted: #aeaeba;
   --appointment-border: #333333;
   --border: #49515d;
+
+  --header: 4rem;
+  --sidebar: 16.25rem;
+
+  --primary: #49515d;
+  --secondary: #76869f;
+  --tertiary: #000000;
+  --brand-accent: #3684fd;
+  --muted: #5dd384;
+
+  --badge-green-bg: #163222;
+  --badge-green-text: #5dd384;
+  --badge-red-bg: #321616;
+  --badge-red-text: #d35d5f;
 }
 
 @theme inline {
@@ -31,34 +46,40 @@
   --color-appointment-text: var(--appointment-text);
   --color-appointment-text-muted: var(--appointment-text-muted);
   --color-appointment-border: var(--appointment-border);
+  --color-appointment-card-background: var(--appointment-card-background);
   --color-border: var(--border);
+  --color-error: var(--color-red-700);
+
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-tertiary: var(--tertiary);
+  --color-brand-accent: var(--brand-accent);
+  --color-muted: var(--muted);
+
+  --color-badge-green-bg: var(--badge-green-bg);
+  --color-badge-green-text: var(--badge-green-text);
+  --color-badge-red-bg: var(--badge-red-bg);
+  --color-badge-red-text: var(--badge-red-text);
 
   --font-sans: var(--font-arimo);
 
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
-  --radius-2xl: 20px;
-  --radius-3xl: 24px;
+  --radius-sm: 0.25rem; /* 4px */
+  --radius-md: 0.5rem; /* 8px */
+  --radius-lg: 0.75rem; /* 12px */
+  --radius-xl: 1rem; /* 16px */
+  --radius-2xl: 1.25rem; /* 20px */
+  --radius-3xl: 1.5rem; /* 24px */
 
   --text-lg: 1.125rem;
   --text-lg--line-height: normal;
 }
 
-
-
 body {
   background: var(--background);
-  color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
 
 @layer base {
-  body {
-    @apply bg-background text-foreground font-sans;
-  }
-
   h1,
   h2,
   h3,
@@ -67,4 +88,8 @@ body {
   h6 {
     line-height: normal;
   }
+}
+
+@utility border-divider-appointment {
+  @apply border-[#3B3B3B]/30 my-6;
 }

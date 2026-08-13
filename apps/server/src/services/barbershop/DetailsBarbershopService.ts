@@ -1,3 +1,5 @@
+import { Temporal } from '@js-temporal/polyfill';
+
 import { AppError } from '@/src/errors/AppError.js';
 
 import { BarbershopRepository } from '@/src/repositories/BarbershopRepository.js';
@@ -12,6 +14,8 @@ export class DetailsBarbershopService {
       throw new AppError('Barbearia não encontrada.', 404);
     }
 
+    const now = Temporal.Now.zonedDateTimeISO(barbershop.timezone);
+
     return {
       email: barbershop.email,
       name: barbershop.name,
@@ -21,6 +25,7 @@ export class DetailsBarbershopService {
       status: barbershop.status,
       slug: barbershop.slug,
       timezone: barbershop.timezone,
+      instantLocalTime: now.toInstant(),
     };
   }
 }

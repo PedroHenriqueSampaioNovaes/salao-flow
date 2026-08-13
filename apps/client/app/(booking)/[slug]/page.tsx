@@ -45,10 +45,10 @@ export default async function BookingPage({
   }
 
   return (
-    <main className="min-h-screen bg-appointment-background text-foreground">
+    <main className="min-h-screen bg-appointment-background">
       <header className="w-full bg-appointment-foreground border-b border-appointment-border p-4">
         <div className="max-w-6xl mx-auto flex items-center gap-5">
-          <div className="size-20 rounded-2xl border border-appointment-border flex items-center justify-center overflow-hidden shrink-0">
+          <div className="size-20 rounded-2xl border border-appointment-border overflow-hidden shrink-0">
             <Image
               src={bookingInfos.image}
               alt={bookingInfos.name}
@@ -60,17 +60,17 @@ export default async function BookingPage({
           </div>
 
           <div className="flex flex-col justify-center">
-            <h1 className="text-lg md:text-2xl font-bold text-appointment-text mb-2">
+            <h1 className="text-lg sm:text-2xl font-bold text-appointment-text mb-2">
               {bookingInfos.name}
             </h1>
 
-            <div className="flex max-md:flex-col md:items-center gap-y-1 gap-x-16">
-              <div className="flex items-center gap-2 text-appointment-text-muted text-sm md:text-base">
+            <div className="flex max-sm:flex-col sm:items-center gap-y-1 gap-x-6">
+              <div className="flex items-center gap-2 text-appointment-text-muted text-sm sm:text-base">
                 <MapPin className="size-3.5 text-cta-accent shrink-0" />
                 <span>{bookingInfos.address}</span>
               </div>
 
-              <div className="flex items-center gap-2 text-appointment-text-muted text-sm md:text-base">
+              <div className="flex items-center gap-2 text-appointment-text-muted text-sm sm:text-base">
                 <Phone className="size-3.5 text-cta-accent shrink-0" />
                 <span>{bookingInfos.phone}</span>
               </div>
@@ -79,13 +79,11 @@ export default async function BookingPage({
         </div>
       </header>
 
-      <div className="py-8 px-4 md:px-8">
-        <BookingFormContainer
-          professionals={bookingInfos.employees}
-          barbershopLocalDateUTC={barbershopLocalDateUTC}
-          availableTimeSlots={availableTimeSlots}
-        />
-      </div>
+      <BookingFormContainer
+        professionals={bookingInfos.employees}
+        barbershopLocalDateUTC={barbershopLocalDateUTC}
+        availableTimeSlots={availableTimeSlots}
+      />
     </main>
   );
 }
