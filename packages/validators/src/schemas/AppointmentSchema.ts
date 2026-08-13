@@ -17,7 +17,7 @@ export const createAppointmentSchema = z.object({
   phone: z
     .string('Número de contato é obrigatório.')
     .regex(/^(\(?\d{2}\)?\s?)(9?\d{4})-\d{4}$/, 'Número de contato inválido.'),
-  email: z.email('E-mail inválido.').optional().or(z.literal('')),
+  email: z.email('E-mail inválido.'),
 });
 
 export type CreateAppointmentSchema = z.infer<typeof createAppointmentSchema>;
