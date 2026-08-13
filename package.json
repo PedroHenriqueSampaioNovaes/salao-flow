@@ -5,6 +5,8 @@
   "scripts": {
     "client": "npm run dev --workspace=apps/client",
     "server": "npm run dev --workspace=apps/server",
+    "validators": "npm run build:watch --workspace=@sistema-barbearia/validators",
+    "dev": "concurrently --shell=\"D:/Program Files/Git/usr/bin/bash.exe\" --kill-others-on-fail -n client,server,validators -c blue,green,yellow \"npm run client\" \"npm run server\" \"npm run validators\"",
     "build:validators": "npm run build --workspace=@sistema-barbearia/validators",
     "build:client": "npm run build:validators && npm run build --workspace=apps/client",
     "build:server": "npm run build:validators && npm run build --workspace=apps/server",
@@ -25,6 +27,7 @@
   "devDependencies": {
     "@commitlint/cli": "^21.0.2",
     "@commitlint/config-conventional": "^21.0.2",
+    "concurrently": "^10.0.4",
     "husky": "^9.1.7"
   }
 }
