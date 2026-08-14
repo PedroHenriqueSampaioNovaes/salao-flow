@@ -125,7 +125,6 @@ export class AppointmentRepository {
       omit: {
         createdAt: true,
         updatedAt: true,
-        totalServiceDuration: true,
         customerId: true,
         employeeId: true,
       },
