@@ -48,12 +48,18 @@ export class GetAvailableSlotsService {
 
   async execute(
     slug: string,
-    dateString: string,
+    dateStringParam: string | undefined,
     lookForNextAvailableTimeSlot: boolean,
     employeeId?: number,
   ) {
     const barbershop = await this.barbershopRepository.getBySlug(slug);
     if (!barbershop) throw new AppError('Barbearia não encontrada.', 404);
+
+    const dateString =
+      dateStringParam ||
+      new Date().toLocaleDateString('en-CA', {
+        timeZone: barbershop.timezone,
+      });
 
     const targetDate = parseDateWithCurrentZonedDateTime(
       dateString,
