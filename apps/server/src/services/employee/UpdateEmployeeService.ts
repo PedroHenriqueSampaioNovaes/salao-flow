@@ -22,6 +22,12 @@ export class UpdateEmployeeService {
       );
     }
 
+    const newEmployeeData: Partial<UpdateEmployeeData> = {
+      name: data.name,
+      employeeScheduleId: employee.employeeScheduleId,
+      image: employee.image,
+    };
+
     if (data.employeeScheduleId) {
       const employeeScheduleExists =
         !!(await employeeScheduleRepository.getById(data.employeeScheduleId));
@@ -29,17 +35,18 @@ export class UpdateEmployeeService {
       if (!employeeScheduleExists) {
         throw new AppError('Expediente não encontrado ou não existe.', 404);
       }
+
+      newEmployeeData.employeeScheduleId = data.employeeScheduleId;
     }
 
-    const image =
-      data.image || `https://ui-avatars.com/api/?name=${data.name}&size=80`;
+    if (data.name) {
+      newEmployeeData.image = `https://ui-avatars.com/api/?name=${data.name}&size=80`;
+    }
 
-    const employeeUpdated = await employeeRepository.update({
-      id: data.id,
-      name: data.name,
-      image,
-      employeeScheduleId: data.employeeScheduleId,
-    });
+    const employeeUpdated = await employeeRepository.update(
+      employee.id,
+      newEmployeeData,
+    );
 
     return employeeUpdated;
   }

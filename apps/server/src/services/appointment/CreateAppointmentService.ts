@@ -111,7 +111,7 @@ export class CreateAppointmentService {
       barbershop.id,
     );
 
-    return this.appointmentRepository.create(
+    const appointmentCreated = await this.appointmentRepository.create(
       {
         dateString: instantInitialDateAppointment.toString(),
         totalServiceDuration,
@@ -121,6 +121,8 @@ export class CreateAppointmentService {
       },
       barbershop.id,
     );
+
+    return appointmentCreated;
   }
 
   private async checkScheduleBlock(

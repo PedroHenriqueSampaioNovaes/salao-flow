@@ -28,6 +28,10 @@ export class GetBookingInfoService {
       throw new AppError('Barbearia não encontrada.', 404);
     }
 
+    if (!bookingInfo.status) {
+      throw new AppError('Barbearia desativada.', 403);
+    }
+
     return { ...bookingInfo, instantLocalTime: now.toInstant() };
   }
 }

@@ -10,6 +10,7 @@ import { ResetPasswordController } from '../controllers/barbershop/ResetPassword
 import { UpdateBarbershopController } from '../controllers/barbershop/UpdateBarbershopController.js';
 import { GetBookingInfoController } from '../controllers/barbershop/GetBookingInfoController.js';
 import { GetAvailableSlotsController } from '../controllers/barbershop/GetAvailableSlotsController.js';
+import { GetDashboardMetricsController } from '../controllers/barbershop/GetDashboardMetricsController.js';
 
 const router = Router();
 
@@ -21,6 +22,11 @@ router.post('/reset-password', ResetPasswordController.handle);
 router.get('/:slug/booking', GetBookingInfoController.handle);
 router.get('/:slug/available-slots', GetAvailableSlotsController.handle);
 router.get('/me', verifyToken, DetailsBarbershopController.handle);
+router.get(
+  '/me/dashboard-metrics',
+  verifyToken,
+  GetDashboardMetricsController.handle,
+);
 
 router.put('/', verifyToken, UpdateBarbershopController.handle);
 

@@ -50,7 +50,6 @@ export class AppointmentRepository {
       omit: {
         createdAt: true,
         updatedAt: true,
-        totalServiceDuration: true,
         customerId: true,
         employeeId: true,
         barbershopId: true,
@@ -85,12 +84,12 @@ export class AppointmentRepository {
     return appointments;
   }
 
-  async getAppointmentsForMonth(date: Date, barbershopId: number) {
-    const startOfMonth = new Date(date);
+  async getAppointmentsForMonth(dateInUTC: string, barbershopId: number) {
+    const startOfMonth = new Date(dateInUTC);
     startOfMonth.setUTCDate(1);
     startOfMonth.setUTCHours(0, 0, 0, 0);
 
-    const endOfMonth = new Date(date);
+    const endOfMonth = new Date(dateInUTC);
     endOfMonth.setUTCMonth(startOfMonth.getUTCMonth() + 1);
 
     const appointments = await prisma.appointment.findMany({
@@ -100,6 +99,9 @@ export class AppointmentRepository {
           lt: endOfMonth,
         },
         barbershopId,
+      },
+      orderBy: {
+        date: 'asc',
       },
       include: {
         customer: {
