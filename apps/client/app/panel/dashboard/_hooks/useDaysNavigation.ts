@@ -1,8 +1,7 @@
 'use client';
 
-import { useMemo } from 'react';
+import { Dispatch, SetStateAction, useMemo } from 'react';
 
-import { useSelectedDateContext } from '@/src/common/contexts/selected-date-context';
 import { usePanelContext } from '@/src/common/contexts/panel-context';
 
 import { getLocalDateAsUTCDate } from '@/src/common/utils/getLocalDateAsUTCDate';
@@ -21,8 +20,15 @@ function getDayName(date: Date): string {
     .toUpperCase();
 }
 
-export function useDaysNavigation() {
-  const { date, setDate } = useSelectedDateContext();
+interface IUseDaysNavigationParams {
+  selectedDate: Date;
+  setSelectedDate: Dispatch<SetStateAction<Date>>;
+}
+
+export function useDaysNavigation({
+  selectedDate,
+  setSelectedDate,
+}: IUseDaysNavigationParams) {
   const { barbershop } = usePanelContext();
 
   const today = getLocalDateAsUTCDate(
@@ -35,9 +41,9 @@ export function useDaysNavigation() {
       [-2, -1, 0, 1, 2].map((offset) => {
         const dayDate = new Date(
           Date.UTC(
-            date.getUTCFullYear(),
-            date.getUTCMonth(),
-            date.getUTCDate() + offset,
+            selectedDate.getUTCFullYear(),
+            selectedDate.getUTCMonth(),
+            selectedDate.getUTCDate() + offset,
           ),
         );
 
@@ -45,17 +51,17 @@ export function useDaysNavigation() {
           date: dayDate,
           dayName: getDayName(dayDate),
           dayNum: dayDate.getUTCDate(),
-          isSelected: date.getTime() === dayDate.getTime(),
+          isSelected: selectedDate.getTime() === dayDate.getTime(),
           isMatchDate:
             today.toLocaleDateString('pt-BR', { timeZone: 'UTC' }) ===
             dayDate.toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
         };
       }),
-    [date, today],
+    [selectedDate, today],
   );
 
   const moveDay = (delta: number) => {
-    setDate((current) => {
+    setSelectedDate((current) => {
       return new Date(
         Date.UTC(
           current.getUTCFullYear(),
@@ -66,7 +72,7 @@ export function useDaysNavigation() {
     });
   };
 
-  const selectDay = (dayDate: Date) => setDate(dayDate);
+  const selectDay = (dayDate: Date) => setSelectedDate(dayDate);
 
   return {
     days,

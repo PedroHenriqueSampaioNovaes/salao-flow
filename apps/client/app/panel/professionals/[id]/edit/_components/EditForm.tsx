@@ -49,14 +49,16 @@ export default function EditForm({
   }
 
   return (
-    <ProfessionalForm
-      employeeSchedules={employeeSchedules}
-      onSubmit={onSubmit}
-      submitLabel="Editar"
-      defaultValues={{
-        name: employee.name,
-        employeeScheduleId: employee.employeeScheduleId,
-      }}
-    />
+    <div className="flex flex-col gap-8">
+      <ProfessionalForm
+        employeeSchedules={employeeSchedules}
+        onSubmit={onSubmit}
+        submitLabel="Editar"
+        defaultValues={{
+          name: employee.name,
+          employeeScheduleId: employee.employeeScheduleId,
+        }}
+      />
+    </div>
   );
 }

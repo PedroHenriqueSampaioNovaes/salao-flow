@@ -3,10 +3,9 @@
 import { useState } from 'react';
 import { CalendarCheck } from 'lucide-react';
 
-import { usePanelContext } from '@/src/common/contexts/panel-context';
-import { useSelectedDateContext } from '@/src/common/contexts/selected-date-context';
+import { getLocalDateAsUTCDate } from '@/src/common/utils/getLocalDateAsUTCDate';
 
-import { IAppointment } from '@/src/common/interfaces/appointment';
+import { usePanelContext } from '@/src/common/contexts/panel-context';
 
 import ActionControls from './ActionControls';
 import AppointmentsList from './AppointmentsList';
@@ -20,38 +19,20 @@ const dateRibbonFormatter = new Intl.DateTimeFormat('pt-BR', {
 });
 
 export default function Calendar() {
-  const { appointments } = usePanelContext();
-  const { date } = useSelectedDateContext();
+  const { barbershop } = usePanelContext();
+  const [selectedDate, setSelectedDate] = useState(() => {
+    const today = getLocalDateAsUTCDate(
+      barbershop.instantLocalTime,
+      barbershop.timezone,
+    );
+
+    const initialDate = new Date(
+      Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()),
+    );
+    return initialDate;
+  });
 
   const [employee, setEmployee] = useState<number | ''>('');
-
-  const displayAppointments: IAppointment[] =
-    appointments.length > 0
-      ? filterAppointments(appointments, employee, date)
-      : [
-          {
-            id: '1',
-            date: '2026-07-13T17:00:00.000Z',
-            customer: {
-              id: 101,
-              name: 'Pedro Henrique',
-              phone: '(11) 91111-1111',
-            },
-            employee: { id: 1, name: 'Carlos Cabeleireiro' },
-            services: [{ name: 'Corte + Barba, Barba Terapia', price: 3000 }],
-          },
-          {
-            id: '2',
-            date: '2026-07-23T17:30:00.000Z',
-            customer: {
-              id: 102,
-              name: 'Pedro Henrique',
-              phone: '(11) 91111-1111',
-            },
-            employee: { id: 1, name: 'Carlos Cabeleireiro' },
-            services: [{ name: 'Corte + Barba, Barba Terapia', price: 3000 }],
-          },
-        ];
 
   return (
     <div className="bg-white rounded-2xl shadow shadow-neutral/20 overflow-hidden flex flex-col">
@@ -62,32 +43,21 @@ export default function Calendar() {
         <h2 className="text-lg font-bold leading-none">Agenda</h2>
       </div>
 
-      <DaysNavigationBar />
-
-      <div className="bg-[#F8F9FA] border-t border-b border-border/20 py-2 text-center font-medium text-primary">
-        {dateRibbonFormatter.format(date)}
-      </div>
-
-      <ActionControls
-        employee={employee}
-        onEmployeeChange={setEmployee}
+      <DaysNavigationBar
+        selectedDate={selectedDate}
+        setSelectedDate={setSelectedDate}
       />
 
-      <AppointmentsList appointments={displayAppointments} />
+      <div className="bg-[#F8F9FA] border-t border-b border-border/20 py-2 text-center font-medium text-primary">
+        {dateRibbonFormatter.format(selectedDate)}
+      </div>
+
+      <ActionControls employee={employee} onEmployeeChange={setEmployee} />
+
+      <AppointmentsList
+        employee={employee}
+        selectedDate={selectedDate}
+      />
     </div>
   );
-}
-
-function filterAppointments(
-  appointments: IAppointment[],
-  employeeId: number | '',
-  date: Date,
-) {
-  return appointments?.filter(({ date: appointmentDate, employee }) => {
-    const appointment = new Date(appointmentDate);
-    const isSameDate = appointment.toDateString() === date.toDateString();
-    const isSameEmployee = employeeId ? employee.id === employeeId : true;
-
-    return isSameDate && isSameEmployee;
-  });
 }

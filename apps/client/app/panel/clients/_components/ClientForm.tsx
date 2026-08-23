@@ -10,8 +10,8 @@ import { CreateCustomerSchema } from '@sistema-barbearia/validators';
 
 import { useClientForm } from '../_hooks/useClientForm';
 
-import { PhoneInputField } from '@/app/(auth)/register/_components/PhoneInputField';
 import { Switch } from '@/src/components/ui/switch';
+import { PhoneInputField } from '@/src/components/ui/phone-input-field';
 
 interface ClientFormProps {
   onSubmit: (data: CreateCustomerSchema) => Promise<void>;

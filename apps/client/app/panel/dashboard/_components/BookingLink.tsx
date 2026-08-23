@@ -1,16 +1,25 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useSyncExternalStore } from 'react';
 import { Link as LinkIcon, Copy, Check } from 'lucide-react';
 
 import { usePanelContext } from '@/src/common/contexts/panel-context';
+
+const noopSubscribe = () => () => {};
+const getHostSnapshot = () => window.location.host;
+const getHostServerSnapshot = () => '';
 
 export default function BookingLink() {
   const { barbershop } = usePanelContext();
 
   const [copied, setCopied] = useState(false);
+  const host = useSyncExternalStore(
+    noopSubscribe,
+    getHostSnapshot,
+    getHostServerSnapshot,
+  );
 
-  const bookingLink = `${process.env.NEXT_PUBLIC_FRONTEND_URL_BASE}/${barbershop.slug}`;
+  const bookingLink = `${host}/${barbershop.slug}`;
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(`https://${bookingLink}`);
