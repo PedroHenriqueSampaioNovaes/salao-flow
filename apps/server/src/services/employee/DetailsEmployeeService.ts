@@ -25,6 +25,13 @@ export class DetailsEmployeeService {
       name: employee.name,
       image: employee.image,
       employeeScheduleId: employee.employeeScheduleId,
+      services: employee.services.map((service) => ({
+        id: service.id,
+        name: service.name,
+        price: service.price,
+        duration: service.duration,
+        status: service.status,
+      })),
     };
   }
 }

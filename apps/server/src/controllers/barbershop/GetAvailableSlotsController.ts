@@ -13,7 +13,6 @@ export class GetAvailableSlotsController {
       employeeId?: string;
     };
 
-    if (!date) throw new AppError('Parâmetro date é obrigatório.', 400);
     if (!lookForNextAvailableTimeSlot)
       throw new AppError(
         'Parâmetro lookForNextAvailableTimeSlot é obrigatório.',

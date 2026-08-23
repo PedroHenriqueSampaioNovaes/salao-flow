@@ -8,4 +8,12 @@ export interface IBarbershop {
   status: boolean;
   slug: string;
   timezone: string;
+  instantLocalTime: string;
+}
+
+export interface IDashboardMetrics {
+  customerCount: number;
+  employeeCount: number;
+  serviceCount: number;
+  todayAppointmentsCount: number;
 }

@@ -1,13 +1,19 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
+
+import { SelectedDateProvider } from '@/src/common/contexts/selected-date-context';
+import { getLocalDateAsUTCDate } from '@/src/common/utils/getLocalDateAsUTCDate';
 
 import { usePanelContext } from '@/src/common/contexts/panel-context';
 
 import { IAppointment } from '@/src/common/interfaces/appointment';
-import { formatPrice } from '@/src/common/utils/formatPrice';
 
 import { connectToSocket, disconnectSocket } from '@/src/common/lib/socket';
+
+import MetricCards from './MetricCards';
+import Calendar from './Calendar';
+import BookingLink from './BookingLink';
 
 interface DashboardProps {
   token?: string;
@@ -15,14 +21,9 @@ interface DashboardProps {
 }
 
 export default function Dashboard({ token, apiUrl }: DashboardProps) {
-  const { barbershop, appointments, employees, setAppointments } =
-    usePanelContext();
-
-  const [date, setDate] = useState(new Date());
-  const [employee, setEmployee] = useState<number | ''>('');
+  const { barbershop, setAppointments } = usePanelContext();
 
   const socketConnected = useRef(false);
-
   const handleNewAppointment = useCallback(
     (newAppointment: IAppointment) => {
       setAppointments((prev) => [...prev, newAppointment]);
@@ -44,79 +45,39 @@ export default function Dashboard({ token, apiUrl }: DashboardProps) {
     };
   }, [token, apiUrl, handleNewAppointment]);
 
-  const appointmentsOfCurrentDate = filterAppointments(
-    appointments,
-    employee,
-    date,
+  const today = getLocalDateAsUTCDate(
+    barbershop.instantLocalTime,
+    barbershop.timezone,
   );
+  const initialDate = new Date(
+    Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()),
+  );
+
+  const currentDateFormatted = new Intl.DateTimeFormat('pt-BR', {
+    dateStyle: 'full',
+    timeZone: 'UTC',
+  }).format(today);
 
   return (
-    <div>
-      <h1 className="text-xl">Dashboard:</h1>
-      <p>{`www.salaoflow.com/${barbershop?.slug}`}</p>
-      <button
-        className="cursor-pointer mr-20"
-        onClick={() => setDate(new Date())}
-      >
-        Hoje
-      </button>{' '}
-      <button
-        className="cursor-pointer"
-        onClick={() =>
-          setDate(() => {
-            const date = new Date();
-            date.setDate(3);
-            return date;
-          })
-        }
-      >
-        Dia 03
-      </button>
-      <div>
-        <span>Funcionários:</span>
-        <button className="cursor-pointer ml-5" onClick={() => setEmployee('')}>
-          Todos profissionais
-        </button>
-        {employees.map((employee) => (
-          <button
-            key={employee.id}
-            className="cursor-pointer ml-5"
-            onClick={() => setEmployee(employee.id)}
-          >
-            {employee.name}
-          </button>
-        ))}
-      </div>
-      {appointmentsOfCurrentDate.map(({ id, date, services, employee }) => (
-        <div key={id}>
-          Data: {date}{' '}
-          <span className="ml-5">
-            Serviços:{' '}
-            {services.map(({ name }) => (
-              <span key={name}>{name}</span>
-            ))}
-            Valor total:
-            {formatPrice(
-              services.reduce((acc, service) => acc + service.price, 0),
-            )}
-          </span>
-          <span className="ml-5">Profissional: {employee.name}</span>
+    <SelectedDateProvider initialDate={initialDate}>
+      <div className="flex flex-col gap-6">
+        <div className="text-center md:text-left">
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
+            Bem-vindo à {barbershop?.name}!
+          </h1>
+          <p className="text-sm text-primary mt-1 font-normal">
+            {currentDateFormatted[0].toUpperCase() +
+              currentDateFormatted.slice(1)}
+          </p>
         </div>
-      ))}
-    </div>
+
+        <MetricCards />
+
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] xl:grid-cols-[1fr_350px] gap-5 items-start">
+          <Calendar />
+          <BookingLink />
+        </div>
+      </div>
+    </SelectedDateProvider>
   );
-}
-
-function filterAppointments(
-  appointments: IAppointment[],
-  employeeId: number | '',
-  date: Date,
-) {
-  return appointments?.filter(({ date: appointmentDate, employee }) => {
-    const appointment = new Date(appointmentDate);
-    const isSameDate = appointment.toDateString() === date.toDateString();
-    const isSameEmployee = employeeId ? employee.id === employeeId : true;
-
-    return isSameDate && isSameEmployee;
-  });
 }

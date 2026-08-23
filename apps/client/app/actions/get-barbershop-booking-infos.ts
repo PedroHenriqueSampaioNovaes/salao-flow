@@ -8,9 +8,9 @@ import { IBarbershopBookingInfos } from '@/src/common/interfaces/barbershop-book
 
 export default async function getBarbershopBookingInfosAction(slug: string) {
   try {
-    const data = (await FetchApi.get(
+    const data = await FetchApi.get<IBarbershopBookingInfos>(
       `/barbershops/${slug}/booking`,
-    )) as IBarbershopBookingInfos;
+    );
 
     return { data, ok: true, error: '' };
   } catch (error) {

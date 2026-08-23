@@ -3,6 +3,7 @@ export interface IEmployee {
   employeeScheduleId: string;
   name: string;
   image: string;
+  services: { id: string; name: string; price: number }[];
 }
 
 export interface ICreateEmployee {

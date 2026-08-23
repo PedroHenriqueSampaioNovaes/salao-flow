@@ -4,68 +4,95 @@ import { useTransition } from 'react';
 import { useParams } from 'next/navigation';
 import { cn } from '@/src/lib/utils';
 
-import { User, Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
+import {
+  User,
+  Scissors,
+  CalendarClock,
+  BookUser,
+  ChevronLeft,
+  ChevronRight,
+  CalendarCheck,
+} from 'lucide-react';
 
-import { BookingFormProvider, useBookingForm } from './BookingFormContext';
-import Professionals from './Professionals';
-import Booking from './Booking';
 import createAppointmentAction from '@/app/actions/create-appointment';
+import { showErrorToast, showSuccessToast } from '@/src/common/lib/toast';
 
 import {
-  IEmployee,
+  BookingFormProvider,
+  useBookingForm,
+} from '../_contexts/BookingFormContext';
+
+import {
+  IBarbershopBookingInfos,
   IGetAvailableTimeSlotsForBooking,
 } from '@/src/common/interfaces/barbershop-booking';
 
+import Professionals from './Professionals';
+import Services from './Services';
+import Booking from './Booking';
+import ClientData from './ClientData';
+import SchedulingSummary from './SchedulingSummary';
+import Contacts from './Contacts';
+
 interface IBookingFormContainerProps {
-  professionals: IEmployee[];
-  barbershopLocalDateUTC: Date;
-  availableTimeSlots: IGetAvailableTimeSlotsForBooking;
+  barbershopBookingInfos: IBarbershopBookingInfos;
+  timeSlotsByProfessionalAndDate: IGetAvailableTimeSlotsForBooking;
 }
 
 export default function BookingFormContainer({
-  professionals,
-  barbershopLocalDateUTC,
-  availableTimeSlots,
+  barbershopBookingInfos,
+  timeSlotsByProfessionalAndDate,
 }: IBookingFormContainerProps) {
   return (
     <BookingFormProvider>
       <BookingFormWrapper
-        professionals={professionals}
-        barbershopLocalDateUTC={barbershopLocalDateUTC}
-        availableTimeSlots={availableTimeSlots}
+        barbershopBookingInfos={barbershopBookingInfos}
+        timeSlotsByProfessionalAndDate={timeSlotsByProfessionalAndDate}
       />
     </BookingFormProvider>
   );
 }
 
 function BookingFormWrapper({
-  professionals,
-  barbershopLocalDateUTC,
-  availableTimeSlots,
+  barbershopBookingInfos,
+  timeSlotsByProfessionalAndDate,
 }: IBookingFormContainerProps) {
   const { currentStep } = useBookingForm();
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-4 md:p-8 bg-card border border-border/60 rounded-2xl shadow-xl backdrop-blur-sm transition-all duration-300">
+    <div className="px-4">
       <StepperHeader />
 
-      <div className="min-h-[400px] mb-8 transition-all duration-300">
-        {currentStep === 1 && (
-          <Professionals
-            professionals={professionals}
-            barbershopLocalDateUTC={barbershopLocalDateUTC}
-            employeesShiftData={availableTimeSlots.employees}
-          />
-        )}
-        {currentStep === 2 && (
-          <Booking
-            barbershopLocalDateUTC={barbershopLocalDateUTC}
-            availableTimeSlots={availableTimeSlots}
-          />
-        )}
-      </div>
+      <div className="max-w-300 mx-auto mb-9 transition-all duration-300">
+        <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] items-start gap-x-16 gap-y-6">
+          <div>
+            {currentStep === 1 && (
+              <Professionals
+                professionals={barbershopBookingInfos.employees}
+                barbershopBookingInfos={barbershopBookingInfos}
+                employeesShiftData={timeSlotsByProfessionalAndDate.employees}
+              />
+            )}
+            {currentStep === 2 && (
+              <Services professionals={barbershopBookingInfos.employees} />
+            )}
+            {currentStep === 3 && (
+              <Booking
+                timeSlotsByProfessionalAndDate={timeSlotsByProfessionalAndDate}
+              />
+            )}
+            {currentStep === 4 && <ClientData />}
+            <StepperFooter />
+          </div>
 
-      <StepperFooter />
+          <div>
+            <SchedulingSummary
+              professionals={barbershopBookingInfos.employees}
+            />
+            <Contacts />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -74,29 +101,38 @@ function StepperHeader() {
   const { currentStep, setStep } = useBookingForm();
   const [isPending, startTransition] = useTransition();
 
+  const activeVisualStep = currentStep;
+
   const steps = [
-    { number: 1, label: 'Profissional e Serviços', icon: User },
-    { number: 2, label: 'Data e Horário', icon: Calendar },
+    { number: 1, label: 'Profissional', icon: User },
+    { number: 2, label: 'Serviços', icon: Scissors },
+    { number: 3, label: 'Data e Hora', icon: CalendarClock },
+    { number: 4, label: 'Seus dados', icon: BookUser },
   ];
 
-  const handleStepClick = (stepNumber: number) => {
+  const handleStepClick = (step: number) => {
     startTransition(async () => {
-      await setStep(stepNumber);
+      await setStep(step);
     });
   };
 
+  const progressPercentage =
+    ((activeVisualStep - 1) / (steps.length - 1)) * 100;
+
   return (
-    <div className="relative flex justify-between items-center mb-8 pb-6 border-b border-border/40">
-      {/* Progress Line */}
-      <div className="absolute top-[28px] left-[40px] right-[40px] h-[3px] bg-muted -translate-y-1/2 z-0" />
+    <div className="relative flex justify-between items-start gap-2 py-6 mb-8 max-w-140 mx-auto">
+      {/* Horizontal connecting line */}
+      <div className="absolute h-0.5 top-11 sm:top-12.25 left-13.75 right-12 bg-appointment-border -translate-y-1/2" />
       <div
-        className="absolute top-[28px] left-[40px] h-[3px] bg-primary -translate-y-1/2 z-0 transition-all duration-500"
-        style={{ width: currentStep === 1 ? '0%' : 'calc(100% - 80px)' }}
+        className="absolute h-0.5 top-11 sm:top-12.25 left-13.75 right-12 bg-cta-accent -translate-y-1/2 transition-all duration-500 origin-left"
+        style={{
+          transform: `scaleX(${progressPercentage / 100})`,
+        }}
       />
 
       {steps.map((step) => {
-        const isActive = currentStep === step.number;
-        const isCompleted = currentStep > step.number;
+        const isActive = activeVisualStep === step.number;
+        const isCompleted = activeVisualStep > step.number;
         const Icon = step.icon;
 
         return (
@@ -105,30 +141,28 @@ function StepperHeader() {
             type="button"
             disabled={isPending}
             onClick={() => handleStepClick(step.number)}
-            className={cn(
-              'relative z-10 flex flex-col items-center gap-2 px-4 py-2 rounded-xl transition-all duration-300 hover:bg-accent/40',
-              isActive ? 'text-primary scale-105' : 'text-muted-foreground',
-              isCompleted && 'text-primary/80',
-            )}
+            className="relative z-10 flex flex-col items-center gap-2 cursor-pointer"
           >
             <div
               className={cn(
-                'w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-500 shadow-md',
-                isActive
-                  ? 'bg-primary border-primary text-primary-foreground font-bold scale-110'
-                  : isCompleted
-                    ? 'bg-primary/10 border-primary text-primary'
-                    : 'bg-background border-muted text-muted-foreground',
+                'size-10 sm:size-12.5 rounded-full flex items-center justify-center bg-appointment-foreground border-2 border-appointment-border text-appointment-text-muted transition-all duration-300',
+                isActive && 'bg-cta-accent text-black border-cta-accent-border',
+                isCompleted &&
+                  'text-cta-accent border-cta-accent bg-cta-accent-border',
               )}
             >
-              <Icon className="w-5 h-5" />
+              <Icon className="sm:size-7" />
             </div>
-            <div className="flex flex-col text-center">
-              <span className="text-[10px] uppercase tracking-wider font-semibold opacity-70">
-                Passo {step.number}
-              </span>
-              <span className="text-sm font-bold">{step.label}</span>
-            </div>
+
+            <span
+              className={cn(
+                'text-sm sm:text-base transition-colors duration-300 text-center text-appointment-text-muted',
+                isActive && 'text-cta-accent',
+                isCompleted && 'text-white',
+              )}
+            >
+              {step.label}
+            </span>
           </button>
         );
       })}
@@ -137,7 +171,15 @@ function StepperHeader() {
 }
 
 function StepperFooter() {
-  const { currentStep, goToNextStep, goToPrevStep, form } = useBookingForm();
+  const {
+    currentStep,
+    totalSteps,
+    form,
+    setStep,
+    goToNextStep,
+    goToPrevStep,
+    validateStep,
+  } = useBookingForm();
   const params = useParams() as { slug: string };
 
   const slug = decodeURIComponent(params.slug);
@@ -146,14 +188,18 @@ function StepperFooter() {
   const serviceIds = form.watch('serviceIds') || [];
   const date = form.watch('date');
   const selectedTime = form.watch('time');
-  const isBookingValid = !!selectedTime;
+  const name = form.watch('name');
+  const phone = form.watch('phone');
+  const email = form.watch('email');
 
   const handleSubmit = async () => {
-    if (!isBookingValid) return;
+    const isValid = await validateStep(currentStep);
+    if (!isValid) return;
 
     const { error, ok } = await createAppointmentAction({
-      name: 'Pedro',
-      phone: '(11) 98814-8020',
+      name,
+      phone,
+      email,
       barbershopSlug: slug,
       employeeId,
       serviceIds,
@@ -162,48 +208,47 @@ function StepperFooter() {
     });
 
     if (!ok) {
-      alert(error);
-    } else {
-      alert('Agendamento realizado com sucesso!');
+      showErrorToast(error, { theme: 'dark' });
+      return;
     }
+
+    form.reset();
+    setStep(1);
+    showSuccessToast('Agendamento realizado com sucesso!', { theme: 'dark' });
   };
 
   return (
-    <div className="flex justify-between items-center pt-6 border-t border-border/40">
-      {currentStep > 1 ? (
+    <div className="max-md:fixed left-0 bottom-0 z-50 w-full max-md:px-4 max-md:py-2 py-6 max-md:bg-appointment-foreground flex justify-between md:justify-end gap-4 md:gap-6">
+      {currentStep > 1 && (
         <button
           type="button"
           onClick={goToPrevStep}
-          className="flex items-center gap-2 py-2.5 px-6 rounded-xl border border-input bg-background hover:bg-accent text-accent-foreground font-semibold shadow-sm transition-all duration-200 cursor-pointer"
+          className="flex items-center gap-1.5 px-3 md:px-4 h-10 md:h-9 rounded-lg border border-appointment-border hover:bg-[#262626] text-sm font-bold transition-all duration-200 cursor-pointer"
+          aria-label="Voltar"
         >
-          <ChevronLeft className="w-4 h-4" />
-          Voltar
+          <ChevronLeft className="size-5" />
+          <span className="max-md:hidden">Voltar</span>
         </button>
-      ) : (
-        <div />
       )}
 
-      {currentStep < 2 ? (
+      {currentStep < totalSteps ? (
         <button
           type="button"
           onClick={goToNextStep}
-          className="flex items-center gap-2 py-2.5 px-6 rounded-xl bg-primary text-primary-foreground hover:bg-primary/95 font-semibold shadow-lg transition-all duration-200 cursor-pointer"
+          className="max-md:flex-1 flex items-center max-md:justify-center gap-1.5 h-10 md:h-9 px-6 rounded-lg bg-cta-accent hover:bg-[#BFA000] text-black text-sm font-bold transition-all duration-200 cursor-pointer"
         >
-          Próximo
-          <ChevronRight className="w-4 h-4" />
+          Avançar
+          <ChevronRight className="size-5" />
         </button>
       ) : (
         <button
           type="button"
-          disabled={!isBookingValid}
           className={cn(
-            'px-8 py-3 rounded-xl font-bold transition-all duration-200 cursor-pointer',
-            isBookingValid
-              ? 'bg-primary text-primary-foreground hover:bg-primary/95 shadow-lg hover:shadow-xl scale-[1.02]'
-              : 'bg-muted text-muted-foreground cursor-not-allowed opacity-50',
+            'max-md:flex-1 flex items-center max-md:justify-center gap-1.5 h-10 md:h-9 px-6 rounded-lg bg-cta-accent hover:bg-[#BFA000] text-black text-sm font-bold transition-all duration-200 cursor-pointer',
           )}
           onClick={handleSubmit}
         >
+          <CalendarCheck className="size-5" />
           Submeter Agendamento
         </button>
       )}

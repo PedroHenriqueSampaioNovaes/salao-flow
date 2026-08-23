@@ -72,7 +72,6 @@ export class BarbershopRepository {
       where: { id },
       omit: {
         updatedAt: true,
-        customerId: true,
         resetPasswordExpires: true,
         resetPasswordToken: true,
       },
@@ -122,6 +121,31 @@ export class BarbershopRepository {
     return barbershop;
   }
 
+  async getDashboardData(id: number, todayStart: Date, todayEnd: Date) {
+    const barbershop = await prisma.barbershop.findUnique({
+      where: { id },
+      select: {
+        _count: {
+          select: {
+            customers: true,
+            employees: true,
+            services: true,
+            appointments: {
+              where: {
+                date: {
+                  gte: todayStart,
+                  lte: todayEnd,
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return barbershop;
+  }
+
   async getBookingInfoBySlug(slug: string, now: string, maxDate: string) {
     const barbershop = await prisma.barbershop.findUnique({
       where: { slug },
@@ -131,6 +155,7 @@ export class BarbershopRepository {
         phone: true,
         image: true,
         timezone: true,
+        status: true,
         employees: {
           select: {
             id: true,

@@ -38,7 +38,7 @@ export interface IAppointments {
   totalServiceDuration: number;
 }
 
-export interface IEmployee {
+export interface IEmployeeBookingInfo {
   id: number;
   name: string;
   image: string;
@@ -53,7 +53,8 @@ export interface IBarbershopBookingInfos {
   address: string;
   phone: string;
   image: string;
-  employees: IEmployee[];
+  status: boolean;
+  employees: IEmployeeBookingInfo[];
   instantLocalTime: string;
   timezone: string;
 }

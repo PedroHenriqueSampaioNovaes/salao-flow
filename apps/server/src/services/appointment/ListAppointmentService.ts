@@ -1,13 +1,24 @@
 import { AppointmentRepository } from '@/src/repositories/AppointmentRepository.js';
+import { BarbershopRepository } from '@/src/repositories/BarbershopRepository.js';
 
 import { AppError } from '@/src/errors/AppError.js';
 
 export class ListAppointmentService {
-  async execute(date: Date, barbershopId: number) {
+  async execute(dateStringParam: string, barbershopId: number) {
     const appointmentRepository = new AppointmentRepository();
+    const barbershopRepository = new BarbershopRepository();
+
+    const barbershop = await barbershopRepository.getById(barbershopId);
+    if (!barbershop) throw new AppError('Barbearia não encontrada.', 404);
+
+    const dateString =
+      dateStringParam ||
+      new Date().toLocaleDateString('en-CA', {
+        timeZone: barbershop.timezone,
+      });
 
     const appointments = await appointmentRepository.getAppointmentsForMonth(
-      date,
+      dateString,
       barbershopId,
     );
 

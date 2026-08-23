@@ -8,11 +8,13 @@ export interface IAppointment {
   customer: Pick<ICustomer, 'id' | 'name' | 'phone'>;
   employee: Pick<IEmployee, 'id' | 'name'>;
   services: Pick<IService, 'name' | 'price'>[];
+  totalServiceDuration: number;
 }
 
 export interface ICreateAppointment {
   name: string;
   phone: string;
+  email: string;
   date: string;
   time: string;
   serviceIds: string[];

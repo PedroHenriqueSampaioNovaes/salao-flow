@@ -8,18 +8,24 @@ import { apiError } from '@/src/common/utils/apiError';
 
 import { IAppointment } from '@/src/common/interfaces/appointment';
 
-export default async function getAppointmentsAction() {
+interface GetAppointmentsActionParams {
+  dateString?: string;
+}
+
+export default async function getAppointmentsAction({
+  dateString,
+}: GetAppointmentsActionParams = {}) {
   try {
     const cookieStore = await cookies();
 
     const data = await FetchApi.get<IAppointment[]>(
-      `/appointments?date=${new Date().toISOString()}`,
+      `/appointments?date=${dateString}`,
       {
         token: cookieStore.get('token')?.value,
       },
     );
 
-    return { data, ok: true, error: '' };
+    return { data: data ?? [], ok: true, error: '' };
   } catch (error) {
     return apiError(error);
   }

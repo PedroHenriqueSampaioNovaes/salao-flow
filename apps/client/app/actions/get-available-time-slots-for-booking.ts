@@ -8,25 +8,27 @@ import { IGetAvailableTimeSlotsForBooking } from '@/src/common/interfaces/barber
 
 interface IGetAvailableTimeSlotsForBookingRequest {
   slug: string;
-  dateString: string;
+  dateString?: string;
   employeeId?: number;
-  lookForNextAvailableTimeSlot: number;
+  lookForNextAvailableTimeSlot?: number;
 }
 
 export default async function getAvailableTimeSlotsForBookingAction({
   slug,
   dateString,
   employeeId,
-  lookForNextAvailableTimeSlot,
+  lookForNextAvailableTimeSlot = 1,
 }: IGetAvailableTimeSlotsForBookingRequest) {
   try {
     const params = new URLSearchParams();
-    params.append('date', dateString);
+    if (dateString) params.append('date', dateString);
     if (employeeId) params.append('employeeId', String(employeeId));
-    params.append(
-      'lookForNextAvailableTimeSlot',
-      String(lookForNextAvailableTimeSlot),
-    );
+    if (lookForNextAvailableTimeSlot !== undefined) {
+      params.append(
+        'lookForNextAvailableTimeSlot',
+        String(lookForNextAvailableTimeSlot),
+      );
+    }
 
     const data = (await FetchApi.get(
       `/barbershops/${slug}/available-slots?${params.toString()}`,

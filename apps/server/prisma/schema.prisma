@@ -83,9 +83,9 @@ model EmployeeScheduleWeekday {
 }
 
 model Employee {
-  id    Int     @id @default(autoincrement())
+  id    Int    @id @default(autoincrement())
   name  String
-  image String?
+  image String
 
   barbershopId       Int
   barbershop         Barbershop       @relation(fields: [barbershopId], references: [id], onDelete: Cascade)
@@ -115,7 +115,6 @@ model Customer {
   updatedAt DateTime @updatedAt
 
   @@unique([phone, barbershopId])
-  @@unique([email, barbershopId])
 }
 
 model Service {

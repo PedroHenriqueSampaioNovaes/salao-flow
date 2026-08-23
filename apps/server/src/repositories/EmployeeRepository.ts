@@ -4,7 +4,7 @@ import { UpdateEmployeeData } from '../interfaces/Employee.js';
 
 interface CreateEmployeeData {
   name: string;
-  image?: string;
+  image: string;
   barbershopId: number;
   employeeScheduleId: string;
   serviceIds: string[];
@@ -43,6 +43,7 @@ export class EmployeeRepository {
       },
       include: {
         employeeSchedule: true,
+        services: true,
       },
     });
 
@@ -81,20 +82,19 @@ export class EmployeeRepository {
       where: {
         barbershopId,
       },
-      omit: {
-        barbershopId: true,
-        createdAt: true,
-        updatedAt: true,
+      include: {
+        services: true,
+        employeeSchedule: true,
       },
     });
 
     return employees;
   }
 
-  async update(data: UpdateEmployeeData) {
+  async update(id: number, data: Partial<UpdateEmployeeData>) {
     const employee = await prisma.employee.update({
       where: {
-        id: data.id,
+        id,
       },
       data: {
         name: data.name,
