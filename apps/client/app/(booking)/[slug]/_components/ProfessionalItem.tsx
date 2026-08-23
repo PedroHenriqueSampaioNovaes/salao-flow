@@ -29,8 +29,6 @@ export default function ProfessionalItem({
 }: IProfessionalItemProps) {
   const { id, name, image, services } = employee;
 
-  if (services.length === 0) return null;
-
   const employeeShift = employeesShiftData.find(
     ({ id: employeeId }) => employeeId === employee.id,
   )!;
