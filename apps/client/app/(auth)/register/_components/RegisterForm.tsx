@@ -3,7 +3,7 @@
 import { useRegisterForm } from '../_hooks/useRegisterForm';
 import { Field, FieldLabel, FieldError } from '@/src/components/ui/field';
 import { Input } from '@/src/components/ui/input';
-import { PhoneInputField } from './PhoneInputField';
+import { PhoneInputField } from '@/src/components/ui/phone-input-field';
 
 export function RegisterForm() {
   const {

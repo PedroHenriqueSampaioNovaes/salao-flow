@@ -3,6 +3,7 @@
 import React from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import { IMaskMixin } from 'react-imask';
+import { LucideIcon } from 'lucide-react';
 
 import { Input } from '@/src/components/ui/input';
 import { Field, FieldLabel, FieldError } from '@/src/components/ui/field';
@@ -14,6 +15,7 @@ interface PhoneInputFieldProps<TFieldValues extends FieldValues = FieldValues> {
   error?: string;
   id?: string;
   placeholder?: string;
+  Icon?: LucideIcon;
   className?: string;
 }
 
@@ -34,11 +36,14 @@ export function PhoneInputField<
   error,
   id = 'phone',
   placeholder,
+  Icon,
   className,
 }: PhoneInputFieldProps<TFieldValues>) {
   return (
     <Field data-invalid={!!error}>
-      <FieldLabel htmlFor={id}>{label}</FieldLabel>
+      <FieldLabel htmlFor={id} Icon={Icon}>
+        {label}
+      </FieldLabel>
       <Controller
         name={name}
         control={control}

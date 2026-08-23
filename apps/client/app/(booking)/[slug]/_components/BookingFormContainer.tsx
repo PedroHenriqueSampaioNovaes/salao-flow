@@ -15,11 +15,17 @@ import {
 } from 'lucide-react';
 
 import createAppointmentAction from '@/app/actions/create-appointment';
+import { showErrorToast, showSuccessToast } from '@/src/common/lib/toast';
 
 import {
   BookingFormProvider,
   useBookingForm,
 } from '../_contexts/BookingFormContext';
+
+import {
+  IBarbershopBookingInfos,
+  IGetAvailableTimeSlotsForBooking,
+} from '@/src/common/interfaces/barbershop-booking';
 
 import Professionals from './Professionals';
 import Services from './Services';
@@ -28,37 +34,28 @@ import ClientData from './ClientData';
 import SchedulingSummary from './SchedulingSummary';
 import Contacts from './Contacts';
 
-import {
-  IEmployee,
-  IGetAvailableTimeSlotsForBooking,
-} from '@/src/common/interfaces/barbershop-booking';
-
 interface IBookingFormContainerProps {
-  professionals: IEmployee[];
-  barbershopLocalDateUTC: Date;
-  availableTimeSlots: IGetAvailableTimeSlotsForBooking;
+  barbershopBookingInfos: IBarbershopBookingInfos;
+  timeSlotsByProfessionalAndDate: IGetAvailableTimeSlotsForBooking;
 }
 
 export default function BookingFormContainer({
-  professionals,
-  barbershopLocalDateUTC,
-  availableTimeSlots,
+  barbershopBookingInfos,
+  timeSlotsByProfessionalAndDate,
 }: IBookingFormContainerProps) {
   return (
     <BookingFormProvider>
       <BookingFormWrapper
-        professionals={professionals}
-        barbershopLocalDateUTC={barbershopLocalDateUTC}
-        availableTimeSlots={availableTimeSlots}
+        barbershopBookingInfos={barbershopBookingInfos}
+        timeSlotsByProfessionalAndDate={timeSlotsByProfessionalAndDate}
       />
     </BookingFormProvider>
   );
 }
 
 function BookingFormWrapper({
-  professionals,
-  barbershopLocalDateUTC,
-  availableTimeSlots,
+  barbershopBookingInfos,
+  timeSlotsByProfessionalAndDate,
 }: IBookingFormContainerProps) {
   const { currentStep } = useBookingForm();
 
@@ -71,16 +68,17 @@ function BookingFormWrapper({
           <div>
             {currentStep === 1 && (
               <Professionals
-                professionals={professionals}
-                barbershopLocalDateUTC={barbershopLocalDateUTC}
-                employeesShiftData={availableTimeSlots.employees}
+                professionals={barbershopBookingInfos.employees}
+                barbershopBookingInfos={barbershopBookingInfos}
+                employeesShiftData={timeSlotsByProfessionalAndDate.employees}
               />
             )}
-            {currentStep === 2 && <Services professionals={professionals} />}
+            {currentStep === 2 && (
+              <Services professionals={barbershopBookingInfos.employees} />
+            )}
             {currentStep === 3 && (
               <Booking
-                barbershopLocalDateUTC={barbershopLocalDateUTC}
-                availableTimeSlots={availableTimeSlots}
+                timeSlotsByProfessionalAndDate={timeSlotsByProfessionalAndDate}
               />
             )}
             {currentStep === 4 && <ClientData />}
@@ -88,7 +86,9 @@ function BookingFormWrapper({
           </div>
 
           <div>
-            <SchedulingSummary professionals={professionals} />
+            <SchedulingSummary
+              professionals={barbershopBookingInfos.employees}
+            />
             <Contacts />
           </div>
         </div>
@@ -171,8 +171,15 @@ function StepperHeader() {
 }
 
 function StepperFooter() {
-  const { currentStep, totalSteps, goToNextStep, goToPrevStep, form } =
-    useBookingForm();
+  const {
+    currentStep,
+    totalSteps,
+    form,
+    setStep,
+    goToNextStep,
+    goToPrevStep,
+    validateStep,
+  } = useBookingForm();
   const params = useParams() as { slug: string };
 
   const slug = decodeURIComponent(params.slug);
@@ -184,10 +191,10 @@ function StepperFooter() {
   const name = form.watch('name');
   const phone = form.watch('phone');
   const email = form.watch('email');
-  const isBookingValid = !!name && !!phone;
 
   const handleSubmit = async () => {
-    if (!isBookingValid) return;
+    const isValid = await validateStep(currentStep);
+    if (!isValid) return;
 
     const { error, ok } = await createAppointmentAction({
       name,
@@ -201,10 +208,13 @@ function StepperFooter() {
     });
 
     if (!ok) {
-      alert(error);
-    } else {
-      alert('Agendamento realizado com sucesso!');
+      showErrorToast(error, { theme: 'dark' });
+      return;
     }
+
+    form.reset();
+    setStep(1);
+    showSuccessToast('Agendamento realizado com sucesso!', { theme: 'dark' });
   };
 
   return (
@@ -233,11 +243,8 @@ function StepperFooter() {
       ) : (
         <button
           type="button"
-          disabled={!isBookingValid}
           className={cn(
             'max-md:flex-1 flex items-center max-md:justify-center gap-1.5 h-10 md:h-9 px-6 rounded-lg bg-cta-accent hover:bg-[#BFA000] text-black text-sm font-bold transition-all duration-200 cursor-pointer',
-            isBookingValid &&
-              'bg-primary text-primary-foreground hover:bg-primary/95 shadow-lg hover:shadow-xl scale-[1.02]',
           )}
           onClick={handleSubmit}
         >

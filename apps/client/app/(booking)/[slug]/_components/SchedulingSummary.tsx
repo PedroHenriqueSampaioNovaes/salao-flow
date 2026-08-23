@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { ScissorsIcon, CalendarDays } from 'lucide-react';
 
 import {
-  IEmployee,
+  IEmployeeBookingInfo,
   IServices,
 } from '@/src/common/interfaces/barbershop-booking';
 import { formatPrice } from '@/src/common/utils/formatPrice';
@@ -12,7 +12,7 @@ import { formatPrice } from '@/src/common/utils/formatPrice';
 import { useBookingForm } from '../_contexts/BookingFormContext';
 
 interface ISchedulingSummaryProps {
-  professionals: IEmployee[];
+  professionals: IEmployeeBookingInfo[];
 }
 
 export default function SchedulingSummary({

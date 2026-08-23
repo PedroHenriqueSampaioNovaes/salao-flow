@@ -27,14 +27,14 @@ function NativeSelect({
       {Icon && (
         <Icon
           size={18}
-          className="absolute top-1/2 left-2.5 -translate-y-1/2 text-primary select-none pointer-events-none"
+          className="absolute top-1/2 left-2.5 -translate-y-1/2 select-none pointer-events-none"
         />
       )}
       <select
         data-slot="native-select"
         data-size={size}
         className={cn(
-          'w-full min-w-0 appearance-none outline-brand-accent rounded-md border border-border/20 bg-transparent py-2.5 pr-8 pl-2.5 text-xs transition-colors select-none text-black placeholder:text-black disabled:pointer-events-none disabled:cursor-not-allowed aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 data-[size=sm]:h-7 data-[size=sm]:rounded-[min(var(--radius-md),10px)] data-[size=sm]:py-0.5',
+          'w-full min-w-0 appearance-none outline-none rounded-md border border-border/20 focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 bg-transparent py-2.5 pr-8 pl-2.5 text-sm transition-colors select-none text-black placeholder:text-black disabled:pointer-events-none disabled:cursor-not-allowed aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 data-[size=sm]:h-7 data-[size=sm]:rounded-[min(var(--radius-md),10px)] data-[size=sm]:py-0.5',
           !!Icon && 'pl-8.5',
         )}
         {...props}

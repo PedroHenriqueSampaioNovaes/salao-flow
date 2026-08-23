@@ -7,9 +7,6 @@ import getAvailableTimeSlotsForBookingAction from '@/app/actions/get-available-t
 
 import BookingFormContainer from './_components/BookingFormContainer';
 
-import { dateToInputDate } from '@/src/common/utils/dateToInputDate';
-import { getLocalDateAsUTCDate } from '@/src/common/utils/getLocalDateAsUTCDate';
-
 export default async function BookingPage({
   params,
 }: {
@@ -19,30 +16,14 @@ export default async function BookingPage({
 
   const { data: bookingInfos } = await getBarbershopBookingInfosAction(slug);
 
-  if (!bookingInfos) {
-    return notFound();
-  }
+  if (!bookingInfos || !bookingInfos.status) return notFound();
 
-  const barbershopLocalDate = new Date(bookingInfos.instantLocalTime);
-  const barbershopLocalDateUTC = getLocalDateAsUTCDate(
-    barbershopLocalDate,
-    bookingInfos.timezone,
-  );
+  const { data: timeSlotsByProfessionalAndDate, ok } =
+    await getAvailableTimeSlotsForBookingAction({
+      slug,
+    });
 
-  const {
-    data: availableTimeSlots,
-    ok,
-    error,
-  } = await getAvailableTimeSlotsForBookingAction({
-    slug,
-    dateString: dateToInputDate(barbershopLocalDate, bookingInfos.timezone),
-    lookForNextAvailableTimeSlot: 1,
-  });
-
-  if (!ok) {
-    alert(error || 'Erro ao buscar horários disponíveis.');
-    return;
-  }
+  if (!ok) return notFound();
 
   return (
     <main className="min-h-screen bg-appointment-background">
@@ -80,9 +61,8 @@ export default async function BookingPage({
       </header>
 
       <BookingFormContainer
-        professionals={bookingInfos.employees}
-        barbershopLocalDateUTC={barbershopLocalDateUTC}
-        availableTimeSlots={availableTimeSlots}
+        barbershopBookingInfos={bookingInfos}
+        timeSlotsByProfessionalAndDate={timeSlotsByProfessionalAndDate}
       />
     </main>
   );

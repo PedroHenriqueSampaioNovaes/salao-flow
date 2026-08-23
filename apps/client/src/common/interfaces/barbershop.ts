@@ -10,3 +10,10 @@ export interface IBarbershop {
   timezone: string;
   instantLocalTime: string;
 }
+
+export interface IDashboardMetrics {
+  customerCount: number;
+  employeeCount: number;
+  serviceCount: number;
+  todayAppointmentsCount: number;
+}

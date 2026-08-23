@@ -11,5 +11,5 @@ export default function BookingLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <>{children}</>;
+  return children;
 }

@@ -3,62 +3,74 @@ const URL_BASE = process.env.API_URL;
 type FetchOptions = Omit<RequestInit, 'method' | 'headers' | 'body'> & {
   token?: string;
   body?: unknown;
+  baseUrl?: string;
 };
 
 export default class FetchApi {
   static async get<T>(url: string, options: Omit<FetchOptions, 'body'> = {}) {
-    const response = await fetch(`${URL_BASE}${url}`, {
+    const { token, baseUrl, ...fetchOptions } = options;
+
+    const response = await fetch(`${baseUrl || URL_BASE}${url}`, {
       method: 'GET',
       headers: {
-        Authorization: options.token ? `Bearer ${options.token}` : '',
+        Authorization: token ? `Bearer ${token}` : '',
       } as HeadersInit,
-      ...options,
+      ...fetchOptions,
     });
 
     return await FetchApi.extractData<T>(response);
   }
 
   static async post<T>(url: string, options: FetchOptions = {}) {
-    const response = await fetch(`${URL_BASE}${url}`, {
+    const { token, baseUrl, body, ...fetchOptions } = options;
+
+    const response = await fetch(`${baseUrl || URL_BASE}${url}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: options.token ? `Bearer ${options.token}` : '',
+        Authorization: token ? `Bearer ${token}` : '',
       } as HeadersInit,
-      body: options.body ? JSON.stringify(options.body) : null,
+      body: body ? JSON.stringify(body) : null,
+      ...fetchOptions,
     });
 
     return await FetchApi.extractData<T>(response);
   }
 
   static async patch<T>(url: string, options: FetchOptions = {}) {
-    const response = await fetch(`${URL_BASE}${url}`, {
+    const { token, baseUrl, body, ...fetchOptions } = options;
+
+    const response = await fetch(`${baseUrl || URL_BASE}${url}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: options.token ? `Bearer ${options.token}` : '',
+        Authorization: token ? `Bearer ${token}` : '',
       } as HeadersInit,
-      body: options.body ? JSON.stringify(options.body) : null,
+      body: body ? JSON.stringify(body) : null,
+      ...fetchOptions,
     });
 
     return await FetchApi.extractData<T>(response);
   }
 
   static async put<T>(url: string, options: FetchOptions = {}) {
-    const response = await fetch(`${URL_BASE}${url}`, {
+    const { token, baseUrl, body, ...fetchOptions } = options;
+
+    const response = await fetch(`${baseUrl || URL_BASE}${url}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: options.token ? `Bearer ${options.token}` : '',
+        Authorization: token ? `Bearer ${token}` : '',
       } as HeadersInit,
-      body: options.body ? JSON.stringify(options.body) : null,
+      body: body ? JSON.stringify(body) : null,
+      ...fetchOptions,
     });
 
     return await FetchApi.extractData<T>(response);
   }
 
-  static async delete<T>(url: string, token?: string) {
-    const response = await fetch(`${URL_BASE}${url}`, {
+  static async delete<T>(url: string, token?: string, baseUrl?: string) {
+    const response = await fetch(`${baseUrl || URL_BASE}${url}`, {
       method: 'DELETE',
       headers: {
         Authorization: token ? `Bearer ${token}` : '',

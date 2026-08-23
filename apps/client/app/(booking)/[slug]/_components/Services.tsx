@@ -2,7 +2,7 @@
 
 import { AlertCircle, Check, Clock, Scissors } from 'lucide-react';
 
-import { IEmployee } from '@/src/common/interfaces/barbershop-booking';
+import { IEmployeeBookingInfo } from '@/src/common/interfaces/barbershop-booking';
 
 import { formatPrice } from '@/src/common/utils/formatPrice';
 import { cn } from '@/src/lib/utils';
@@ -10,9 +10,10 @@ import { cn } from '@/src/lib/utils';
 import { useServices } from '../_hooks/useServices';
 
 import StepTitle from './StepTitle';
+import { Alert, AlertDescription } from '@/src/components/ui/alert';
 
 interface IServicesProps {
-  professionals: IEmployee[];
+  professionals: IEmployeeBookingInfo[];
 }
 
 export default function Services({ professionals }: IServicesProps) {
@@ -31,10 +32,10 @@ export default function Services({ professionals }: IServicesProps) {
       />
 
       {serviceIdsError && (
-        <div className="flex items-center gap-2 p-3 mb-4 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive text-sm">
-          <AlertCircle className="w-4 h-4" />
-          <span>{serviceIdsError.message}</span>
-        </div>
+        <Alert variant="warning" className="mb-4">
+          <AlertCircle className="size-6" />
+          <AlertDescription>{serviceIdsError.message}</AlertDescription>
+        </Alert>
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">

@@ -6,7 +6,10 @@ import FetchApi from '@/src/common/api/FetchApi';
 
 import { apiError } from '@/src/common/utils/apiError';
 
-import { ICreateAppointment } from '@/src/common/interfaces/appointment';
+import {
+  IAppointment,
+  ICreateAppointment,
+} from '@/src/common/interfaces/appointment';
 
 export default async function createAppointmentAction(
   appointmentData: ICreateAppointment,
@@ -15,12 +18,14 @@ export default async function createAppointmentAction(
     const cookieStore = await cookies();
     const token = cookieStore.get('token')?.value;
 
-    await FetchApi.post('/appointments', {
+    const data = await FetchApi.post<IAppointment>('/appointments', {
       token,
       body: appointmentData,
     });
 
-    return { data: null, ok: true, error: '' };
+    if (data === null) throw new Error('Não foi possível criar o agendamento.');
+
+    return { data, ok: true, error: '' };
   } catch (error) {
     return apiError(error);
   }

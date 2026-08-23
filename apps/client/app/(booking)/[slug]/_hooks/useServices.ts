@@ -1,10 +1,10 @@
 'use client';
 
-import { IEmployee } from '@/src/common/interfaces/barbershop-booking';
+import { IEmployeeBookingInfo } from '@/src/common/interfaces/barbershop-booking';
 
 import { useBookingForm } from '../_contexts/BookingFormContext';
 
-export function useServices(professionals: IEmployee[]) {
+export function useServices(professionals: IEmployeeBookingInfo[]) {
   const { form, goToPrevStep } = useBookingForm();
   const selectedEmployeeId = form.watch('employeeId');
   const selectedServiceIds = form.watch('serviceIds') || [];

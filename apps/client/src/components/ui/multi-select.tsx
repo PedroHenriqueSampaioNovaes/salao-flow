@@ -1,9 +1,15 @@
 'use client';
 
 import * as React from 'react';
-import { CheckIcon, ChevronDownIcon } from 'lucide-react';
+import { ChevronDownIcon } from 'lucide-react';
 
 import { cn } from '@/src/lib/utils';
+import { Checkbox } from '@/src/components/ui/checkbox';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/src/components/ui/popover';
 
 interface MultiSelectOption {
   value: string;
@@ -22,6 +28,7 @@ interface MultiSelectProps {
   optionClassName?: string;
   disabled?: boolean;
   ariaInvalid?: boolean;
+  ref?: React.Ref<HTMLButtonElement>;
 }
 
 function MultiSelect({
@@ -36,13 +43,12 @@ function MultiSelect({
   optionClassName,
   disabled = false,
   ariaInvalid,
+  ref,
 }: MultiSelectProps) {
   const generatedId = React.useId();
   const triggerId = id ?? `${generatedId}-trigger`;
   const listboxId = `${triggerId}-listbox`;
   const [open, setOpen] = React.useState(false);
-  const rootRef = React.useRef<HTMLDivElement>(null);
-  const triggerRef = React.useRef<HTMLButtonElement>(null);
   const optionRefs = React.useRef<Array<HTMLButtonElement | null>>([]);
 
   const selectedLabels = React.useMemo(
@@ -54,22 +60,6 @@ function MultiSelect({
   );
 
   const displayValue = selectedLabels.join(', ');
-
-  React.useEffect(() => {
-    if (!open) return;
-
-    function handleClickOutside(event: MouseEvent) {
-      if (!rootRef.current?.contains(event.target as Node)) {
-        setOpen(false);
-      }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside);
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [open]);
 
   function handleOptionToggle(value: string) {
     if (selected.includes(value)) {
@@ -99,14 +89,8 @@ function MultiSelect({
   function handleOptionKeyDown(
     event: React.KeyboardEvent<HTMLButtonElement>,
     index: number,
+    value: string,
   ) {
-    if (event.key === 'Escape') {
-      event.preventDefault();
-      setOpen(false);
-      triggerRef.current?.focus();
-      return;
-    }
-
     if (event.key === 'ArrowDown') {
       event.preventDefault();
       focusOption((index + 1) % options.length);
@@ -117,98 +101,98 @@ function MultiSelect({
       event.preventDefault();
       focusOption((index - 1 + options.length) % options.length);
     }
+
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      handleOptionToggle(value);
+    }
   }
 
   return (
-    <div ref={rootRef} className="relative">
-      <button
-        ref={triggerRef}
-        id={triggerId}
-        type="button"
-        role="combobox"
-        aria-controls={listboxId}
-        aria-expanded={open}
-        aria-haspopup="listbox"
-        aria-invalid={ariaInvalid}
-        disabled={disabled}
-        onClick={() => setOpen((current) => !current)}
-        onKeyDown={handleTriggerKeyDown}
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <button
+          ref={ref}
+          id={triggerId}
+          type="button"
+          role="combobox"
+          aria-controls={listboxId}
+          aria-expanded={open}
+          aria-haspopup="listbox"
+          aria-invalid={ariaInvalid}
+          disabled={disabled}
+          onKeyDown={handleTriggerKeyDown}
+          className={cn(
+            'flex w-full min-w-0 h-10.5 items-center justify-between gap-2 rounded-lg border border-border/20 bg-transparent px-3 py-2 text-left text-sm transition-colors outline-none focus:border-accent focus:ring-2 data-[state=open]:ring-2 focus:ring-accent/20 data-[state=open]:border-accent data-[state=open]:ring-accent/20 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
+            className,
+          )}
+        >
+          <span
+            className={cn(
+              'block min-w-0 flex-1 truncate',
+              !displayValue && 'text-secondary',
+            )}
+          >
+            {displayValue || placeholder}
+          </span>
+          <ChevronDownIcon
+            className="size-4 shrink-0 text-gray-600 select-none"
+            aria-hidden="true"
+            data-slot="native-select-icon"
+          />
+        </button>
+      </PopoverTrigger>
+
+      <PopoverContent
+        id={listboxId}
+        role="listbox"
+        aria-multiselectable="true"
+        align="start"
         className={cn(
-          'flex h-8 w-full min-w-0 items-center justify-between gap-2 rounded-lg border border-input bg-transparent px-2.5 py-1 text-left text-base transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm',
-          className,
+          'w-(--radix-popover-trigger-width) gap-2 max-h-60 p-1 overflow-auto bg-white',
+          listClassName,
         )}
       >
-        <span
-          className={cn(
-            'block min-w-0 flex-1 truncate',
-            !displayValue && 'text-muted-foreground',
-          )}
-        >
-          {displayValue || placeholder}
-        </span>
-        <ChevronDownIcon
-          className={cn(
-            'size-4 shrink-0 text-muted-foreground transition-transform',
-            open && 'rotate-180',
-          )}
-          aria-hidden="true"
-        />
-      </button>
+        {options.length > 0 ? (
+          options.map((option, index) => {
+            const isSelected = selected.includes(option.value);
 
-      {open && (
-        <div
-          id={listboxId}
-          role="listbox"
-          aria-multiselectable="true"
-          className={cn(
-            'absolute mt-1 max-h-60 w-full overflow-auto rounded-lg border border-input bg-popover p-1 text-popover-foreground shadow-md',
-            listClassName,
-          )}
-        >
-          {options.length > 0 ? (
-            options.map((option, index) => {
-              const isSelected = selected.includes(option.value);
-
-              return (
-                <button
-                  key={option.value}
+            return (
+              <label
+                key={option.value}
+                htmlFor={`${triggerId}-option-${option.value}`}
+                role="option"
+                aria-selected={isSelected}
+                onMouseDown={(event) => event.preventDefault()}
+                className={cn(
+                  'flex w-full cursor-pointer items-center gap-2.5 rounded-md px-2.5 py-2 text-sm outline-none hover:bg-gray-100 focus:bg-gray-100 has-data-disabled:cursor-not-allowed has-data-disabled:opacity-50',
+                  optionClassName,
+                )}
+              >
+                <Checkbox
                   ref={(element) => {
                     optionRefs.current[index] = element;
                   }}
-                  type="button"
-                  role="option"
-                  aria-selected={isSelected}
-                  onClick={() => handleOptionToggle(option.value)}
-                  onKeyDown={(event) => handleOptionKeyDown(event, index)}
-                  className={cn(
-                    'flex w-full items-center gap-2 rounded-md px-2.5 py-2 text-left text-sm outline-none hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground',
-                    optionClassName,
-                  )}
-                >
-                  <span
-                    className={cn(
-                      'flex size-4 shrink-0 items-center justify-center rounded-sm border border-input',
-                      isSelected &&
-                        'border-primary bg-primary text-primary-foreground',
-                    )}
-                    aria-hidden="true"
-                  >
-                    {isSelected && <CheckIcon className="size-3" />}
-                  </span>
-                  <span className="min-w-0 flex-1 truncate">
-                    {option.label}
-                  </span>
-                </button>
-              );
-            })
-          ) : (
-            <p className="px-2.5 py-2 text-sm text-muted-foreground">
-              {emptyMessage}
-            </p>
-          )}
-        </div>
-      )}
-    </div>
+                  id={`${triggerId}-option-${option.value}`}
+                  checked={isSelected}
+                  onCheckedChange={() => handleOptionToggle(option.value)}
+                  onKeyDown={(event) =>
+                    handleOptionKeyDown(event, index, option.value)
+                  }
+                  disabled={disabled}
+                  className="pointer-events-none"
+                />
+                <span className="min-w-0 flex-1 truncate">{option.label}</span>
+              </label>
+            );
+          })
+        ) : (
+          <p className="px-2.5 py-2 text-sm text-muted-foreground">
+            {emptyMessage}
+          </p>
+        )}
+      </PopoverContent>
+    </Popover>
   );
 }
 

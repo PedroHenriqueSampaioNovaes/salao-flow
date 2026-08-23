@@ -1,43 +1,22 @@
 'use client';
 
-import React, { createContext, useContext, useState } from 'react';
-import { useForm, UseFormReturn } from 'react-hook-form';
+import React, { createContext, useCallback, useContext, useState } from 'react';
+import { FormProvider, useForm, UseFormReturn } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { z } from '@sistema-barbearia/validators';
-
-export const bookingFormSchema = z.object({
-  employeeId: z.number({
-    message: 'Por favor, selecione um profissional.',
-  }),
-  serviceIds: z
-    .array(z.uuid())
-    .min(1, 'Por favor, selecione pelo menos um serviço.'),
-  date: z
-    .string({ message: 'Por favor, selecione uma data.' })
-    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Por favor, selecione uma data válida.'),
-  time: z
-    .string({ message: 'Por favor, selecione um horário.' })
-    .min(1, 'Por favor, selecione um horário.'),
-  name: z.string().min(1, 'Por favor, informe seu nome.'),
-  phone: z
-    .string({ message: 'Por favor, informe seu telefone.' })
-    .regex(
-      /^(\(?\d{2}\)?\s?)(9?\d{4})-\d{4}$/,
-      'Por favor, informe um telefone válido.',
-    ),
-  email: z.email('Por favor, informe um e-mail válido.'),
-});
-
-export type BookingFormValues = z.infer<typeof bookingFormSchema>;
+import {
+  bookingFormSchema,
+  BookingFormSchema,
+} from '@/src/common/schemas/booking';
 
 interface BookingFormContextType {
   currentStep: number;
   totalSteps: number;
-  form: UseFormReturn<BookingFormValues>;
+  form: UseFormReturn<BookingFormSchema>;
   goToNextStep: () => Promise<boolean>;
   goToPrevStep: () => void;
   setStep: (step: number) => Promise<boolean>;
+  validateStep: (step: number) => Promise<boolean>;
 }
 
 const BookingFormContext = createContext<BookingFormContextType | undefined>(
@@ -52,7 +31,7 @@ export function BookingFormProvider({
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 4;
 
-  const form = useForm<BookingFormValues>({
+  const form = useForm<BookingFormSchema>({
     resolver: zodResolver(bookingFormSchema),
     defaultValues: {
       employeeId: undefined,
@@ -66,27 +45,30 @@ export function BookingFormProvider({
     mode: 'onTouched',
   });
 
-  const validateStep = async (step: number) => {
-    if (step === 1) {
-      const result = await form.trigger(['employeeId']);
-      return result;
-    }
-    if (step === 2) {
-      const result = await form.trigger(['serviceIds']);
-      return result;
-    }
-    if (step === 3) {
-      const result = await form.trigger(['date', 'time']);
-      return result;
-    }
-    if (step === 4) {
-      const result = await form.trigger(['name', 'phone']);
-      return result;
-    }
-    return true;
-  };
+  const validateStep = useCallback(
+    async (step: number) => {
+      if (step === 1) {
+        const result = await form.trigger(['employeeId']);
+        return result;
+      }
+      if (step === 2) {
+        const result = await form.trigger(['serviceIds']);
+        return result;
+      }
+      if (step === 3) {
+        const result = await form.trigger(['date', 'time']);
+        return result;
+      }
+      if (step === 4) {
+        const result = await form.trigger(['name', 'phone', 'email']);
+        return result;
+      }
+      return true;
+    },
+    [form],
+  );
 
-  const goToNextStep = async () => {
+  const goToNextStep = useCallback(async () => {
     if (currentStep < totalSteps) {
       const isValid = await validateStep(currentStep);
       if (isValid) {
@@ -95,35 +77,38 @@ export function BookingFormProvider({
       }
     }
     return false;
-  };
+  }, [currentStep, totalSteps, validateStep]);
 
-  const goToPrevStep = () => {
+  const goToPrevStep = useCallback(() => {
     if (currentStep > 1) {
       setCurrentStep((prev) => prev - 1);
     }
-  };
+  }, [currentStep]);
 
-  const setStep = async (step: number) => {
-    if (step === currentStep) return true;
+  const setStep = useCallback(
+    async (step: number) => {
+      if (step === currentStep) return true;
 
-    if (step < currentStep) {
+      if (step < currentStep) {
+        setCurrentStep(step);
+        return true;
+      }
+
+      // Moving forward: we must validate all steps between currentStep and targeted step
+      let tempStep = currentStep;
+      while (tempStep < step) {
+        const isValid = await validateStep(tempStep);
+        if (!isValid) {
+          return false;
+        }
+        tempStep++;
+      }
+
       setCurrentStep(step);
       return true;
-    }
-
-    // Moving forward: we must validate all steps between currentStep and targeted step
-    let tempStep = currentStep;
-    while (tempStep < step) {
-      const isValid = await validateStep(tempStep);
-      if (!isValid) {
-        return false;
-      }
-      tempStep++;
-    }
-
-    setCurrentStep(step);
-    return true;
-  };
+    },
+    [currentStep, validateStep],
+  );
 
   return (
     <BookingFormContext.Provider
@@ -134,9 +119,10 @@ export function BookingFormProvider({
         goToNextStep,
         goToPrevStep,
         setStep,
+        validateStep,
       }}
     >
-      {children}
+      <FormProvider {...form}>{children}</FormProvider>
     </BookingFormContext.Provider>
   );
 }

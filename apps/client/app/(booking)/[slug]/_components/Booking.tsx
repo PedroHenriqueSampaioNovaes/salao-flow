@@ -1,43 +1,39 @@
 'use client';
 
-import { AlertCircle, CalendarClock, CalendarX } from 'lucide-react';
+import { useEffect } from 'react';
+import { AlertCircle, CalendarClock } from 'lucide-react';
+import { useParams } from 'next/navigation';
 
 import { IGetAvailableTimeSlotsForBooking } from '@/src/common/interfaces/barbershop-booking';
 
-import { cn } from '@/src/lib/utils';
-
-import { useBooking } from '../_hooks/useBooking';
+import { useBookingForm } from '../_contexts/BookingFormContext';
 
 import { FieldLabel } from '@/src/components/ui/field';
-import { Input } from '@/src/components/ui/input';
 import StepTitle from './StepTitle';
 import Wrapper from './Wrapper';
+import InputDateBookingByProfessional from '@/src/components/ui/input-date-booking-by-professional';
+import SelectionTimeSlotsBooking from '@/src/components/ui/selection-time-slots-booking';
+import { Alert, AlertDescription } from '@/src/components/ui/alert';
 
 interface IBookingProps {
-  barbershopLocalDateUTC: Date;
-  availableTimeSlots: IGetAvailableTimeSlotsForBooking;
+  timeSlotsByProfessionalAndDate: IGetAvailableTimeSlotsForBooking;
 }
 
 export default function Booking({
-  barbershopLocalDateUTC,
-  availableTimeSlots,
+  timeSlotsByProfessionalAndDate,
 }: IBookingProps) {
-  const {
-    professional,
-    date,
-    selectedTime,
-    times,
-    minimumInputDate,
-    maxInputDate,
-    dateError,
-    timeError,
-    handleInputDateChange,
-    handleSelectTime,
-  } = useBooking({ barbershopLocalDateUTC, availableTimeSlots });
+  const { slug } = useParams() as { slug: string };
 
-  if (!professional) {
-    return null;
-  }
+  const { form, setStep } = useBookingForm();
+
+  const employeeId = form.watch('employeeId');
+
+  const dateError = form.formState.errors.date;
+  const timeError = form.formState.errors.time;
+
+  useEffect(() => {
+    if (!employeeId) setStep(1);
+  }, [employeeId, setStep]);
 
   return (
     <div className="space-y-4 animate-in fade-in duration-300">
@@ -48,58 +44,28 @@ export default function Booking({
         />
 
         {(dateError || timeError) && (
-          <div className="flex items-center gap-2 p-3 mb-4 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive text-sm">
-            <AlertCircle className="w-4 h-4" />
-            <span>{dateError?.message || timeError?.message}</span>
-          </div>
+          <Alert variant="warning" className="mb-4">
+            <AlertCircle className="size-6" />
+            <AlertDescription>
+              {dateError?.message || timeError?.message}
+            </AlertDescription>
+          </Alert>
         )}
 
         <FieldLabel className="w-full max-w-xs mx-auto">
-          <Input
-            type="date"
-            name="date"
-            value={date}
-            onChange={handleInputDateChange}
-            min={minimumInputDate}
-            max={maxInputDate}
-            className="h-10 px-3 border-appointment-border bg-transparent text-white"
+          <InputDateBookingByProfessional
+            timeSlotsByProfessionalAndDate={timeSlotsByProfessionalAndDate}
+            className="focus:border-cta-accent focus:ring-0 border-appointment-border"
           />
         </FieldLabel>
-
-        {dateError && (
-          <p className="text-xs text-destructive mt-1">{dateError.message}</p>
-        )}
       </div>
 
       <Wrapper>
-        {times.length > 0 ? (
-          <div className="flex flex-wrap justify-center gap-2">
-            {times.map((time) => {
-              const isSelected = selectedTime === time;
-              return (
-                <button
-                  type="button"
-                  className={cn(
-                    'w-16 h-8.5 rounded-xl border border-border text-white leading-none font-semibold bg-appointment-background transition-all duration-200 cursor-pointer',
-                    isSelected && 'bg-cta-accent text-black border-cta-accent',
-                  )}
-                  key={time}
-                  onClick={() => handleSelectTime(time)}
-                >
-                  {time}
-                </button>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="flex flex-col items-center gap-3">
-            <CalendarX size={42} />
-            <p className="text-sm text-muted-foreground text-center bg-muted/40 px-4 rounded-xl leading-6">
-              Nenhum horário disponível para esta data. Por favor, troque a data
-              ou verifique com outro profissional.
-            </p>
-          </div>
-        )}
+        <SelectionTimeSlotsBooking
+          slug={slug}
+          employeesShift={timeSlotsByProfessionalAndDate.employees}
+          isBookingPage
+        />
       </Wrapper>
     </div>
   );
