@@ -1,10 +1,12 @@
 import { Calendar, Scissors, TrendingUp, User, Users } from 'lucide-react';
 
-import { usePanelContext } from '@/src/common/contexts/panel-context';
+import { IDashboardMetrics } from '@/src/common/interfaces/barbershop';
 
-export default function MetricCards() {
-  const { employees, services } = usePanelContext();
+interface MetricCardsProps {
+  dashboardMetrics: IDashboardMetrics;
+}
 
+export default function MetricCards({ dashboardMetrics }: MetricCardsProps) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
       {/* Card 1: Total de clientes */}
@@ -17,7 +19,7 @@ export default function MetricCards() {
             <span className="font-bold text-neutral">Total de clientes</span>
           </div>
           <div className="text-3xl lg:text-4xl font-bold text-black leading-none">
-            20
+            {dashboardMetrics.customerCount}
           </div>
         </div>
         <div className="flex items-center justify-between">
@@ -41,7 +43,7 @@ export default function MetricCards() {
             <span className="font-bold text-neutral">Atendimentos hoje</span>
           </div>
           <div className="text-3xl lg:text-4xl font-bold text-black leading-none">
-            6
+            {dashboardMetrics.todayAppointmentsCount}
           </div>
         </div>
       </div>
@@ -58,7 +60,7 @@ export default function MetricCards() {
             </span>
           </div>
           <div className="text-3xl lg:text-4xl font-bold text-black leading-none">
-            {employees.length}
+            {dashboardMetrics.employeeCount}
           </div>
         </div>
         <div className="flex items-center justify-between">
@@ -82,7 +84,7 @@ export default function MetricCards() {
             <span className="font-bold text-neutral">Total de serviços</span>
           </div>
           <div className="text-3xl lg:text-4xl font-bold text-black leading-none">
-            {services.length}
+            {dashboardMetrics.serviceCount}
           </div>
         </div>
         <div className="flex items-center justify-between">

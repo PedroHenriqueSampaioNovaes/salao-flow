@@ -2,12 +2,12 @@
 
 import { useCallback, useEffect, useRef } from 'react';
 
-import { SelectedDateProvider } from '@/src/common/contexts/selected-date-context';
 import { getLocalDateAsUTCDate } from '@/src/common/utils/getLocalDateAsUTCDate';
 
 import { usePanelContext } from '@/src/common/contexts/panel-context';
 
 import { IAppointment } from '@/src/common/interfaces/appointment';
+import { IDashboardMetrics } from '@/src/common/interfaces/barbershop';
 
 import { connectToSocket, disconnectSocket } from '@/src/common/lib/socket';
 
@@ -16,11 +16,16 @@ import Calendar from './Calendar';
 import BookingLink from './BookingLink';
 
 interface DashboardProps {
-  token?: string;
+  token: string;
   apiUrl: string;
+  dashboardMetrics: IDashboardMetrics;
 }
 
-export default function Dashboard({ token, apiUrl }: DashboardProps) {
+export default function Dashboard({
+  token,
+  apiUrl,
+  dashboardMetrics,
+}: DashboardProps) {
   const { barbershop, setAppointments } = usePanelContext();
 
   const socketConnected = useRef(false);
@@ -49,9 +54,6 @@ export default function Dashboard({ token, apiUrl }: DashboardProps) {
     barbershop.instantLocalTime,
     barbershop.timezone,
   );
-  const initialDate = new Date(
-    Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()),
-  );
 
   const currentDateFormatted = new Intl.DateTimeFormat('pt-BR', {
     dateStyle: 'full',
@@ -59,25 +61,23 @@ export default function Dashboard({ token, apiUrl }: DashboardProps) {
   }).format(today);
 
   return (
-    <SelectedDateProvider initialDate={initialDate}>
-      <div className="flex flex-col gap-6">
-        <div className="text-center md:text-left">
-          <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
-            Bem-vindo à {barbershop?.name}!
-          </h1>
-          <p className="text-sm text-primary mt-1 font-normal">
-            {currentDateFormatted[0].toUpperCase() +
-              currentDateFormatted.slice(1)}
-          </p>
-        </div>
-
-        <MetricCards />
-
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] xl:grid-cols-[1fr_350px] gap-5 items-start">
-          <Calendar />
-          <BookingLink />
-        </div>
+    <div className="flex flex-col gap-6">
+      <div className="text-center md:text-left">
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
+          Bem-vindo à {barbershop?.name}!
+        </h1>
+        <p className="text-sm text-primary mt-1 font-normal">
+          {currentDateFormatted[0].toUpperCase() +
+            currentDateFormatted.slice(1)}
+        </p>
       </div>
-    </SelectedDateProvider>
+
+      <MetricCards dashboardMetrics={dashboardMetrics} />
+
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] xl:grid-cols-[1fr_350px] gap-5 items-start">
+        <Calendar />
+        <BookingLink />
+      </div>
+    </div>
   );
 }

@@ -4,11 +4,11 @@ import { useSettingsForm } from '../_hooks/useSettingsForm';
 
 import { Input } from '@/src/components/ui/input';
 import { Field, FieldError, FieldLabel } from '@/src/components/ui/field';
-import { PhoneInputField } from '@/app/(auth)/register/_components/PhoneInputField';
 import {
   NativeSelect,
   NativeSelectOption,
 } from '@/src/components/ui/native-select';
+import { PhoneInputField } from '@/src/components/ui/phone-input-field';
 
 const timezones = [
   { label: 'Brasília (GMT-3)', value: 'America/Sao_Paulo' },
