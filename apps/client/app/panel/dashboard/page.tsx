@@ -18,7 +18,7 @@ export default async function DashboardPage() {
     <Dashboard
       token={token}
       apiUrl={apiUrl}
-      dashboardMetrics={dashboardMetrics}
+      initialDashboardMetrics={dashboardMetrics}
     />
   );
 }
