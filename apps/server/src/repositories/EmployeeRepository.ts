@@ -43,7 +43,11 @@ export class EmployeeRepository {
       },
       include: {
         employeeSchedule: true,
-        services: true,
+        services: {
+          where: {
+            status: true,
+          },
+        },
       },
     });
 
@@ -83,7 +87,11 @@ export class EmployeeRepository {
         barbershopId,
       },
       include: {
-        services: true,
+        services: {
+          where: {
+            status: true,
+          },
+        },
         employeeSchedule: true,
       },
     });
