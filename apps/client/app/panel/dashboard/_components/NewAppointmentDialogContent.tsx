@@ -54,7 +54,7 @@ export default function NewAppointmentDialogContent({
     barbershop,
     selectedEmployeeId,
     selectedEmployeeServices,
-    selectEmployee,
+    onSelectEmployee,
     timeSlotsByProfessionalAndDate,
     isFetchingSlots,
     refetchSlots,
@@ -132,7 +132,7 @@ export default function NewAppointmentDialogContent({
               <NativeSelect
                 id="professional"
                 value={selectedEmployeeId}
-                onChange={(e) => selectEmployee(Number(e.target.value))}
+                onChange={(e) => onSelectEmployee(Number(e.target.value))}
               >
                 {timeSlotsByProfessionalAndDate.employees.map((emp) => (
                   <NativeSelectOption key={emp.id} value={emp.id}>

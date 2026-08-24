@@ -24,7 +24,7 @@ interface IUseNewAppointmentDialogParams {
 export function useNewAppointmentDialog({
   closeDialog,
 }: IUseNewAppointmentDialogParams) {
-  const { employees, services, barbershop } = usePanelContext();
+  const { employees, barbershop } = usePanelContext();
 
   const methods = useForm<BookingFormSchema>({
     resolver: zodResolver(bookingFormSchema),
@@ -40,7 +40,7 @@ export function useNewAppointmentDialog({
   });
   const { setValue } = methods;
 
-  const [selectedEmployeeId, setSelectedEmployeeId] = useState(employees[0].id);
+  const [selectedEmployee, setSelectedEmployee] = useState(employees[0]);
 
   const {
     data: timeSlotsByProfessionalAndDate,
@@ -65,25 +65,23 @@ export function useNewAppointmentDialog({
     refetchOnMount: 'always',
   });
 
-  const selectedEmployeeServices = services.filter(
-    (service) =>
-      service.assignToAllEmployees ||
-      service.employees.some((employee) => employee.id === selectedEmployeeId),
-  );
+  const selectedEmployeeServices = selectedEmployee.services;
 
   useEffect(() => {
     if (!timeSlotsByProfessionalAndDate) return;
 
     const employee = timeSlotsByProfessionalAndDate.employees.find(
-      (employee) => employee.id === selectedEmployeeId,
+      (employee) => employee.id === selectedEmployee.id,
     );
     if (!employee) return;
 
     setValue('date', employee.date);
-  }, [selectedEmployeeId, timeSlotsByProfessionalAndDate, setValue]);
+  }, [selectedEmployee, timeSlotsByProfessionalAndDate, setValue]);
 
-  const selectEmployee = (employeeId: number) => {
-    setSelectedEmployeeId(employeeId);
+  const onSelectEmployee = (employeeId: number) => {
+    const employee = employees.find((employee) => employee.id === employeeId)!;
+
+    setSelectedEmployee(employee);
     setValue('serviceIds', []);
     setValue('employeeId', employeeId);
     setValue('time', '');
@@ -110,9 +108,9 @@ export function useNewAppointmentDialog({
   return {
     methods,
     barbershop,
-    selectedEmployeeId,
+    selectedEmployeeId: selectedEmployee.id,
     selectedEmployeeServices,
-    selectEmployee,
+    onSelectEmployee,
     timeSlotsByProfessionalAndDate,
     isFetchingSlots,
     refetchSlots,
