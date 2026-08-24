@@ -122,7 +122,7 @@ export class CreateAppointmentService {
       barbershop.id,
     );
 
-    return appointmentCreated;
+    return { appointment: appointmentCreated, barbershopId: barbershop.id };
   }
 
   private async checkScheduleBlock(

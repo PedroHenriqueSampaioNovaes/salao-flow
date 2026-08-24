@@ -5,6 +5,7 @@ import { emitToBarbershop } from '../../lib/socket.js';
 import { createAppointmentSchema } from '@sistema-barbearia/validators';
 
 import { CreateAppointmentService } from '../../services/appointment/CreateAppointmentService.js';
+import { GetDashboardMetricsService } from '../../services/barbershop/GetDashboardMetricsService.js';
 
 export class CreateAppointmentController {
   static async handle(req: Request, res: Response) {
@@ -12,9 +13,17 @@ export class CreateAppointmentController {
 
     const createAppointmentService = new CreateAppointmentService();
 
-    const appointment = await createAppointmentService.execute(body);
+    const { appointment, barbershopId } =
+      await createAppointmentService.execute(body);
 
-    emitToBarbershop(body.barbershopSlug, 'new-appointment', appointment);
+    const dashboardMetrics = await new GetDashboardMetricsService().execute(
+      barbershopId,
+    );
+
+    emitToBarbershop(body.barbershopSlug, 'new-appointment', {
+      appointment,
+      dashboardMetrics,
+    });
 
     return res.status(201).json(appointment);
   }
