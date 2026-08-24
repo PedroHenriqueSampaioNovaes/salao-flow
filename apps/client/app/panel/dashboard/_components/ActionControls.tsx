@@ -23,7 +23,7 @@ export default function ActionControls({
   const { employees } = usePanelContext();
 
   return (
-    <div className="p-4 px-4 md:px-6 flex flex-col sm:flex-row gap-3">
+    <div className="p-4 px-4 md:px-6 flex flex-col sm:flex-row gap-3 border-b border-border/20">
       <NativeSelect
         Icon={IdCardLanyard}
         value={employee}

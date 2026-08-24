@@ -52,7 +52,7 @@ export default function AppointmentsList({
   }
 
   return (
-    <div className="flex flex-col border-t border-border/20 leading-none divide-y divide-border/20 max-h-81.25 overflow-y-auto">
+    <div className="flex flex-col leading-none divide-y divide-border/20 max-h-81.25 overflow-y-auto">
       {filteredAppointments.length === 0 ? (
         <div className="p-4 md:p-6 flex max-sm:flex-col items-center justify-center gap-2 text-secondary">
           <CalendarX className="shrink-0" />
