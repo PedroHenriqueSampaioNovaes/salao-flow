@@ -32,6 +32,7 @@ export function useAppointmentsList({
 
   const {
     data,
+    isLoading,
     isFetching,
     isError,
     refetch: refetchAppointments,
@@ -65,7 +66,12 @@ export function useAppointmentsList({
     [appointments, employee, selectedDate, barbershopTimezone],
   );
 
-  return { filteredAppointments, isFetching, isError, refetchAppointments };
+  return {
+    filteredAppointments,
+    isLoading: isLoading || (isFetching && isError),
+    isError,
+    refetchAppointments,
+  };
 }
 
 function filterAppointments(

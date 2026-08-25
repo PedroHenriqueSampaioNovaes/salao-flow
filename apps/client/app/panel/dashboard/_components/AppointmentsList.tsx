@@ -18,14 +18,14 @@ export default function AppointmentsList({
   selectedDate,
 }: AppointmentsListProps) {
   const { barbershop } = usePanelContext();
-  const { filteredAppointments, isFetching, isError, refetchAppointments } =
+  const { filteredAppointments, isLoading, isError, refetchAppointments } =
     useAppointmentsList({
       employee,
       selectedDate,
       barbershopTimezone: barbershop.timezone,
     });
 
-  if (isFetching) {
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center gap-2 p-4 md:p-6 text-secondary">
         <Loader2 className="size-4 animate-spin shrink-0" />
@@ -38,7 +38,7 @@ export default function AppointmentsList({
     return (
       <div className="flex items-center justify-center gap-2 p-4 md:p-6 text-secondary">
         <CalendarX className="shrink-0" />
-        <span>
+        <span className="text-center max-md:text-sm">
           Erro ao carregar os agendamentos.{' '}
           <button
             onClick={() => refetchAppointments()}
