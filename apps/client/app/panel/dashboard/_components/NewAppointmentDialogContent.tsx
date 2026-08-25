@@ -164,11 +164,11 @@ export default function NewAppointmentDialogContent({
                   />
                 )}
               />
+              <FieldError>{errors.serviceIds?.message}</FieldError>
               <FieldDescription>
                 Se nenhum serviço estiver disponível, crie em{' '}
                 <Link href="/panel/services">serviços</Link>.
               </FieldDescription>
-              <FieldError>{errors.serviceIds?.message}</FieldError>
             </Field>
 
             <Field>
