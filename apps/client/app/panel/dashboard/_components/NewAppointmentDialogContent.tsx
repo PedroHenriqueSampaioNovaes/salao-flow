@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import {
   Calendar,
   CalendarClock,
@@ -27,6 +28,7 @@ import {
   FieldLabel,
 } from '@/src/components/ui/field';
 import { Input } from '@/src/components/ui/input';
+import Loading from '@/src/components/ui/loading';
 
 import {
   NativeSelect,
@@ -40,7 +42,6 @@ import SelectionTimeSlotsBooking from '@/src/components/ui/selection-time-slots-
 import { cn } from '@/src/lib/utils';
 
 import { useNewAppointmentDialog } from '../_hooks/useNewAppointmentDialog';
-import Link from 'next/link';
 
 interface INewAppointmentDialogContentProps {
   closeDialog: () => void;
@@ -73,7 +74,7 @@ export default function NewAppointmentDialogContent({
     return (
       <DialogContent showCloseButton={false}>
         <div className="flex items-center justify-center py-16">
-          <div className="animate-spin rounded-full h-8 w-8 border-4 border-gray-300 border-t-brand-accent" />
+          <Loading />
         </div>
       </DialogContent>
     );

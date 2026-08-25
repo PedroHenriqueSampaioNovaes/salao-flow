@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic';
 import { CalendarPlus2 } from 'lucide-react';
 
 import { Dialog, DialogTrigger } from '@/src/components/ui/dialog';
+import Loading from '@/src/components/ui/loading';
 
 import { usePanelContext } from '@/src/common/contexts/panel-context';
 
@@ -46,7 +47,7 @@ export default function NewAppointmentDialog() {
         <Suspense
           fallback={
             <div className="fixed inset-0 z-50 flex items-center justify-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-4 border-gray-300 border-t-brand-accent" />
+              <Loading />
             </div>
           }
         >
