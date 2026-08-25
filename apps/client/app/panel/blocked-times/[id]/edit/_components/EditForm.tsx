@@ -6,8 +6,6 @@ import updateBlockedTimesAction from '@/app/actions/update-blocked-times';
 
 import { BlockedTimesForm } from '../../../_components/BlockedTimesForm';
 
-import { useBlockedTimesContext } from '@/src/common/contexts/blocked-times-context';
-
 import { dateToInputDate } from '@/src/common/utils/dateToInputDate';
 import { dateToInputTime } from '@/src/common/utils/dateToInputTime';
 
@@ -20,8 +18,7 @@ interface IEditFormProps {
 }
 
 export default function EditForm({ blockedTimeId }: IEditFormProps) {
-  const { blockedTimes, setBlockedTimes } = useBlockedTimesContext();
-  const { barbershop } = usePanelContext();
+  const { blockedTimes, setBlockedTimes, barbershop } = usePanelContext();
 
   const blockedTime = blockedTimes.find((e) => e.id === blockedTimeId);
 

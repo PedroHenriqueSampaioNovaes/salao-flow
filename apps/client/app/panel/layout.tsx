@@ -6,6 +6,8 @@ import getAppointmentsAction from '../actions/get-appointments';
 import getEmployeesAction from '../actions/get-employees';
 import getBarbershopAction from '../actions/get-barbershop';
 import getServicesAction from '../actions/get-services';
+import getExpedientsAction from '../actions/get-expedients';
+import getBlockedTimesAction from '../actions/get-blocked-times';
 
 import { IBarbershop } from '@/src/common/interfaces/barbershop';
 
@@ -57,16 +59,25 @@ async function PanelData({
   barbershop: IBarbershop;
   children: React.ReactNode;
 }) {
-  const [appointmentsResponse, employeesResponse, servicesResponse] =
-    await Promise.all([
-      getAppointmentsAction(),
-      getEmployeesAction(),
-      getServicesAction(),
-    ]);
+  const [
+    appointmentsResponse,
+    employeesResponse,
+    servicesResponse,
+    expedientsResponse,
+    blockedTimesResponse,
+  ] = await Promise.all([
+    getAppointmentsAction(),
+    getEmployeesAction(),
+    getServicesAction(),
+    getExpedientsAction(),
+    getBlockedTimesAction(),
+  ]);
 
   const appointments = appointmentsResponse?.data ?? [];
   const employees = employeesResponse?.data ?? [];
   const services = servicesResponse?.data ?? [];
+  const expedients = expedientsResponse?.data ?? [];
+  const blockedTimes = blockedTimesResponse?.data ?? [];
 
   return (
     <PanelProvider
@@ -74,6 +85,8 @@ async function PanelData({
       appointmentsData={appointments}
       employeesData={employees}
       servicesData={services}
+      expedientsData={expedients}
+      blockedTimesData={blockedTimes}
     >
       {children}
     </PanelProvider>

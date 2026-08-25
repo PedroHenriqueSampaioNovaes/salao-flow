@@ -2,12 +2,12 @@
 
 import Link from 'next/link';
 
-import { useExpedientsContext } from '@/src/common/contexts/expedients-context';
-
 import deleteExpedientAction from '@/app/actions/delete-expedient';
 
+import { usePanelContext } from '@/src/common/contexts/panel-context';
+
 export default function Expedients() {
-  const { expedients, setExpedients } = useExpedientsContext();
+  const { expedients, setExpedients } = usePanelContext();
 
   return (
     <div>
