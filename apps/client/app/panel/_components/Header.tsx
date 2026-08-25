@@ -3,12 +3,15 @@
 import Image from 'next/image';
 import { Menu } from 'lucide-react';
 
+import { IBarbershop } from '@/src/common/interfaces/barbershop';
+
 import { useSidebarContext } from '@/src/common/contexts/sidebar-context';
-import { usePanelContext } from '@/src/common/contexts/panel-context';
 
-export default function Header() {
-  const { barbershop } = usePanelContext();
+interface IHeaderProps {
+  barbershop: IBarbershop;
+}
 
+export default function Header({ barbershop }: IHeaderProps) {
   const { toggleSidebar } = useSidebarContext();
 
   return (
