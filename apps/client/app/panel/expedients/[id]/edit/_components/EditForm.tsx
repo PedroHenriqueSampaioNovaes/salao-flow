@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 
 import updateExpedientAction from '@/app/actions/update-expedient';
 
-import { useExpedientsContext } from '@/src/common/contexts/expedients-context';
+import { usePanelContext } from '@/src/common/contexts/panel-context';
 
 import { EmployeeScheduleSchema } from '@sistema-barbearia/validators';
 
@@ -15,7 +15,7 @@ interface IEditFormProps {
 }
 
 export default function EditForm({ expedientId }: IEditFormProps) {
-  const { expedients, setExpedients } = useExpedientsContext();
+  const { expedients, setExpedients } = usePanelContext();
 
   const expedient = expedients.find((e) => e.id === expedientId);
 
