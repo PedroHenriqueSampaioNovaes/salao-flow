@@ -153,6 +153,7 @@ export class BarbershopRepository {
       where: { slug },
       select: {
         name: true,
+        businessName: true,
         address: true,
         phone: true,
         image: true,

@@ -50,6 +50,7 @@ export interface IEmployeeBookingInfo {
 
 export interface IBarbershopBookingInfos {
   name: string;
+  businessName: string;
   address: string;
   phone: string;
   image: string;

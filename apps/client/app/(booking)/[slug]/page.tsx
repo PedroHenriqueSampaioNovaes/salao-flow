@@ -32,7 +32,7 @@ export default async function BookingPage({
           <div className="size-20 rounded-2xl border border-appointment-border overflow-hidden shrink-0">
             <Image
               src={bookingInfos.image}
-              alt={bookingInfos.name}
+              alt={bookingInfos.businessName}
               width={96}
               height={96}
               loading="eager"
@@ -42,7 +42,7 @@ export default async function BookingPage({
 
           <div className="flex flex-col justify-center">
             <h1 className="text-lg sm:text-2xl font-bold text-appointment-text mb-2">
-              {bookingInfos.name}
+              {bookingInfos.businessName}
             </h1>
 
             <div className="flex max-sm:flex-col sm:items-center gap-y-1 gap-x-6">
