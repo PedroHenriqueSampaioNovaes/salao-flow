@@ -30,7 +30,7 @@ export default function Dashboard({
     <div className="flex flex-col gap-6">
       <div className="text-center md:text-left">
         <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
-          Bem-vindo à {barbershop?.name}!
+          Bem-vindo, {barbershop?.name}!
         </h1>
         <p className="text-sm text-primary mt-1 font-normal">
           {currentDateFormatted}
