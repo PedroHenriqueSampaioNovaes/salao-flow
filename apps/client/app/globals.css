@@ -93,3 +93,11 @@ body {
 @utility border-divider-appointment {
   @apply border-[#3B3B3B]/30 my-6;
 }
+
+@utility link {
+  @apply text-brand-accent hover:text-accent hover:underline;
+}
+
+@utility input-error-message {
+  @apply text-sm text-error;
+}
