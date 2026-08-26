@@ -19,6 +19,7 @@ export class DetailsBarbershopService {
     return {
       email: barbershop.email,
       name: barbershop.name,
+      businessName: barbershop.businessName,
       image: barbershop.image,
       address: barbershop.address,
       phone: barbershop.phone,
