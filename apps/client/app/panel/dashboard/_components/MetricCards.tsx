@@ -22,7 +22,7 @@ export default function MetricCards({ dashboardMetrics }: MetricCardsProps) {
             {dashboardMetrics.customerCount}
           </div>
         </div>
-        <div className="flex items-center justify-between">
+        {/* <div className="flex items-center justify-between">
           <span className="text-xs text-secondary font-medium">
             Em relação ao último mês
           </span>
@@ -30,7 +30,7 @@ export default function MetricCards({ dashboardMetrics }: MetricCardsProps) {
             <TrendingUp className="size-3.5" />
             <span>+4.8%</span>
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* Card 2: Atendimentos hoje */}
@@ -63,7 +63,7 @@ export default function MetricCards({ dashboardMetrics }: MetricCardsProps) {
             {dashboardMetrics.employeeCount}
           </div>
         </div>
-        <div className="flex items-center justify-between">
+        {/* <div className="flex items-center justify-between">
           <span className="text-xs text-secondary font-medium">
             Em relação ao último mês
           </span>
@@ -71,7 +71,7 @@ export default function MetricCards({ dashboardMetrics }: MetricCardsProps) {
             <TrendingUp className="size-3.5 -rotate-180" />
             <span>-2%</span>
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* Card 4: Total de serviços */}
@@ -87,7 +87,7 @@ export default function MetricCards({ dashboardMetrics }: MetricCardsProps) {
             {dashboardMetrics.serviceCount}
           </div>
         </div>
-        <div className="flex items-center justify-between">
+        {/* <div className="flex items-center justify-between">
           <span className="text-xs text-secondary font-medium">
             Em relação ao último mês
           </span>
@@ -95,7 +95,7 @@ export default function MetricCards({ dashboardMetrics }: MetricCardsProps) {
             <TrendingUp className="size-3.5" />
             <span>+4.8%</span>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
