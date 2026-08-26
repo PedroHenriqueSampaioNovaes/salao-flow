@@ -2,12 +2,12 @@
 
 import Link from 'next/link';
 
-import { useBlockedTimesContext } from '@/src/common/contexts/blocked-times-context';
+import { usePanelContext } from '@/src/common/contexts/panel-context';
 
 import deleteBlockedTimesAction from '@/app/actions/delete-blocked-times';
 
 export default function BlockedTimes() {
-  const { blockedTimes, setBlockedTimes } = useBlockedTimesContext();
+  const { blockedTimes, setBlockedTimes } = usePanelContext();
 
   return (
     <div>

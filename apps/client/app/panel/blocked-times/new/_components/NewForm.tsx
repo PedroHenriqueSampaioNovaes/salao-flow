@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 
 import createBlockedTimeAction from '@/app/actions/create-blocked-time';
 
-import { useBlockedTimesContext } from '@/src/common/contexts/blocked-times-context';
+import { usePanelContext } from '@/src/common/contexts/panel-context';
 
 import { BlockedTimesForm } from '../../_components/BlockedTimesForm';
 
@@ -13,7 +13,7 @@ import { CreateScheduleBlockFormData } from '../../_hooks/useBlockedTimesForm';
 export default function NewForm() {
   const router = useRouter();
 
-  const { setBlockedTimes } = useBlockedTimesContext();
+  const { setBlockedTimes } = usePanelContext();
 
   async function onSubmit(data: CreateScheduleBlockFormData) {
     const {
