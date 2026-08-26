@@ -2,6 +2,7 @@ export interface IBarbershop {
   id: number;
   email: string;
   name: string;
+  businessName: string;
   image: string;
   address: string;
   phone: string;

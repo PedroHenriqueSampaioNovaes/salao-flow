@@ -56,7 +56,7 @@ export class CreateBarbershopService {
       ...data,
       password: hashedPassword,
       slug,
-      image: `https://ui-avatars.com/api/?name=${data.name}&size=96`,
+      image: `https://ui-avatars.com/api/?name=${data.businessName}&size=96`,
     };
 
     await barbershopRepository.create(barbershopData);

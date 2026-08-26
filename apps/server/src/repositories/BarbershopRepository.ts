@@ -94,6 +94,7 @@ export class BarbershopRepository {
       where: { id },
       data: {
         name: data.name,
+        businessName: data.businessName,
         email: data.email,
         password: data.password,
         phone: data.phone,

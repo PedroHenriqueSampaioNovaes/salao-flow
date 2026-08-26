@@ -32,6 +32,7 @@ export class UpdateBarbershopService {
     const newBarbershopData: UpdateBarbershopSchema = {
       email: data.email,
       name: data.name,
+      businessName: data.businessName,
       phone: data.phone,
       address: data.address,
       timezone: data.timezone,
@@ -68,8 +69,8 @@ export class UpdateBarbershopService {
       newBarbershopData.password = await bcrypt.hash(data.password, salt);
     }
 
-    if (data.name) {
-      newBarbershopData.image = `https://ui-avatars.com/api/?name=${data.name}&size=96`;
+    if (data.businessName) {
+      newBarbershopData.image = `https://ui-avatars.com/api/?name=${data.businessName}&size=96`;
     }
 
     const updatedBarbershop = await barbershopRepository.updateProfile(

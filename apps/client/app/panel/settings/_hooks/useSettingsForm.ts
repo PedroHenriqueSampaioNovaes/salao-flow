@@ -17,6 +17,7 @@ export function useSettingsForm() {
 
   const defaultValues: Partial<IBarbershop> = {
     name: barbershop?.name || '',
+    businessName: barbershop?.businessName || '',
     phone: barbershop?.phone || '',
     email: barbershop?.email || '',
     address: barbershop?.address || '',

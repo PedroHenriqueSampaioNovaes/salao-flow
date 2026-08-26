@@ -35,6 +35,17 @@ export default function Settings() {
         <FieldError>{errors.name?.message}</FieldError>
       </Field>
 
+      <Field data-invalid={!!errors.businessName}>
+        <FieldLabel htmlFor="businessName">Nome Comercial</FieldLabel>
+        <Input
+          id="businessName"
+          placeholder="Nome comercial da barbearia."
+          aria-invalid={!!errors.businessName}
+          {...register('businessName')}
+        />
+        <FieldError>{errors.businessName?.message}</FieldError>
+      </Field>
+
       <Field data-invalid={!!errors.email}>
         <FieldLabel htmlFor="email">E-mail</FieldLabel>
         <Input
