@@ -16,6 +16,9 @@ const password = z.string().min(8, 'Senha deve conter pelo menos 8 caracteres');
 
 export const baseBarbershopSchema = z.object({
   name: z.string().min(3, 'Nome deve conter pelo menos 3 caracteres'),
+  businessName: z
+    .string()
+    .min(3, 'Nome do negócio deve conter pelo menos 3 caracteres'),
   email: z.email('E-mail inválido'),
   image: z.string().optional(),
   password,

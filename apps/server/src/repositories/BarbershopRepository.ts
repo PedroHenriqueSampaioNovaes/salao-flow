@@ -20,6 +20,7 @@ export class BarbershopRepository {
     const barbershop = await prisma.barbershop.create({
       data: {
         name: data.name,
+        businessName: data.businessName,
         email: data.email,
         password: data.password,
         address: data.address,
