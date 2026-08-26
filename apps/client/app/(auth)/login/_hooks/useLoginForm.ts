@@ -1,4 +1,7 @@
+'use client';
+
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -17,6 +20,8 @@ export function useLoginForm() {
   });
   const [error, setError] = useState('');
 
+  const router = useRouter();
+
   const onSubmit = async (data: LoginRequest) => {
     const { ok, error } = await loginAction(data);
 
@@ -25,7 +30,7 @@ export function useLoginForm() {
       return;
     }
 
-    console.log('Login realizado com sucesso!');
+    router.push('/panel/dashboard');
   };
 
   return {

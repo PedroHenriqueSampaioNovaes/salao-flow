@@ -78,7 +78,7 @@ describe('LoginForm', () => {
 
     const button = screen.getByRole('button');
     expect(button).toBeDisabled();
-    expect(screen.queryByText('Entrar')).not.toBeInTheDocument();
+    expect(button).not.toHaveTextContent('Entrar');
     const spinner = button.querySelector('.animate-spin');
     expect(spinner).toBeInTheDocument();
   });
