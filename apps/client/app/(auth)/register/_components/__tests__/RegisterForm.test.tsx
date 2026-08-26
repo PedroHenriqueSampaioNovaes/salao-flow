@@ -6,7 +6,7 @@ import { RegisterForm } from '../RegisterForm';
 import { useRegisterForm } from '../../_hooks/useRegisterForm';
 
 jest.mock('../../_hooks/useRegisterForm');
-jest.mock('../PhoneInputField', () => ({
+jest.mock('@/src/components/ui/phone-input-field', () => ({
   PhoneInputField: ({ label, error }: { label: string; error?: string }) => (
     <div>
       <label htmlFor="phone">{label}</label>
@@ -54,7 +54,7 @@ describe('RegisterForm', () => {
     expect(screen.getByLabelText(/^senha$/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/confirmar/i)).toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: /registrar barbearia/i }),
+      screen.getByRole('button', { name: /cadastrar/i }),
     ).toBeInTheDocument();
   });
 
@@ -114,7 +114,7 @@ describe('RegisterForm', () => {
 
     const button = screen.getByRole('button');
     expect(button).toBeDisabled();
-    expect(screen.queryByText('Registrar Barbearia')).not.toBeInTheDocument();
+    expect(screen.queryByText('Cadastrar')).not.toBeInTheDocument();
     const spinner = button.querySelector('.animate-spin');
     expect(spinner).toBeInTheDocument();
   });
