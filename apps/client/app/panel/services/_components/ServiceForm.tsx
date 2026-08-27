@@ -3,6 +3,10 @@
 import Link from 'next/link';
 import { Controller, useWatch } from 'react-hook-form';
 
+import { ServiceFormData, useServiceForm } from '../_hooks/useServiceForm';
+
+import { usePanelContext } from '@/src/common/contexts/panel-context';
+
 import {
   Field,
   FieldLabel,
@@ -12,12 +16,8 @@ import {
 import { Input } from '@/src/components/ui/input';
 import { MultiSelect } from '@/src/components/ui/multi-select';
 import { Switch } from '@/src/components/ui/switch';
-
-import { usePanelContext } from '@/src/common/contexts/panel-context';
-
-import { ServiceFormData, useServiceForm } from '../_hooks/useServiceForm';
 import { Textarea } from '@/src/components/ui/textarea';
-import { NumericFormat } from 'react-number-format';
+import { InputCurrencyMask } from '@/src/components/ui/input-currency-mask';
 
 interface ServiceFormProps {
   onSubmit: (data: ServiceFormData) => Promise<void>;
@@ -54,32 +54,12 @@ export function ServiceForm({
         <FieldError>{errors.name?.message}</FieldError>
       </Field>
 
-      <Field data-invalid={!!errors.price}>
-        <FieldLabel htmlFor="price">Preço</FieldLabel>
-        <Controller
-          name="price"
-          control={control}
-          render={({ field }) => (
-            <NumericFormat
-              id="price"
-              value={field.value}
-              getInputRef={field.ref}
-              thousandSeparator="."
-              decimalSeparator=","
-              decimalScale={2}
-              fixedDecimalScale
-              prefix="R$ "
-              placeholder="R$ 0,00"
-              customInput={Input}
-              aria-invalid={!!errors.price}
-              onValueChange={(values) => {
-                field.onChange(values.floatValue ?? 0);
-              }}
-            />
-          )}
-        />
-        <FieldError>{errors.price?.message}</FieldError>
-      </Field>
+      <InputCurrencyMask
+        label="Preço"
+        name="price"
+        control={control}
+        error={errors.price?.message}
+      />
 
       <Field data-invalid={!!errors.duration}>
         <FieldLabel htmlFor="duration">Tempo (em minutos)</FieldLabel>
