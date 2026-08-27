@@ -35,10 +35,9 @@ export function BlockedTimesForm({
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
       <Field data-invalid={!!errors.name}>
-        <FieldLabel htmlFor="name">Nome</FieldLabel>
+        <FieldLabel htmlFor="name">Nome do bloqueio</FieldLabel>
         <Input
           id="name"
-          placeholder="Nome do serviço."
           aria-invalid={!!errors.name}
           {...register('name')}
         />
