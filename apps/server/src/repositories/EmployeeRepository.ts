@@ -29,6 +29,13 @@ export class EmployeeRepository {
         employeeScheduleId: true,
         name: true,
         image: true,
+        services: {
+          select: {
+            id: true,
+            name: true,
+            price: true,
+          },
+        },
       },
     });
 
