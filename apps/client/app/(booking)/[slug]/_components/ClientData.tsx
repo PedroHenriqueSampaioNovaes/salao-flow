@@ -43,7 +43,7 @@ export default function ClientData() {
           />
           <FieldError>{formState.errors.name?.message}</FieldError>
         </Field>
-        <div className="md:flex gap-4">
+        <div className="flex max-md:flex-col gap-4">
           <PhoneInputField
             id="phone"
             label="Celular / WhatsApp"
