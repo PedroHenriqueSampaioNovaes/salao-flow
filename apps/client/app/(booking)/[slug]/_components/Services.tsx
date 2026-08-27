@@ -32,7 +32,7 @@ export default function Services({ professionals }: IServicesProps) {
       />
 
       {serviceIdsError && (
-        <Alert variant="warning" className="mb-4">
+        <Alert variant="warning" className="mb-4 sticky top-2.5">
           <AlertCircle className="size-6" />
           <AlertDescription>{serviceIdsError.message}</AlertDescription>
         </Alert>

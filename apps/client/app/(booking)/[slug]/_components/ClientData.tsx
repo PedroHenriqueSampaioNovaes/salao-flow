@@ -24,7 +24,7 @@ export default function ClientData() {
       <StepTitle title="Seus dados" icon={BookUser} />
 
       {(nameError || phoneError || emailError) && (
-        <Alert variant="warning" className="mb-4">
+        <Alert variant="warning" className="mb-4 sticky top-2.5">
           <AlertCircle className="size-6" />
           <AlertDescription>
             {nameError?.message || phoneError?.message || emailError?.message}

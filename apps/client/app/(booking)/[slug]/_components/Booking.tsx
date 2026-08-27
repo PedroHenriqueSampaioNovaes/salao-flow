@@ -44,7 +44,7 @@ export default function Booking({
         />
 
         {(dateError || timeError) && (
-          <Alert variant="warning" className="mb-4">
+          <Alert variant="warning" className="mb-4 sticky top-2.5">
             <AlertCircle className="size-6" />
             <AlertDescription>
               {dateError?.message || timeError?.message}

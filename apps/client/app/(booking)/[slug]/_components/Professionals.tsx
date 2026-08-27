@@ -53,8 +53,8 @@ export default function Professionals({
       <StepTitle title="Escolha seu Profissional" icon={User} />
 
       {form.formState.errors.employeeId && (
-        <Alert variant="warning" className="mb-4">
-          <AlertCircle className='size-6' />
+        <Alert variant="warning" className="mb-4 sticky top-2.5">
+          <AlertCircle className="size-6" />
           <AlertDescription>
             {form.formState.errors.employeeId.message}
           </AlertDescription>
