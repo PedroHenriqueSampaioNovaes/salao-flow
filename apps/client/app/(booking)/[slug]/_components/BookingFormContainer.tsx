@@ -63,7 +63,7 @@ function BookingFormWrapper({
     <div className="px-4">
       <StepperHeader />
 
-      <div className="max-w-300 mx-auto mb-9 transition-all duration-300">
+      <div className="max-w-300 mx-auto mb-20 md:mb-9 transition-all duration-300">
         <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] items-start gap-x-16 gap-y-6">
           <div>
             {currentStep === 1 && (
