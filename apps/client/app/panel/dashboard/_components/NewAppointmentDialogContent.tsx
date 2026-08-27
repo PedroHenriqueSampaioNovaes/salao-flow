@@ -97,7 +97,6 @@ export default function NewAppointmentDialogContent({
               </FieldLabel>
               <Input
                 id="customer-name"
-                placeholder="Ex: João Silva"
                 aria-invalid={!!errors.name}
                 {...register('name')}
               />
