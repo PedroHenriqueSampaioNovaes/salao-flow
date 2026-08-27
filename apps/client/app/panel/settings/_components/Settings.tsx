@@ -93,13 +93,8 @@ export default function Settings() {
       </Field>
 
       <Field data-invalid={!!errors.slug}>
-        <FieldLabel htmlFor="slug">Slug</FieldLabel>
-        <Input
-          id="slug"
-          placeholder="Slug da barbearia."
-          aria-invalid={!!errors.slug}
-          {...register('slug')}
-        />
+        <FieldLabel htmlFor="slug">URL da página de agendamento</FieldLabel>
+        <Input id="slug" aria-invalid={!!errors.slug} {...register('slug')} />
         <FieldError>{errors.slug?.message}</FieldError>
       </Field>
 
