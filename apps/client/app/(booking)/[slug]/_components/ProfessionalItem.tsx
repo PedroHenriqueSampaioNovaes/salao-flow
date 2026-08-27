@@ -72,14 +72,13 @@ export default function ProfessionalItem({
           type="button"
           onClick={() => onSelect(id)}
           className={cn(
-            'cursor-pointer flex items-center gap-2 bg-neutral/20 border border-appointment-border py-2 px-3 rounded-2xl text-sm text-appointment-text-muted font-bold leading-none',
-            isSelected &&
-              'border-cta-accent bg-cta-accent text-appointment-background',
+            'cursor-pointer flex items-center gap-2 bg-appointment-background border border-cta-accent py-2 px-3 rounded-2xl text-sm text-cta-accent font-bold leading-none',
+            isSelected && 'bg-cta-accent text-appointment-background',
           )}
         >
           <Check
             className={cn(
-              'size-3.5 text-border',
+              'size-3.5 text-cta-accent',
               isSelected && 'text-appointment-background',
             )}
           />{' '}
