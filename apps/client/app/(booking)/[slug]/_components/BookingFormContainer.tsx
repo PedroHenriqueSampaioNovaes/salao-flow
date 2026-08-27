@@ -63,7 +63,7 @@ function BookingFormWrapper({
     <div className="px-4">
       <StepperHeader />
 
-      <div className="max-w-300 mx-auto mb-20 md:mb-9 transition-all duration-300">
+      <div className="max-w-300 mx-auto mb-21 md:mb-9 transition-all duration-300">
         <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] items-start gap-x-16 gap-y-6">
           <div>
             {currentStep === 1 && (
@@ -223,7 +223,7 @@ function StepperFooter() {
         <button
           type="button"
           onClick={goToPrevStep}
-          className="flex items-center gap-1.5 px-3 md:px-4 h-10 md:h-9 rounded-lg border border-appointment-border hover:bg-[#262626] text-sm font-bold transition-all duration-200 cursor-pointer"
+          className="flex items-center gap-1.5 px-3 md:px-4 h-12 md:h-9 rounded-lg border border-appointment-border hover:bg-[#262626] text-sm font-bold transition-all duration-200 cursor-pointer"
           aria-label="Voltar"
         >
           <ChevronLeft className="size-5" />
@@ -235,7 +235,7 @@ function StepperFooter() {
         <button
           type="button"
           onClick={goToNextStep}
-          className="max-md:flex-1 flex items-center max-md:justify-center gap-1.5 h-10 md:h-9 px-6 rounded-lg bg-cta-accent hover:bg-[#BFA000] text-black text-sm font-bold transition-all duration-200 cursor-pointer"
+          className="max-md:flex-1 flex items-center max-md:justify-center gap-1.5 h-12 md:h-9 px-6 rounded-lg bg-cta-accent hover:bg-[#BFA000] text-black text-sm font-bold transition-all duration-200 cursor-pointer"
         >
           Avançar
           <ChevronRight className="size-5" />
@@ -244,7 +244,7 @@ function StepperFooter() {
         <button
           type="button"
           className={cn(
-            'max-md:flex-1 flex items-center max-md:justify-center gap-1.5 h-10 md:h-9 px-6 rounded-lg bg-cta-accent hover:bg-[#BFA000] text-black text-sm font-bold transition-all duration-200 cursor-pointer',
+            'max-md:flex-1 flex items-center max-md:justify-center gap-1.5 h-12 md:h-9 px-6 rounded-lg bg-cta-accent hover:bg-[#BFA000] text-black text-sm font-bold transition-all duration-200 cursor-pointer',
           )}
           onClick={handleSubmit}
         >
