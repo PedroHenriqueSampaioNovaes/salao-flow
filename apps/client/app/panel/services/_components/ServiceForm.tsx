@@ -145,13 +145,13 @@ export function ServiceForm({
 
       {!assignToAllEmployees && (
         <Field data-invalid={!!errors.employeeIds}>
-          <FieldLabel htmlFor="profissionals">Profissionais</FieldLabel>
+          <FieldLabel htmlFor="professionals">Profissionais</FieldLabel>
           <Controller
             name="employeeIds"
             control={control}
             render={({ field }) => (
               <MultiSelect
-                id="profissionals"
+                id="professionals"
                 options={employees.map((emp) => ({
                   value: String(emp.id),
                   label: emp.name,
