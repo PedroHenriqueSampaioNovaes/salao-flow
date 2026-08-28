@@ -44,6 +44,8 @@ export const updateBarbershopSchema = baseBarbershopSchema
     slug: z.string().optional(),
     password: password.optional().or(z.literal('')),
     currentPassword: z.string().optional(),
+    facebookUrl: z.url('URL inválida').optional(),
+    instagramUrl: z.url('URL inválida').optional(),
   })
   .refine(
     (data) => !data.password || passwordsMatch(data as any),

@@ -32,6 +32,18 @@ export class GetBookingInfoService {
       throw new AppError('Barbearia desativada.', 403);
     }
 
-    return { ...bookingInfo, instantLocalTime: now.toInstant() };
+    return {
+      name: bookingInfo.name,
+      businessName: bookingInfo.businessName,
+      address: bookingInfo.address,
+      phone: bookingInfo.phone,
+      image: bookingInfo.image,
+      timezone: bookingInfo.timezone,
+      status: bookingInfo.status,
+      employees: bookingInfo.employees,
+      instantLocalTime: now.toInstant(),
+      facebookUrl: bookingInfo.facebookUrl,
+      instagramUrl: bookingInfo.instagramUrl,
+    };
   }
 }
