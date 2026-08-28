@@ -45,6 +45,7 @@ export default function ProfessionalItem({
         'p-4 rounded-lg border border-appointment-border bg-appointment-card-background',
         isSelected && 'border-cta-accent',
       )}
+      onClick={() => onSelect(id)}
     >
       <div className="w-full flex max-sm:flex-col sm:justify-between items-start sm:items-center gap-4">
         <div className="flex items-center gap-4">
