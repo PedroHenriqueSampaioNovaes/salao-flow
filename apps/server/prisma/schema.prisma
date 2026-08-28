@@ -22,6 +22,7 @@ model Barbershop {
   resetPasswordToken   String?   @unique
   resetPasswordExpires DateTime?
   slug                 String    @unique
+  whatsAppUrl          String?
   facebookUrl          String?
   instagramUrl         String?
 

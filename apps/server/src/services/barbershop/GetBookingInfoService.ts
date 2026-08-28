@@ -42,6 +42,7 @@ export class GetBookingInfoService {
       status: bookingInfo.status,
       employees: bookingInfo.employees,
       instantLocalTime: now.toInstant(),
+      whatsAppUrl: bookingInfo.whatsAppUrl,
       facebookUrl: bookingInfo.facebookUrl,
       instagramUrl: bookingInfo.instagramUrl,
     };

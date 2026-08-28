@@ -102,6 +102,7 @@ export class BarbershopRepository {
         image: data.image,
         slug: data.slug,
         timezone: data.timezone,
+        whatsAppUrl: data.whatsAppUrl,
         facebookUrl: data.facebookUrl,
         instagramUrl: data.instagramUrl,
         subscription: {
