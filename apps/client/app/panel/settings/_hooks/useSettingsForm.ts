@@ -25,6 +25,9 @@ export function useSettingsForm() {
     status: barbershop?.status || false,
     slug: barbershop?.slug || '',
     timezone: barbershop?.timezone || '',
+    whatsAppUrl: barbershop?.whatsAppUrl || '',
+    facebookUrl: barbershop?.facebookUrl || '',
+    instagramUrl: barbershop?.instagramUrl || '',
   };
 
   const {

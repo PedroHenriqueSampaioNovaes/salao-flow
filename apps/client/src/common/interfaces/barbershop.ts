@@ -9,6 +9,9 @@ export interface IBarbershop {
   status: boolean;
   slug: string;
   timezone: string;
+  whatsAppUrl?: string;
+  facebookUrl?: string;
+  instagramUrl?: string;
   instantLocalTime: string;
 }
 

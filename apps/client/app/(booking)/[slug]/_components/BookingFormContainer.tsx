@@ -89,7 +89,11 @@ function BookingFormWrapper({
             <SchedulingSummary
               professionals={barbershopBookingInfos.employees}
             />
-            <Contacts />
+            <Contacts
+              whatsAppUrl={barbershopBookingInfos.whatsAppUrl}
+              facebookUrl={barbershopBookingInfos.facebookUrl}
+              instagramUrl={barbershopBookingInfos.instagramUrl}
+            />
           </div>
         </div>
       </div>

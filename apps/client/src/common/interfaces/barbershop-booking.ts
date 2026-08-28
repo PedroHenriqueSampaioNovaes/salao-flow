@@ -58,6 +58,9 @@ export interface IBarbershopBookingInfos {
   employees: IEmployeeBookingInfo[];
   instantLocalTime: string;
   timezone: string;
+  facebookUrl?: string;
+  instagramUrl?: string;
+  whatsAppUrl?: string;
 }
 
 export interface IGetAvailableTimeSlotsForBooking {
