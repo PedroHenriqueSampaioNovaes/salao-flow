@@ -27,6 +27,9 @@ export class DetailsBarbershopService {
       slug: barbershop.slug,
       timezone: barbershop.timezone,
       instantLocalTime: now.toInstant(),
+      whatsAppUrl: barbershop.whatsAppUrl,
+      facebookUrl: barbershop.facebookUrl,
+      instagramUrl: barbershop.instagramUrl,
     };
   }
 }

@@ -102,6 +102,9 @@ export class BarbershopRepository {
         image: data.image,
         slug: data.slug,
         timezone: data.timezone,
+        whatsAppUrl: data.whatsAppUrl,
+        facebookUrl: data.facebookUrl,
+        instagramUrl: data.instagramUrl,
         subscription: {
           update: {
             status: data.subscription?.status,
@@ -151,14 +154,7 @@ export class BarbershopRepository {
   async getBookingInfoBySlug(slug: string, now: string, maxDate: string) {
     const barbershop = await prisma.barbershop.findUnique({
       where: { slug },
-      select: {
-        name: true,
-        businessName: true,
-        address: true,
-        phone: true,
-        image: true,
-        timezone: true,
-        status: true,
+      include: {
         employees: {
           select: {
             id: true,

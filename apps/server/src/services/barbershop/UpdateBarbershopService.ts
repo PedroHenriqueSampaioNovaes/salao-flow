@@ -36,6 +36,9 @@ export class UpdateBarbershopService {
       phone: data.phone,
       address: data.address,
       timezone: data.timezone,
+      facebookUrl: data.facebookUrl,
+      instagramUrl: data.instagramUrl,
+      whatsAppUrl: data.whatsAppUrl,
     };
 
     if (data.slug && data.slug !== barbershop.slug) {

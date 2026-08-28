@@ -98,6 +98,39 @@ export default function Settings() {
         <FieldError>{errors.slug?.message}</FieldError>
       </Field>
 
+      <Field data-invalid={!!errors.whatsAppUrl}>
+        <FieldLabel htmlFor="whatsAppUrl">WhatsApp</FieldLabel>
+        <Input
+          id="whatsAppUrl"
+          aria-invalid={!!errors.whatsAppUrl}
+          placeholder="https://wa.me/5511911111111"
+          {...register('whatsAppUrl')}
+        />
+        <FieldError>{errors.whatsAppUrl?.message}</FieldError>
+      </Field>
+
+      <Field data-invalid={!!errors.instagramUrl}>
+        <FieldLabel htmlFor="instagramUrl">Instagram</FieldLabel>
+        <Input
+          id="instagramUrl"
+          aria-invalid={!!errors.instagramUrl}
+          placeholder="https://www.instagram.com/suabarbearia"
+          {...register('instagramUrl')}
+        />
+        <FieldError>{errors.instagramUrl?.message}</FieldError>
+      </Field>
+
+      <Field data-invalid={!!errors.facebookUrl}>
+        <FieldLabel htmlFor="facebookUrl">Facebook</FieldLabel>
+        <Input
+          id="facebookUrl"
+          aria-invalid={!!errors.facebookUrl}
+          placeholder="https://www.facebook.com/suabarbearia"
+          {...register('facebookUrl')}
+        />
+        <FieldError>{errors.facebookUrl?.message}</FieldError>
+      </Field>
+
       <Field data-invalid={!!errors.currentPassword}>
         <FieldLabel htmlFor="currentPassword">Senha atual</FieldLabel>
         <Input
