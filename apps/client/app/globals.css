@@ -32,6 +32,8 @@
   --badge-green-text: #5dd384;
   --badge-red-bg: #321616;
   --badge-red-text: #d35d5f;
+
+  --destructive: #d35d5f;
 }
 
 @theme inline {
@@ -60,6 +62,8 @@
   --color-badge-green-text: var(--badge-green-text);
   --color-badge-red-bg: var(--badge-red-bg);
   --color-badge-red-text: var(--badge-red-text);
+
+  --color-destructive: var(--destructive);
 
   --font-sans: var(--font-arimo);
 
