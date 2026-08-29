@@ -63,7 +63,12 @@ function DialogContent({
         className="fixed inset-0 z-50 overflow-y-auto outline-none duration-300 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95"
         {...props}
       >
-        <DialogPrimitive.Close ref={closeRef} className="hidden" tabIndex={-1} aria-hidden />
+        <DialogPrimitive.Close
+          ref={closeRef}
+          className="hidden"
+          tabIndex={-1}
+          aria-hidden
+        />
         <div
           className="flex min-h-full flex-col items-center py-6"
           onClick={(e) => {
@@ -81,11 +86,7 @@ function DialogContent({
             {children}
             {showCloseButton && (
               <DialogPrimitive.Close data-slot="dialog-close" asChild>
-                <Button
-                  variant="ghost"
-                  className="absolute top-2 right-4 rounded-md text-gray-600 hover:bg-gray-100 focus:bg-gray-100 hover:text-black focus:text-black"
-                  size="icon-sm"
-                >
+                <Button className="absolute top-2 right-4 rounded-md text-gray-600 hover:bg-gray-100 focus:bg-gray-100 hover:text-black focus:text-black">
                   <XIcon />
                   <span className="sr-only">Close</span>
                 </Button>
@@ -131,7 +132,7 @@ function DialogFooter({
       {children}
       {showCloseButton && (
         <DialogPrimitive.Close asChild>
-          <Button variant="outline">Close</Button>
+          <Button>Close</Button>
         </DialogPrimitive.Close>
       )}
     </div>
