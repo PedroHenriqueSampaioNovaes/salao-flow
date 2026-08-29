@@ -1,47 +1,78 @@
 'use client';
 
-import Link from 'next/link';
-
 import { usePanelContext } from '@/src/common/contexts/panel-context';
+
+import { showErrorToast, showSuccessToast } from '@/src/common/lib/toast';
 
 import deleteBlockedTimesAction from '@/app/actions/delete-blocked-times';
 
+import PageHeader from '@/app/panel/_components/PageHeader';
+import BlockedTimeRow from './BlockedTimeRow';
+import CreateBlockedTimeDialog from './CreateBlockedTimeDialog';
+
+const columns = ['Nome', 'Início', 'Fim', 'Duração'];
+
 export default function BlockedTimes() {
-  const { blockedTimes, setBlockedTimes } = usePanelContext();
+  const { barbershop, blockedTimes, setBlockedTimes } = usePanelContext();
+
+  const handleDelete = async (id: string) => {
+    if (!window.confirm('Tem certeza que deseja excluir este bloqueio?')) {
+      return;
+    }
+
+    const { ok, error } = await deleteBlockedTimesAction(id);
+
+    if (!ok) {
+      showErrorToast(error);
+      return;
+    }
+
+    showSuccessToast('Bloqueio de horário excluído com sucesso!');
+
+    setBlockedTimes((prev) =>
+      prev.filter((blockedTime) => blockedTime.id !== id),
+    );
+  };
 
   return (
     <div>
-      <div className="mb-10 flex items-center gap-10">
-        <h1>Horários bloqueados:</h1>
-        <Link className="cursor-pointer" href="/panel/blocked-times/new">
-          Adicionar
-        </Link>
-      </div>
+      <PageHeader
+        title="Horários Bloqueados"
+        description="Gerencie os períodos em que a agenda de seus funcionários ficará indisponível."
+        action={<CreateBlockedTimeDialog />}
+      />
 
-      {blockedTimes.map((blockedTime) => (
-        <div key={blockedTime.id} className="flex items-center gap-5">
-          <p>{blockedTime.name}</p>
-          <p>{blockedTime.initialDate}</p>
-          <p>{blockedTime.finalDate}</p>
-          <Link
-            className="cursor-pointer"
-            href={`/panel/blocked-times/${blockedTime.id}/edit`}
-          >
-            Editar
-          </Link>
-          <button
-            className="cursor-pointer"
-            onClick={async () => {
-              await deleteBlockedTimesAction(blockedTime.id);
-              setBlockedTimes((prev) =>
-                prev.filter((blo) => blo.id !== blockedTime.id),
-              );
-            }}
-          >
-            DELETAR
-          </button>
-        </div>
-      ))}
+      <div className="bg-white rounded-2xl shadow shadow-neutral/20 overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b border-neutral/20">
+              {columns.map((column, index) => (
+                <th
+                  key={column}
+                  className={`text-left text-xs font-bold uppercase tracking-wider text-secondary px-5 py-3 ${
+                    index === 0 ? 'min-w-45' : ''
+                  }`}
+                >
+                  {column}
+                </th>
+              ))}
+              <th className="text-right text-xs font-bold uppercase tracking-wider text-secondary px-5 py-3">
+                Ações
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {blockedTimes.map((blockedTime) => (
+              <BlockedTimeRow
+                key={blockedTime.id}
+                blockedTime={blockedTime}
+                timezone={barbershop.timezone}
+                onDelete={handleDelete}
+              />
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
