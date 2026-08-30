@@ -36,10 +36,7 @@ function DialogOverlay({
   return (
     <DialogPrimitive.Overlay
       data-slot="dialog-overlay"
-      className={cn(
-        'fixed inset-0 isolate z-50 bg-black/10 duration-100 supports-backdrop-filter:backdrop-blur-xs data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0',
-        className,
-      )}
+      className={cn('dialog-overlay isolate', className)}
       {...props}
     />
   );
@@ -79,7 +76,7 @@ function DialogContent({
         >
           <div
             className={cn(
-              'relative my-auto grid w-full max-w-[calc(100%-1rem)] shrink-0 gap-4 rounded-2xl bg-white shadow shadow-neutral/20 sm:max-w-lg',
+              'dialog-surface relative my-auto max-w-[calc(100%-1rem)] shrink-0 sm:max-w-lg',
               className,
             )}
           >
@@ -103,10 +100,7 @@ function DialogHeader({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="dialog-header"
-      className={cn(
-        'flex items-center gap-3 border-b border-border/20 p-4 sm:px-6',
-        className,
-      )}
+      className={cn('dialog-header', className)}
       {...props}
     />
   );
@@ -123,10 +117,7 @@ function DialogFooter({
   return (
     <div
       data-slot="dialog-footer"
-      className={cn(
-        'flex flex-col-reverse gap-2 rounded-b-xl border-t border-border/20 p-4 sm:px-6 sm:flex-row sm:justify-end',
-        className,
-      )}
+      className={cn('dialog-footer', className)}
       {...props}
     >
       {children}
@@ -146,7 +137,7 @@ function DialogTitle({
   return (
     <DialogPrimitive.Title
       data-slot="dialog-title"
-      className={cn('text-lg leading-none font-bold', className)}
+      className={cn('dialog-title', className)}
       {...props}
     />
   );
@@ -159,10 +150,7 @@ function DialogDescription({
   return (
     <DialogPrimitive.Description
       data-slot="dialog-description"
-      className={cn(
-        'text-xs text-primary font-medium mt-1 *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground',
-        className,
-      )}
+      className={cn('dialog-description', className)}
       {...props}
     />
   );
