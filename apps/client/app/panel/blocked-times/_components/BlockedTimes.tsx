@@ -13,6 +13,13 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/src/components/ui/alert-dialog';
+import {
+  Table,
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/src/components/ui/table';
 import { useDeleteBlockedTime } from '../_hooks/useDeleteBlockedTime';
 import BlockedTimeRow from './BlockedTimeRow';
 import CreateBlockedTimeDialog from './CreateBlockedTimeDialog';
@@ -34,25 +41,18 @@ export default function BlockedTimes() {
       />
 
       <div className="bg-white rounded-2xl shadow shadow-neutral/20 overflow-x-auto">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border-neutral/20">
+        <Table>
+          <TableHeader>
+            <TableRow>
               {columns.map((column, index) => (
-                <th
-                  key={column}
-                  className={`text-left text-xs font-bold uppercase tracking-wider text-secondary px-5 py-3 ${
-                    index === 0 ? 'min-w-45' : ''
-                  }`}
-                >
+                <TableHead key={column} wide={index === 0}>
                   {column}
-                </th>
+                </TableHead>
               ))}
-              <th className="text-right text-xs font-bold uppercase tracking-wider text-secondary px-5 py-3">
-                Ações
-              </th>
-            </tr>
-          </thead>
-          <tbody>
+              <TableHead className="text-right">Ações</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {blockedTimes.map((blockedTime) => (
               <BlockedTimeRow
                 key={blockedTime.id}
@@ -62,8 +62,8 @@ export default function BlockedTimes() {
               />
             ))}
             {blockedTimes.length === 0 && <EmptyBlockedTimesRow />}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
 
       <AlertDialog

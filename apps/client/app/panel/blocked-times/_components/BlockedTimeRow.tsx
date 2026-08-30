@@ -3,6 +3,7 @@
 import { Clock, Trash2 } from 'lucide-react';
 
 import { Button } from '@/src/components/ui/button';
+import { TableCell, TableRow } from '@/src/components/ui/table';
 
 import { IBlockedTime } from '@/src/common/interfaces/employee-schedule';
 
@@ -26,19 +27,19 @@ export default function BlockedTimeRow({
   );
 
   return (
-    <tr className="border-b border-neutral/20 last:border-0">
-      <td className="px-5 py-3">
+    <TableRow>
+      <TableCell>
         <span className="font-bold text-black">{blockedTime.name}</span>
-      </td>
-      <td className="px-5 py-3 text-primary whitespace-nowrap">{startLabel}</td>
-      <td className="px-5 py-3 text-primary whitespace-nowrap">{endLabel}</td>
-      <td className="px-5 py-3">
+      </TableCell>
+      <TableCell className="text-primary whitespace-nowrap">{startLabel}</TableCell>
+      <TableCell className="text-primary whitespace-nowrap">{endLabel}</TableCell>
+      <TableCell>
         <span className="bg-foreground text-brand-accent text-xs font-bold px-2.5 py-1 rounded-full inline-flex items-center gap-1.5 whitespace-nowrap">
           <Clock className="size-4" />
           {durationLabel}
         </span>
-      </td>
-      <td className="px-5 py-3">
+      </TableCell>
+      <TableCell>
         <div className="flex items-center justify-end gap-2">
           <EditBlockedTimeDialog blockedTimeId={blockedTime.id} />
 
@@ -50,7 +51,7 @@ export default function BlockedTimeRow({
             <Trash2 className="size-4" />
           </Button>
         </div>
-      </td>
-    </tr>
+      </TableCell>
+    </TableRow>
   );
 }
