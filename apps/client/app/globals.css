@@ -127,5 +127,5 @@ body {
 }
 
 @utility dialog-description {
-  @apply text-xs text-primary mt-4 font-medium px-6 *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground;
+  @apply text-xs text-primary font-medium *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground;
 }
