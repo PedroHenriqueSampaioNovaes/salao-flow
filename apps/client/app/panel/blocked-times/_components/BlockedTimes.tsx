@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+
 import { usePanelContext } from '@/src/common/contexts/panel-context';
 
 import { showErrorToast, showSuccessToast } from '@/src/common/lib/toast';
@@ -7,6 +9,16 @@ import { showErrorToast, showSuccessToast } from '@/src/common/lib/toast';
 import deleteBlockedTimesAction from '@/app/actions/delete-blocked-times';
 
 import PageHeader from '@/app/panel/_components/PageHeader';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/src/components/ui/alert-dialog';
 import BlockedTimeRow from './BlockedTimeRow';
 import CreateBlockedTimeDialog from './CreateBlockedTimeDialog';
 
@@ -14,24 +26,27 @@ const columns = ['Nome', 'Início', 'Fim', 'Duração'];
 
 export default function BlockedTimes() {
   const { barbershop, blockedTimes, setBlockedTimes } = usePanelContext();
+  const [blockedTimeToDelete, setBlockedTimeToDelete] = useState<string | null>(
+    null,
+  );
 
-  const handleDelete = async (id: string) => {
-    if (!window.confirm('Tem certeza que deseja excluir este bloqueio?')) {
-      return;
-    }
+  const handleDelete = async () => {
+    if (!blockedTimeToDelete) return;
 
-    const { ok, error } = await deleteBlockedTimesAction(id);
+    const { ok, error } = await deleteBlockedTimesAction(blockedTimeToDelete);
 
     if (!ok) {
       showErrorToast(error);
+      setBlockedTimeToDelete(null);
       return;
     }
 
     showSuccessToast('Bloqueio de horário excluído com sucesso!');
 
     setBlockedTimes((prev) =>
-      prev.filter((blockedTime) => blockedTime.id !== id),
+      prev.filter((blockedTime) => blockedTime.id !== blockedTimeToDelete),
     );
+    setBlockedTimeToDelete(null);
   };
 
   return (
@@ -67,12 +82,33 @@ export default function BlockedTimes() {
                 key={blockedTime.id}
                 blockedTime={blockedTime}
                 timezone={barbershop.timezone}
-                onDelete={handleDelete}
+                onDelete={(id) => setBlockedTimeToDelete(id)}
               />
             ))}
           </tbody>
         </table>
       </div>
+
+      <AlertDialog
+        open={!!blockedTimeToDelete}
+        onOpenChange={(open) => !open && setBlockedTimeToDelete(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Excluir bloqueio de horário</AlertDialogTitle>
+          </AlertDialogHeader>
+          <AlertDialogDescription>
+            Tem certeza que deseja excluir este bloqueio? Essa ação não pode ser
+            desfeita.
+          </AlertDialogDescription>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete}>
+              Excluir bloqueio
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
