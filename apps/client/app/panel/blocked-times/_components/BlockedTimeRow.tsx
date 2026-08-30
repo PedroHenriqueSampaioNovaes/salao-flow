@@ -1,9 +1,9 @@
 'use client';
 
-import { Clock, Trash2 } from 'lucide-react';
+import { Clock } from 'lucide-react';
 
-import { Button } from '@/src/components/ui/button';
 import { TableCell, TableRow } from '@/src/components/ui/table';
+import { TrashButton } from '@/src/components/ui/trash-button';
 
 import { IBlockedTime } from '@/src/common/interfaces/employee-schedule';
 
@@ -43,13 +43,10 @@ export default function BlockedTimeRow({
         <div className="flex items-center justify-end gap-2">
           <EditBlockedTimeDialog blockedTimeId={blockedTime.id} />
 
-          <Button
+          <TrashButton
             onClick={() => onDelete(blockedTime.id)}
             aria-label="Excluir horário bloqueado"
-            className="size-8 p-0 rounded-full text-destructive hover:bg-destructive/10 shrink-0"
-          >
-            <Trash2 className="size-4" />
-          </Button>
+          />
         </div>
       </TableCell>
     </TableRow>
