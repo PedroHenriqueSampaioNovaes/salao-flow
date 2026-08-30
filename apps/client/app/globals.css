@@ -105,3 +105,27 @@ body {
 @utility input-error-message {
   @apply text-sm text-error;
 }
+
+@utility dialog-overlay {
+  @apply fixed inset-0 z-50 bg-black/10 duration-100 supports-backdrop-filter:backdrop-blur-xs data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0;
+}
+
+@utility dialog-surface {
+  @apply grid w-full gap-4 rounded-2xl bg-white shadow shadow-neutral/20;
+}
+
+@utility dialog-header {
+  @apply flex items-center gap-3 border-b border-border/20 p-4 sm:px-6;
+}
+
+@utility dialog-footer {
+  @apply flex flex-col-reverse gap-2 rounded-b-xl border-t border-border/20 p-4 sm:px-6 sm:flex-row sm:justify-end;
+}
+
+@utility dialog-title {
+  @apply text-lg leading-none font-bold;
+}
+
+@utility dialog-description {
+  @apply text-xs text-primary mt-4 font-medium px-6 *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground;
+}
