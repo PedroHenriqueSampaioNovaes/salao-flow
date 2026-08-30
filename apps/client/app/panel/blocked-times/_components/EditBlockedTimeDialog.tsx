@@ -3,11 +3,9 @@
 import { Suspense, useState } from 'react';
 import dynamic from 'next/dynamic';
 
-import { Pencil } from 'lucide-react';
-
 import { Dialog, DialogTrigger } from '@/src/components/ui/dialog';
 import Loading from '@/src/components/ui/loading';
-import { Button } from '@/src/components/ui/button';
+import { EditButton } from '@/src/components/ui/edit-button';
 
 const EditBlockedTimeDialogContent = dynamic(
   () => import('./EditBlockedTimeDialogContent'),
@@ -25,10 +23,7 @@ export default function EditBlockedTimeDialog({
   return (
     <Dialog open={open} onOpenChange={() => setOpen(!open)}>
       <DialogTrigger asChild>
-        <Button className="bg-white hover:bg-gray-50 font-bold text-xs px-3.5 py-1.5 rounded-full gap-1.5 shadow-xs border-gray-200 shrink-0">
-          <Pencil className="size-4" />
-          <span>Editar</span>
-        </Button>
+        <EditButton />
       </DialogTrigger>
 
       {open && (
