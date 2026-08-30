@@ -1,12 +1,6 @@
 'use client';
 
-import { useState } from 'react';
-
 import { usePanelContext } from '@/src/common/contexts/panel-context';
-
-import { showErrorToast, showSuccessToast } from '@/src/common/lib/toast';
-
-import deleteBlockedTimesAction from '@/app/actions/delete-blocked-times';
 
 import PageHeader from '@/app/panel/_components/PageHeader';
 import {
@@ -19,35 +13,16 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/src/components/ui/alert-dialog';
+import { useDeleteBlockedTime } from '../_hooks/useDeleteBlockedTime';
 import BlockedTimeRow from './BlockedTimeRow';
 import CreateBlockedTimeDialog from './CreateBlockedTimeDialog';
 
 const columns = ['Nome', 'Início', 'Fim', 'Duração'];
 
 export default function BlockedTimes() {
-  const { barbershop, blockedTimes, setBlockedTimes } = usePanelContext();
-  const [blockedTimeToDelete, setBlockedTimeToDelete] = useState<string | null>(
-    null,
-  );
-
-  const handleDelete = async () => {
-    if (!blockedTimeToDelete) return;
-
-    const { ok, error } = await deleteBlockedTimesAction(blockedTimeToDelete);
-
-    if (!ok) {
-      showErrorToast(error);
-      setBlockedTimeToDelete(null);
-      return;
-    }
-
-    showSuccessToast('Bloqueio de horário excluído com sucesso!');
-
-    setBlockedTimes((prev) =>
-      prev.filter((blockedTime) => blockedTime.id !== blockedTimeToDelete),
-    );
-    setBlockedTimeToDelete(null);
-  };
+  const { barbershop, blockedTimes } = usePanelContext();
+  const { blockedTimeToDelete, requestDelete, cancelDelete, confirmDelete } =
+    useDeleteBlockedTime();
 
   return (
     <div>
@@ -82,7 +57,7 @@ export default function BlockedTimes() {
                 key={blockedTime.id}
                 blockedTime={blockedTime}
                 timezone={barbershop.timezone}
-                onDelete={(id) => setBlockedTimeToDelete(id)}
+                onDelete={requestDelete}
               />
             ))}
             {blockedTimes.length === 0 && (
@@ -107,7 +82,7 @@ export default function BlockedTimes() {
 
       <AlertDialog
         open={!!blockedTimeToDelete}
-        onOpenChange={(open) => !open && setBlockedTimeToDelete(null)}
+        onOpenChange={(open) => !open && cancelDelete()}
       >
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -119,7 +94,7 @@ export default function BlockedTimes() {
           </AlertDialogDescription>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete}>
+            <AlertDialogAction onClick={confirmDelete}>
               Excluir bloqueio
             </AlertDialogAction>
           </AlertDialogFooter>
