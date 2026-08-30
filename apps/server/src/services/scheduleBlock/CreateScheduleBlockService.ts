@@ -50,6 +50,13 @@ export class CreateScheduleBlockService {
       barbershopId,
     );
 
-    return scheduleBlock;
+    return {
+      id: scheduleBlock.id,
+      barbershopId: scheduleBlock.barbershopId,
+      name: scheduleBlock.name,
+      initialDate: scheduleBlock.initialDate,
+      finalDate: scheduleBlock.finalDate,
+      employees: scheduleBlock.employees,
+    };
   }
 }

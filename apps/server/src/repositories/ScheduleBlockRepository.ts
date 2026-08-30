@@ -26,6 +26,14 @@ export class ScheduleBlockRepository {
           connect: data.employeeIds.map((id) => ({ id, barbershopId })),
         },
       },
+      include: {
+        employees: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
     });
 
     return scheduleBlock;
