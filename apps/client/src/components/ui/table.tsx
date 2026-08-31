@@ -69,7 +69,7 @@ function TableHead({
     <th
       data-slot="table-head"
       className={cn(
-        'text-left text-xs font-bold uppercase tracking-wider text-secondary px-5 py-3',
+        'text-left text-xs font-bold uppercase tracking-wider text-secondary px-5 py-3 border-b border-neutral/20',
         wide && 'min-w-45',
         className,
       )}
