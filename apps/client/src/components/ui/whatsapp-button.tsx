@@ -17,6 +17,7 @@ function WhatsAppButton({
     <Button
       onClick={onClick}
       aria-label={ariaLabel}
+      title={ariaLabel}
       className={cn(
         'size-8 p-0 rounded-full text-emerald-600 hover:bg-emerald-600/10 shrink-0',
         className,

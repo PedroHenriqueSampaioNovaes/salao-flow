@@ -12,6 +12,7 @@ function EditButton({ className, ...props }: IEditButtonProps) {
   return (
     <Button
       aria-label="Editar"
+      title="Editar"
       className={cn(
         'size-8 p-0 rounded-full text-primary hover:bg-primary/10 shrink-0',
         className,
