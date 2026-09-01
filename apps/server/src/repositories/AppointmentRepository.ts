@@ -146,4 +146,10 @@ export class AppointmentRepository {
       where: { customerId },
     });
   }
+
+  async deleteManyByEmployeeId(employeeId: number) {
+    await prisma.appointment.deleteMany({
+      where: { employeeId },
+    });
+  }
 }
