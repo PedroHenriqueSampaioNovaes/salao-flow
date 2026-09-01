@@ -1,6 +1,7 @@
 'use client';
 
 import { Ban, UserCog } from 'lucide-react';
+import { Controller } from 'react-hook-form';
 
 import { useEditClientForm } from '../_hooks/useEditClientForm';
 
@@ -90,10 +91,19 @@ export default function EditClientDialogContent({
                   <FieldTitle>Bloquear Cliente</FieldTitle>
                   <FieldDescription>Impede novos agendamentos</FieldDescription>
                 </FieldContent>
-                <Checkbox
-                  id="toggle-checkbox-2"
-                  name="toggle-checkbox-2"
-                  className="cursor-pointer"
+                <Controller
+                  name="isBlocked"
+                  control={control}
+                  render={({ field }) => (
+                    <Checkbox
+                      id="isBlocked"
+                      className="cursor-pointer"
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                      onBlur={field.onBlur}
+                      ref={field.ref}
+                    />
+                  )}
                 />
               </Field>
             </FieldLabel>
