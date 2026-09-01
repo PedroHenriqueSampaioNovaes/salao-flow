@@ -2,6 +2,7 @@
 
 import { TableCell, TableRow } from '@/src/components/ui/table';
 import { TrashButton } from '@/src/components/ui/trash-button';
+import { WhatsAppButton } from '@/src/components/ui/whatsapp-button';
 
 import { ICustomer } from '@/src/common/interfaces/customer';
 
@@ -37,6 +38,17 @@ export default function ClientRow({ client, onDelete }: IClientRowProps) {
       </TableCell>
       <TableCell>
         <div className="flex items-center justify-end gap-2">
+          <WhatsAppButton
+            onClick={() =>
+              window.open(
+                `https://wa.me/${client.phone.replace(/\D/g, '')}`,
+                '_blank',
+                'noopener,noreferrer',
+              )
+            }
+            aria-label="Conversar no WhatsApp"
+          />
+
           <EditClientDialog clientId={client.id} />
 
           <TrashButton
