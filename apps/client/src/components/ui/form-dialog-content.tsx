@@ -41,12 +41,12 @@ export function FormDialogHeader({
 }
 
 interface FormDialogFooterProps {
-  submitLabel: string;
+  submitLabel?: string;
   cancelLabel?: string;
 }
 
 export function FormDialogFooter({
-  submitLabel,
+  submitLabel = 'Editar',
   cancelLabel = 'Cancelar',
 }: FormDialogFooterProps) {
   return (
