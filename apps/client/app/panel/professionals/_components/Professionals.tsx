@@ -1,45 +1,94 @@
 'use client';
 
-import Link from 'next/link';
-
-import deleteEmployeeAction from '@/app/actions/delete-employee';
-
 import { usePanelContext } from '@/src/common/contexts/panel-context';
 
+import PageHeader from '../../_components/PageHeader';
+
+import CreateProfessionalDialog from './CreateProfessionalDialog';
+import ProfessionalRow from './ProfessionalRow';
+import EmptyProfessionalsRow from './EmptyProfessionalsRow';
+
+import { useDeleteProfessional } from '../_hooks/useDeleteProfessional';
+
+import {
+  Table,
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/src/components/ui/table';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/src/components/ui/alert-dialog';
+
+const columns = ['Profissional'];
+
 export default function Professionals() {
-  const { employees, setEmployees } = usePanelContext();
+  const { employees } = usePanelContext();
+  const { professionalToDelete, requestDelete, cancelDelete, confirmDelete } =
+    useDeleteProfessional();
 
   return (
     <div>
-      <div className="mb-10 flex items-center gap-10">
-        <h1>Profissionais:</h1>
-        <Link className="cursor-pointer" href="/panel/professionals/new">
-          Adicionar
-        </Link>
+      <PageHeader
+        title="Profissionais"
+        description="Gerencie a equipe que atende no seu empreendimento."
+        action={<CreateProfessionalDialog />}
+      />
+
+      <div className="bg-white rounded-2xl shadow shadow-neutral/20 overflow-x-auto">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              {columns.map((column, index) => (
+                <TableHead key={column} wide={index === 0}>
+                  {column}
+                </TableHead>
+              ))}
+              <TableHead className="text-right">Ações</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {employees.map((employee) => (
+              <ProfessionalRow
+                key={employee.id}
+                employee={employee}
+                onDelete={requestDelete}
+              />
+            ))}
+            {employees.length === 0 && <EmptyProfessionalsRow />}
+          </TableBody>
+        </Table>
       </div>
 
-      {employees.map((employee) => (
-        <div key={employee.id} className="flex items-center gap-5">
-          <p>{employee.name}</p>
-          <Link
-            className="cursor-pointer"
-            href={`/panel/professionals/${employee.id}/edit`}
-          >
-            Editar
-          </Link>
-          <button
-            className="cursor-pointer"
-            onClick={async () => {
-              await deleteEmployeeAction(employee.id);
-              setEmployees((prev) =>
-                prev.filter((emp) => emp.id !== employee.id),
-              );
-            }}
-          >
-            DELETAR
-          </button>
-        </div>
-      ))}
+      <AlertDialog
+        open={!!professionalToDelete}
+        onOpenChange={(open) => !open && cancelDelete()}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Excluir profissional</AlertDialogTitle>
+          </AlertDialogHeader>
+          <AlertDialogDescription>
+            Tem certeza que deseja excluir este profissional? Todos os
+            agendamentos relacionados a ele serão excluídos. Essa ação não pode
+            ser desfeita.
+          </AlertDialogDescription>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete}>
+              Excluir profissional
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
