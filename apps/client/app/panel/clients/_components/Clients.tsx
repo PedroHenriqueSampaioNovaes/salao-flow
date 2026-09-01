@@ -26,6 +26,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/src/components/ui/alert-dialog';
+import EmptyClientsRow from './EmptyClientsRow';
 
 const columns = ['Cliente', 'Telefone', 'Visitas', 'Status'];
 
@@ -62,6 +63,7 @@ export default function Clients() {
                 onDelete={requestDelete}
               />
             ))}
+            {clients.length === 0 && <EmptyClientsRow />}
           </TableBody>
         </Table>
       </div>
