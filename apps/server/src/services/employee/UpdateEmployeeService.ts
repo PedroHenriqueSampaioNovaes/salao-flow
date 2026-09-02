@@ -48,6 +48,12 @@ export class UpdateEmployeeService {
       newEmployeeData,
     );
 
-    return employeeUpdated;
+    return {
+      id: employeeUpdated.id,
+      employeeUpdatedId: employeeUpdated.employeeScheduleId,
+      image: employeeUpdated.image,
+      name: employeeUpdated.name,
+      services: employeeUpdated.services,
+    };
   }
 }

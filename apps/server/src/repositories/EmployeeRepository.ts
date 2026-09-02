@@ -121,6 +121,13 @@ export class EmployeeRepository {
         employeeScheduleId: true,
         name: true,
         image: true,
+        services: {
+          omit: {
+            createdAt: true,
+            updatedAt: true,
+            barbershopId: true,
+          },
+        },
       },
     });
 

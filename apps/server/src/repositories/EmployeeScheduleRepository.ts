@@ -30,9 +30,8 @@ export class EmployeeScheduleRepository {
           },
         },
       },
-      omit: {
-        isDefault: true,
-        barbershopId: true,
+      include: {
+        employeeScheduleWeekdays: true,
       },
     });
 
