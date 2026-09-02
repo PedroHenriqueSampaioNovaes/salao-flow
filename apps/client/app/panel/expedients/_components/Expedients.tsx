@@ -1,45 +1,91 @@
 'use client';
 
-import Link from 'next/link';
-
-import deleteExpedientAction from '@/app/actions/delete-expedient';
-
 import { usePanelContext } from '@/src/common/contexts/panel-context';
 
+import PageHeader from '../../_components/PageHeader';
+
+import CreateExpedientDialog from './CreateExpedientDialog';
+import ExpedientRow from './ExpedientRow';
+
+import { useDeleteExpedient } from '../_hooks/useDeleteExpedient';
+
+import {
+  Table,
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/src/components/ui/table';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/src/components/ui/alert-dialog';
+
+const columns = ['Expediente'];
+
 export default function Expedients() {
-  const { expedients, setExpedients } = usePanelContext();
+  const { expedients } = usePanelContext();
+  const { expedientToDelete, requestDelete, cancelDelete, confirmDelete } =
+    useDeleteExpedient();
 
   return (
     <div>
-      <div className="mb-10 flex items-center gap-10">
-        <h1>Expedientes:</h1>
-        <Link className="cursor-pointer" href="/panel/expedients/new">
-          Adicionar
-        </Link>
+      <PageHeader
+        title="Expedientes"
+        description="Gerencie os horários de funcionamento da sua equipe."
+        action={<CreateExpedientDialog />}
+      />
+
+      <div className="bg-white rounded-2xl shadow shadow-neutral/20 overflow-x-auto">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              {columns.map((column, index) => (
+                <TableHead key={column} wide={index === 0}>
+                  {column}
+                </TableHead>
+              ))}
+              <TableHead className="text-right">Ações</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {expedients.map((expedient) => (
+              <ExpedientRow
+                key={expedient.id}
+                expedient={expedient}
+                onDelete={requestDelete}
+              />
+            ))}
+          </TableBody>
+        </Table>
       </div>
 
-      {expedients.map((expedient) => (
-        <div key={expedient.id} className="flex items-center gap-5">
-          <p>{expedient.name}</p>
-          <Link
-            className="cursor-pointer"
-            href={`/panel/expedients/${expedient.id}/edit`}
-          >
-            Editar
-          </Link>
-          <button
-            className="cursor-pointer"
-            onClick={async () => {
-              await deleteExpedientAction(expedient.id);
-              setExpedients((prev) =>
-                prev.filter((emp) => emp.id !== expedient.id),
-              );
-            }}
-          >
-            DELETAR
-          </button>
-        </div>
-      ))}
+      <AlertDialog
+        open={!!expedientToDelete}
+        onOpenChange={(open) => !open && cancelDelete()}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Excluir expediente</AlertDialogTitle>
+          </AlertDialogHeader>
+          <AlertDialogDescription>
+            Tem certeza que deseja excluir este expediente? Essa ação não pode
+            ser desfeita.
+          </AlertDialogDescription>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete}>
+              Excluir expediente
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
