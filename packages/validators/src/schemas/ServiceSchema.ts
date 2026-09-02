@@ -24,8 +24,12 @@ function validateEmployeeAssignment(
 const baseServiceSchema = z.object({
   name: z.string().min(1, 'Nome é obrigatório.'),
   description: z.string().optional(),
-  price: z.number('Obrigatório definir o preço do serviço.').min(0.01),
-  duration: z.number('Obrigatório definir o tempo de duração do serviço.'),
+  price: z
+    .number('Obrigatório definir o preço do serviço.')
+    .min(0.01, 'O preço tem que ser maior que R$ 0,01.'),
+  duration: z
+    .number('Obrigatório definir o tempo de duração do serviço.')
+    .min(1, 'Os minutos tem que ser maior que 0.'),
   status: z.boolean(),
   assignToAllEmployees: z.boolean(),
   employeeIds: z.array(z.number()).optional(),
