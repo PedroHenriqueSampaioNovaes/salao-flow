@@ -19,19 +19,20 @@ export function useCreateServiceForm({
 }: UseCreateServiceFormProps) {
   const { setServices } = usePanelContext();
 
-  const { register, handleSubmit, control, formState } =
-    useForm<ServiceSchema>({
+  const { register, handleSubmit, control, formState } = useForm<ServiceSchema>(
+    {
       resolver: zodResolver(serviceSchema),
       defaultValues: {
         name: '',
         description: '',
         price: 0,
-        duration: 0,
+        duration: undefined,
         status: true,
         assignToAllEmployees: true,
         employeeIds: [],
       },
-    });
+    },
+  );
 
   async function onSubmit(data: ServiceSchema) {
     const {
