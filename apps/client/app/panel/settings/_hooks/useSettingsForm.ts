@@ -3,6 +3,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
+import { showErrorToast, showSuccessToast } from '@/src/common/lib/toast';
+
 import {
   UpdateBarbershopSchema,
   updateBarbershopSchema,
@@ -40,8 +42,14 @@ export function useSettingsForm() {
       error,
     } = await updateBarbershopAction(data);
 
-    if (!ok) return alert(error);
+    if (!ok) {
+      showErrorToast(
+        error || 'Ocorreu um erro inesperado ao tentar atualizar.',
+      );
+      return;
+    }
 
+    showSuccessToast('Dados atualizados com sucesso.');
     setBarbershop((prev) => ({ ...prev, ...barbershopUpdated! }));
   }
 
