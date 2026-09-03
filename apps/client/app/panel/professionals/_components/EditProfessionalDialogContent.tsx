@@ -32,7 +32,7 @@ export default function EditProfessionalDialogContent({
   employeeId,
   closeDialog,
 }: IEditProfessionalDialogContentProps) {
-  const { register, handleSubmit, errors, employeeSchedules } =
+  const { register, handleSubmit, errors, expedients } =
     useEditProfessionalForm({ employeeId, closeDialog });
 
   return (
@@ -63,7 +63,7 @@ export default function EditProfessionalDialogContent({
               aria-invalid={!!errors.employeeScheduleId}
               {...register('employeeScheduleId')}
             >
-              {employeeSchedules.map((employeeSchedule) => (
+              {expedients.map((employeeSchedule) => (
                 <NativeSelectOption
                   key={employeeSchedule.id}
                   value={employeeSchedule.id}
