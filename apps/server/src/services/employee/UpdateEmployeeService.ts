@@ -50,7 +50,7 @@ export class UpdateEmployeeService {
 
     return {
       id: employeeUpdated.id,
-      employeeUpdatedId: employeeUpdated.employeeScheduleId,
+      employeeScheduleId: employeeUpdated.employeeScheduleId,
       image: employeeUpdated.image,
       name: employeeUpdated.name,
       services: employeeUpdated.services,
