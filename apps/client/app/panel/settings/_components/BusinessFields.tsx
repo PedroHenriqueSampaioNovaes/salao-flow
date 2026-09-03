@@ -31,7 +31,7 @@ export default function BusinessFields() {
       description="Configure o nome, e-mail e o fuso horário"
     >
       <div className="flex flex-col gap-4">
-        <Field data-invalid={!!errors.businessName}>
+        <Field data-invalid={!!errors.businessName} className="max-w-md">
           <FieldLabel htmlFor="businessName">Nome comercial</FieldLabel>
           <Input
             id="businessName"
@@ -42,7 +42,7 @@ export default function BusinessFields() {
           <FieldError>{errors.businessName?.message}</FieldError>
         </Field>
 
-        <Field data-invalid={!!errors.address}>
+        <Field data-invalid={!!errors.address} className="max-w-md">
           <FieldLabel htmlFor="address">Endereço</FieldLabel>
           <Input
             id="address"
@@ -53,7 +53,7 @@ export default function BusinessFields() {
           <FieldError>{errors.address?.message}</FieldError>
         </Field>
 
-        <Field data-invalid={!!errors.timezone}>
+        <Field data-invalid={!!errors.timezone} className="max-w-md">
           <FieldLabel htmlFor="timezone">Fuso horário</FieldLabel>
           <NativeSelect
             id="timezone"

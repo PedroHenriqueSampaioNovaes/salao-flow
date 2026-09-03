@@ -20,7 +20,7 @@ export default function SocialMediaFields() {
       description="Exibidas abaixo do resumo do agendamento na página de agendamento"
     >
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <Field data-invalid={!!errors.whatsAppUrl}>
+        <Field data-invalid={!!errors.whatsAppUrl} className="max-w-md">
           <FieldLabel htmlFor="whatsAppUrl">WhatsApp</FieldLabel>
           <Input
             id="whatsAppUrl"
@@ -31,7 +31,7 @@ export default function SocialMediaFields() {
           <FieldError>{errors.whatsAppUrl?.message}</FieldError>
         </Field>
 
-        <Field data-invalid={!!errors.instagramUrl}>
+        <Field data-invalid={!!errors.instagramUrl} className="max-w-md">
           <FieldLabel htmlFor="instagramUrl">Instagram</FieldLabel>
           <Input
             id="instagramUrl"
@@ -42,7 +42,7 @@ export default function SocialMediaFields() {
           <FieldError>{errors.instagramUrl?.message}</FieldError>
         </Field>
 
-        <Field data-invalid={!!errors.facebookUrl}>
+        <Field data-invalid={!!errors.facebookUrl} className="max-w-md">
           <FieldLabel htmlFor="facebookUrl">Facebook</FieldLabel>
           <Input
             id="facebookUrl"

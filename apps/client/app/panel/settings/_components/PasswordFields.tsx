@@ -20,7 +20,7 @@ export default function PasswordFields() {
       description="Informe a senha atual e as novas senhas para confirmar a alteração"
     >
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <Field data-invalid={!!errors.currentPassword}>
+        <Field data-invalid={!!errors.currentPassword} className="max-w-md">
           <FieldLabel htmlFor="currentPassword">Senha atual</FieldLabel>
           <PasswordInputToggle
             id="currentPassword"
@@ -30,7 +30,7 @@ export default function PasswordFields() {
           <FieldError>{errors.currentPassword?.message}</FieldError>
         </Field>
 
-        <Field data-invalid={!!errors.password}>
+        <Field data-invalid={!!errors.password} className="max-w-md">
           <FieldLabel htmlFor="password">Nova senha</FieldLabel>
           <PasswordInputToggle
             id="password"
@@ -40,7 +40,7 @@ export default function PasswordFields() {
           <FieldError>{errors.password?.message}</FieldError>
         </Field>
 
-        <Field data-invalid={!!errors.confirmPassword}>
+        <Field data-invalid={!!errors.confirmPassword} className="max-w-md">
           <FieldLabel htmlFor="confirmPassword">
             Confirmar nova senha
           </FieldLabel>

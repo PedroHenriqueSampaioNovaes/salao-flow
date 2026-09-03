@@ -23,7 +23,7 @@ export default function AccountFields() {
       description="Como você é identificado no painel"
     >
       <div className="flex flex-col gap-4">
-        <Field data-invalid={!!errors.name}>
+        <Field data-invalid={!!errors.name} className="max-w-md">
           <FieldLabel htmlFor="name">Nome</FieldLabel>
           <Input
             id="name"
@@ -34,7 +34,7 @@ export default function AccountFields() {
           <FieldError>{errors.name?.message}</FieldError>
         </Field>
 
-        <Field data-invalid={!!errors.email}>
+        <Field data-invalid={!!errors.email} className="max-w-md">
           <FieldLabel htmlFor="email">E-mail</FieldLabel>
           <Input
             id="email"
@@ -50,6 +50,7 @@ export default function AccountFields() {
           label="Telefone"
           name="phone"
           control={control}
+          className="max-w-md"
           placeholder="Ex.: (11) 98814-8020"
           error={errors.phone?.message}
         />
