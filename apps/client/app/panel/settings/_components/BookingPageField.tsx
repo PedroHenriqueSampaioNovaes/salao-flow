@@ -5,7 +5,12 @@ import { useFormContext } from 'react-hook-form';
 import { UpdateBarbershopSchema } from '@sistema-barbearia/validators';
 
 import { Input } from '@/src/components/ui/input';
-import { Field, FieldError, FieldLabel } from '@/src/components/ui/field';
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldLabel,
+} from '@/src/components/ui/field';
 
 import SettingsCard from './SettingsCard';
 
@@ -31,15 +36,10 @@ export default function BookingPageField() {
     >
       <Field data-invalid={!!errors.slug} className="max-w-md">
         <FieldLabel htmlFor="slug">URL da página de agendamento</FieldLabel>
-        <div className="flex items-center rounded-lg border border-border/20 px-3 has-focus:border-accent has-focus:ring-2 has-focus:ring-accent/25">
-          <span className="text-sm text-secondary shrink-0">{origin}/</span>
-          <Input
-            id="slug"
-            aria-invalid={!!errors.slug}
-            className="border-0 px-1 focus:ring-0 focus:border-0"
-            {...register('slug')}
-          />
-        </div>
+        <Input id="slug" aria-invalid={!!errors.slug} {...register('slug')} />
+        <FieldDescription className="-mt-1! text-xs">
+          Exemplo: {origin}/meu-negocio
+        </FieldDescription>
         <FieldError>{errors.slug?.message}</FieldError>
       </Field>
     </SettingsCard>
