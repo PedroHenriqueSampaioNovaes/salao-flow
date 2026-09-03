@@ -12,14 +12,14 @@ import { cn } from '@/src/lib/utils';
 import { Checkbox } from '@/src/components/ui/checkbox';
 import { Input } from '@/src/components/ui/input';
 
-const WEEKDAY_NAMES = [
-  { name: 'Segunda-feira', index: 1 },
-  { name: 'Terça-feira', index: 2 },
-  { name: 'Quarta-feira', index: 3 },
-  { name: 'Quinta-feira', index: 4 },
-  { name: 'Sexta-feira', index: 5 },
-  { name: 'Sábado', index: 6 },
-  { name: 'Domingo', index: 0 },
+const WEEKDAY_INFOS = [
+  { name: 'Segunda-feira', weekdayIndex: 1 },
+  { name: 'Terça-feira', weekdayIndex: 2 },
+  { name: 'Quarta-feira', weekdayIndex: 3 },
+  { name: 'Quinta-feira', weekdayIndex: 4 },
+  { name: 'Sexta-feira', weekdayIndex: 5 },
+  { name: 'Sábado', weekdayIndex: 6 },
+  { name: 'Domingo', weekdayIndex: 7 },
 ];
 
 const timeInputClassName =
@@ -38,8 +38,12 @@ export function ExpedientWeekdayFields({
 }: IExpedientWeekdayFieldsProps) {
   return (
     <div className="flex flex-col gap-3">
-      {WEEKDAY_NAMES.map(({ name, index }) => {
-        const isWorkingDay = watch(`weekdays.${index}.isWorkingDay`);
+      {WEEKDAY_INFOS.map(({ name, weekdayIndex }) => {
+        const weekdays = watch('weekdays');
+        const index = weekdays.findIndex(
+          ({ weekday }) => weekday === weekdayIndex,
+        );
+        const isWorkingDay = weekdays[index].isWorkingDay;
 
         return (
           <div

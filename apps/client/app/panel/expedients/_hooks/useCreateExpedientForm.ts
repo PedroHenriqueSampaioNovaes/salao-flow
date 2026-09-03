@@ -15,7 +15,7 @@ import { showErrorToast, showSuccessToast } from '@/src/common/lib/toast';
 
 function buildDefaultWeekdays(): EmployeeScheduleSchema['weekdays'] {
   return Array.from({ length: 7 }, (_, i) => ({
-    weekday: i,
+    weekday: i || 7,
     isWorkingDay: true,
     start: '09:00',
     startLunch: '12:00',
