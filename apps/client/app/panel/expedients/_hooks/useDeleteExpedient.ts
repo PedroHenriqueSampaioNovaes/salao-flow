@@ -9,7 +9,7 @@ import { showErrorToast, showSuccessToast } from '@/src/common/lib/toast';
 import deleteExpedientAction from '@/app/actions/delete-expedient';
 
 export function useDeleteExpedient() {
-  const { setExpedients } = usePanelContext();
+  const { setEmployees, setExpedients, expedients } = usePanelContext();
   const [expedientToDelete, setExpedientToDelete] = useState<string | null>(
     null,
   );
@@ -29,6 +29,18 @@ export function useDeleteExpedient() {
 
     setExpedients((prev) =>
       prev.filter((expedient) => expedient.id !== expedientToDelete),
+    );
+
+    const defaultExpedient = expedients.find(
+      (expedient) => expedient.isDefault,
+    )!;
+
+    setEmployees((prev) =>
+      prev.map((employee) =>
+        employee.employeeScheduleId === expedientToDelete
+          ? { ...employee, employeeScheduleId: defaultExpedient.id }
+          : employee,
+      ),
     );
     setExpedientToDelete(null);
   };
