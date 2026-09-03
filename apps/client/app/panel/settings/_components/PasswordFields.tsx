@@ -3,7 +3,7 @@
 import { useFormContext } from 'react-hook-form';
 import { UpdateBarbershopSchema } from '@sistema-barbearia/validators';
 
-import { Input } from '@/src/components/ui/input';
+import { PasswordInputToggle } from '@/src/components/ui/password-input-toggle';
 import { Field, FieldError, FieldLabel } from '@/src/components/ui/field';
 
 import SettingsCard from './SettingsCard';
@@ -22,9 +22,8 @@ export default function PasswordFields() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <Field data-invalid={!!errors.currentPassword}>
           <FieldLabel htmlFor="currentPassword">Senha atual</FieldLabel>
-          <Input
+          <PasswordInputToggle
             id="currentPassword"
-            type="password"
             aria-invalid={!!errors.currentPassword}
             {...register('currentPassword')}
           />
@@ -33,9 +32,8 @@ export default function PasswordFields() {
 
         <Field data-invalid={!!errors.password}>
           <FieldLabel htmlFor="password">Nova senha</FieldLabel>
-          <Input
+          <PasswordInputToggle
             id="password"
-            type="password"
             aria-invalid={!!errors.password}
             {...register('password')}
           />
@@ -46,9 +44,8 @@ export default function PasswordFields() {
           <FieldLabel htmlFor="confirmPassword">
             Confirmar nova senha
           </FieldLabel>
-          <Input
+          <PasswordInputToggle
             id="confirmPassword"
-            type="password"
             aria-invalid={!!errors.confirmPassword}
             {...register('confirmPassword')}
           />
