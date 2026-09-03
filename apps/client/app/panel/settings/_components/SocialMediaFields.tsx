@@ -1,0 +1,58 @@
+'use client';
+
+import { useFormContext } from 'react-hook-form';
+import { UpdateBarbershopSchema } from '@sistema-barbearia/validators';
+
+import { Input } from '@/src/components/ui/input';
+import { Field, FieldError, FieldLabel } from '@/src/components/ui/field';
+
+import SettingsCard from './SettingsCard';
+
+export default function SocialMediaFields() {
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext<UpdateBarbershopSchema>();
+
+  return (
+    <SettingsCard
+      title="Redes sociais"
+      description="Exibidas abaixo do resumo do agendamento na página de agendamento"
+    >
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <Field data-invalid={!!errors.whatsAppUrl}>
+          <FieldLabel htmlFor="whatsAppUrl">WhatsApp</FieldLabel>
+          <Input
+            id="whatsAppUrl"
+            aria-invalid={!!errors.whatsAppUrl}
+            placeholder="Ex.: wa.me/5511988148020"
+            {...register('whatsAppUrl')}
+          />
+          <FieldError>{errors.whatsAppUrl?.message}</FieldError>
+        </Field>
+
+        <Field data-invalid={!!errors.instagramUrl}>
+          <FieldLabel htmlFor="instagramUrl">Instagram</FieldLabel>
+          <Input
+            id="instagramUrl"
+            aria-invalid={!!errors.instagramUrl}
+            placeholder="Ex.: instagram.com/seunegocio"
+            {...register('instagramUrl')}
+          />
+          <FieldError>{errors.instagramUrl?.message}</FieldError>
+        </Field>
+
+        <Field data-invalid={!!errors.facebookUrl}>
+          <FieldLabel htmlFor="facebookUrl">Facebook</FieldLabel>
+          <Input
+            id="facebookUrl"
+            aria-invalid={!!errors.facebookUrl}
+            placeholder="Ex.: facebook.com/seunegocio"
+            {...register('facebookUrl')}
+          />
+          <FieldError>{errors.facebookUrl?.message}</FieldError>
+        </Field>
+      </div>
+    </SettingsCard>
+  );
+}
