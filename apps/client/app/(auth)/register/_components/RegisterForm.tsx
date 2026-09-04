@@ -23,7 +23,6 @@ export function RegisterForm() {
   return (
     <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-[0_1px_3px_rgba(73,81,93,0.2)]">
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
-
         <h1 className="text-center text-2xl font-bold text-tertiary leading-none">
           Criar conta
         </h1>
@@ -47,7 +46,7 @@ export function RegisterForm() {
               htmlFor="businessName"
               className="font-bold text-primary"
             >
-              Nome do negócio
+              Nome do estabelecimento
             </FieldLabel>
             <Input
               id="businessName"
