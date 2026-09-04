@@ -8,6 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { usePanelContext } from '@/src/common/contexts/panel-context';
 
 import getAvailableTimeSlotsForBookingAction from '@/app/actions/get-available-time-slots-for-booking';
+import getEmployeesAction from '@/app/actions/get-employees';
 
 import { showErrorToast, showSuccessToast } from '@/src/common/lib/toast';
 
@@ -24,12 +25,29 @@ interface IUseNewAppointmentDialogParams {
 export function useNewAppointmentDialog({
   closeDialog,
 }: IUseNewAppointmentDialogParams) {
-  const { employees, barbershop } = usePanelContext();
+  const { barbershop } = usePanelContext();
+
+  const { data: employees = [], isLoading: isLoadingEmployees } = useQuery({
+    queryKey: ['employees'],
+    queryFn: async () => {
+      const { data, error, ok } = await getEmployeesAction();
+
+      if (!ok) {
+        showErrorToast(error || 'Erro ao buscar profissionais.');
+        return [];
+      }
+
+      return data ?? [];
+    },
+    staleTime: Infinity,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
 
   const methods = useForm<BookingFormSchema>({
     resolver: zodResolver(bookingFormSchema),
     defaultValues: {
-      employeeId: employees[0].id,
+      employeeId: 0,
       serviceIds: [],
       date: '',
       time: '',
@@ -40,7 +58,11 @@ export function useNewAppointmentDialog({
   });
   const { setValue } = methods;
 
-  const [selectedEmployee, setSelectedEmployee] = useState(employees[0]);
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState<number>();
+
+  const selectedEmployee =
+    employees.find((employee) => employee.id === selectedEmployeeId) ??
+    employees[0];
 
   const {
     data: timeSlotsByProfessionalAndDate,
@@ -65,9 +87,13 @@ export function useNewAppointmentDialog({
     refetchOnMount: 'always',
   });
 
-  const selectedEmployeeServices = selectedEmployee.services;
+  const selectedEmployeeServices = selectedEmployee?.services ?? [];
 
   useEffect(() => {
+    if (!selectedEmployee) return;
+
+    setValue('employeeId', selectedEmployee.id);
+
     if (!timeSlotsByProfessionalAndDate) return;
 
     const employee = timeSlotsByProfessionalAndDate.employees.find(
@@ -79,9 +105,7 @@ export function useNewAppointmentDialog({
   }, [selectedEmployee, timeSlotsByProfessionalAndDate, setValue]);
 
   const onSelectEmployee = (employeeId: number) => {
-    const employee = employees.find((employee) => employee.id === employeeId)!;
-
-    setSelectedEmployee(employee);
+    setSelectedEmployeeId(employeeId);
     setValue('serviceIds', []);
     setValue('employeeId', employeeId);
     setValue('time', '');
@@ -103,12 +127,16 @@ export function useNewAppointmentDialog({
   };
 
   const isReady =
-    !isLoadingSlots && isFetchedAfterMount && !!timeSlotsByProfessionalAndDate;
+    !isLoadingEmployees &&
+    !isLoadingSlots &&
+    isFetchedAfterMount &&
+    !!timeSlotsByProfessionalAndDate &&
+    !!selectedEmployee;
 
   return {
     methods,
     barbershop,
-    selectedEmployeeId: selectedEmployee.id,
+    selectedEmployeeId: selectedEmployee?.id,
     selectedEmployeeServices,
     onSelectEmployee,
     timeSlotsByProfessionalAndDate,

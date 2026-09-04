@@ -2,6 +2,7 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useQueryClient } from '@tanstack/react-query';
 import { serviceSchema, ServiceSchema } from '@sistema-barbearia/validators';
 
 import createServiceAction from '@/app/actions/create-service';
@@ -18,6 +19,7 @@ export function useCreateServiceForm({
   closeDialog,
 }: UseCreateServiceFormProps) {
   const { setServices } = usePanelContext();
+  const queryClient = useQueryClient();
 
   const { register, handleSubmit, control, formState } = useForm<ServiceSchema>(
     {
@@ -50,6 +52,7 @@ export function useCreateServiceForm({
     }
 
     setServices((prev) => [...prev, serviceResponse!]);
+    queryClient.invalidateQueries({ queryKey: ['employees'] });
 
     showSuccessToast('Serviço criado com sucesso!');
     closeDialog();
