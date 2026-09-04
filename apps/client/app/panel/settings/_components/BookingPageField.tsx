@@ -15,11 +15,11 @@ import {
 import SettingsCard from './SettingsCard';
 
 const noopSubscribe = () => () => {};
-const getOriginSnapshot = () => window.location.origin;
+const getOriginSnapshot = () => window.location.host;
 const getOriginServerSnapshot = () => '';
 
 export default function BookingPageField() {
-  const origin = useSyncExternalStore(
+  const host = useSyncExternalStore(
     noopSubscribe,
     getOriginSnapshot,
     getOriginServerSnapshot,
@@ -38,7 +38,7 @@ export default function BookingPageField() {
         <FieldLabel htmlFor="slug">URL da página de agendamento</FieldLabel>
         <Input id="slug" aria-invalid={!!errors.slug} {...register('slug')} />
         <FieldDescription className="-mt-1! text-xs">
-          Exemplo: {origin}/meu-negocio
+          Exemplo: {host}/<strong>meu-negocio</strong>
         </FieldDescription>
         <FieldError>{errors.slug?.message}</FieldError>
       </Field>
