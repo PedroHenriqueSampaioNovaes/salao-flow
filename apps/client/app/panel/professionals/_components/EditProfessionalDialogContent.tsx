@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { UserCog } from 'lucide-react';
 
 import { useEditProfessionalForm } from '../_hooks/useEditProfessionalForm';
@@ -74,6 +75,14 @@ export default function EditProfessionalDialogContent({
             </NativeSelect>
             <FieldError>{errors.employeeScheduleId?.message}</FieldError>
           </Field>
+
+          <p className="text-left text-sm leading-normal font-normal text-primary">
+            A criação de serviços está disponível em{' '}
+            <Link href="/panel/services" className="link">
+              serviços
+            </Link>
+            .
+          </p>
         </FieldGroup>
 
         <FormDialogFooter />
