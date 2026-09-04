@@ -21,7 +21,8 @@ export function useCreateBlockedTimeForm({
 }: UseCreateBlockedTimeFormProps) {
   const { setBlockedTimes, employees } = usePanelContext();
 
-  const { register, handleSubmit, formState, control } = useBlockedTimesForm();
+  const { register, handleSubmit, formState, control, getValues } =
+    useBlockedTimesForm();
 
   const onSubmit: SubmitHandler<CreateScheduleBlockFormData> = async (data) => {
     const {
@@ -50,5 +51,6 @@ export function useCreateBlockedTimeForm({
     errors: formState.errors,
     control,
     employees,
+    getValues,
   };
 }
