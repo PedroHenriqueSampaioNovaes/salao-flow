@@ -10,6 +10,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/src/components/ui/popover';
+import { inputStyles } from './input';
 
 interface MultiSelectOption {
   value: string;
@@ -123,7 +124,8 @@ function MultiSelect({
           disabled={disabled}
           onKeyDown={handleTriggerKeyDown}
           className={cn(
-            'flex w-full min-w-0 h-10.5 items-center justify-between gap-2 rounded-lg border border-border/20 bg-transparent px-3 py-2 text-left text-sm transition-colors outline-none focus:border-accent focus:ring-2 data-[state=open]:ring-2 focus:ring-accent/20 data-[state=open]:border-accent data-[state=open]:ring-accent/20 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
+            'flex items-center justify-between text-left',
+            inputStyles,
             className,
           )}
         >
