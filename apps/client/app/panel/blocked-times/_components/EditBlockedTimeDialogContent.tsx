@@ -28,7 +28,7 @@ export default function EditBlockedTimeDialogContent({
   closeDialog,
   blockedTimeId,
 }: IEditBlockedTimeDialogContentProps) {
-  const { register, handleSubmit, errors, control, employees } =
+  const { register, handleSubmit, errors, control, employees, currentDate } =
     useEditBlockedTimeForm({ blockedTimeId, closeDialog });
 
   return (
@@ -81,6 +81,7 @@ export default function EditBlockedTimeDialogContent({
                 id="initialDate"
                 type="date"
                 aria-invalid={!!errors.initialDate}
+                min={currentDate}
                 {...register('initialDate')}
               />
               <FieldError>{errors.initialDate?.message}</FieldError>
@@ -105,6 +106,7 @@ export default function EditBlockedTimeDialogContent({
                 id="finalDate"
                 type="date"
                 aria-invalid={!!errors.finalDate}
+                min={currentDate}
                 {...register('finalDate')}
               />
               <FieldError>{errors.finalDate?.message}</FieldError>

@@ -21,18 +21,17 @@ export function useBlockedTimesForm({
 }: UseBlockedTimesFormProps = {}) {
   const { barbershop } = usePanelContext();
 
+  const currentDate = dateToInputDate(
+    new Date(barbershop.instantLocalTime),
+    barbershop.timezone,
+  );
+
   const methods = useForm<CreateScheduleBlockFormData>({
     resolver: zodResolver(createScheduleBlockFormData),
     defaultValues: {
       name: '',
-      initialDate: dateToInputDate(
-        new Date(barbershop.instantLocalTime),
-        barbershop.timezone,
-      ),
-      finalDate: dateToInputDate(
-        new Date(barbershop.instantLocalTime),
-        barbershop.timezone,
-      ),
+      initialDate: currentDate,
+      finalDate: currentDate,
       initialTime: '',
       finalTime: '',
       employeeIds: [],
@@ -40,5 +39,5 @@ export function useBlockedTimesForm({
     },
   });
 
-  return methods;
+  return { ...methods, currentDate };
 }

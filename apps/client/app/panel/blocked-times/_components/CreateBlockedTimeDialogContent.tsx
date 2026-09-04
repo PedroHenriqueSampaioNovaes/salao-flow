@@ -28,7 +28,7 @@ interface ICreateBlockedTimeDialogContentProps {
 export default function CreateBlockedTimeDialogContent({
   closeDialog,
 }: ICreateBlockedTimeDialogContentProps) {
-  const { register, handleSubmit, errors, control, employees, getValues } =
+  const { register, handleSubmit, errors, control, employees, currentDate } =
     useCreateBlockedTimeForm({ closeDialog });
 
   return (
@@ -81,7 +81,7 @@ export default function CreateBlockedTimeDialogContent({
                 id="initialDate"
                 type="date"
                 aria-invalid={!!errors.initialDate}
-                min={getValues('initialDate')}
+                min={currentDate}
                 {...register('initialDate')}
               />
               <FieldError>{errors.initialDate?.message}</FieldError>
@@ -106,7 +106,7 @@ export default function CreateBlockedTimeDialogContent({
                 id="finalDate"
                 type="date"
                 aria-invalid={!!errors.finalDate}
-                min={getValues('initialDate')}
+                min={currentDate}
                 {...register('finalDate')}
               />
               <FieldError>{errors.finalDate?.message}</FieldError>

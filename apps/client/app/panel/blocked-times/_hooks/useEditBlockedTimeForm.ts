@@ -29,28 +29,29 @@ export function useEditBlockedTimeForm({
 
   const blockedTime = blockedTimes.find((e) => e.id === blockedTimeId);
 
-  const { register, handleSubmit, formState, control } = useBlockedTimesForm({
-    defaultValues: {
-      name: blockedTime?.name || '',
-      initialDate: dateToInputDate(
-        blockedTime?.initialDate ?? '',
-        barbershop.timezone,
-      ),
-      finalDate: dateToInputDate(
-        blockedTime?.finalDate ?? '',
-        barbershop.timezone,
-      ),
-      initialTime: dateToInputTime(
-        blockedTime?.initialDate ?? '',
-        barbershop.timezone,
-      ),
-      finalTime: dateToInputTime(
-        blockedTime?.finalDate ?? '',
-        barbershop.timezone,
-      ),
-      employeeIds: blockedTime?.employees.map((e) => String(e.id)) ?? [],
-    },
-  });
+  const { register, handleSubmit, formState, control, currentDate } =
+    useBlockedTimesForm({
+      defaultValues: {
+        name: blockedTime?.name || '',
+        initialDate: dateToInputDate(
+          blockedTime?.initialDate ?? '',
+          barbershop.timezone,
+        ),
+        finalDate: dateToInputDate(
+          blockedTime?.finalDate ?? '',
+          barbershop.timezone,
+        ),
+        initialTime: dateToInputTime(
+          blockedTime?.initialDate ?? '',
+          barbershop.timezone,
+        ),
+        finalTime: dateToInputTime(
+          blockedTime?.finalDate ?? '',
+          barbershop.timezone,
+        ),
+        employeeIds: blockedTime?.employees.map((e) => String(e.id)) ?? [],
+      },
+    });
 
   const onSubmit: SubmitHandler<CreateScheduleBlockFormData> = async (data) => {
     if (!blockedTime) return;
@@ -83,5 +84,6 @@ export function useEditBlockedTimeForm({
     errors: formState.errors,
     control,
     employees,
+    currentDate,
   };
 }
