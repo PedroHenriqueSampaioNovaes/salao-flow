@@ -16,6 +16,7 @@ import { SidebarProvider } from '@/src/common/contexts/sidebar-context';
 
 import Aside from './_components/Aside';
 import Header from './_components/Header';
+import LoadingScreen from '@/src/components/ui/loading-screen';
 
 export const metadata: Metadata = {
   title: 'SalãoFlow',
@@ -40,9 +41,7 @@ export default async function PanelLayout({
         <Header barbershop={barbershop} />
         <div className="max-lg:px-4 pb-4 pt-[calc(var(--header)+2.25rem)] lg:pl-[calc(var(--sidebar)+1rem)] lg:pr-4">
           <main className="max-w-300 w-full mx-auto">
-            <Suspense
-              fallback={<p className="p-4 text-center">Carregando...</p>}
-            >
+            <Suspense fallback={<LoadingScreen message="Carregando..." />}>
               <PanelData barbershop={barbershop}>{children}</PanelData>
             </Suspense>
           </main>

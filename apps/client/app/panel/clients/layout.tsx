@@ -4,6 +4,8 @@ import { ClientsProvider } from '@/src/common/contexts/clients-context';
 
 import getClientsAction from '@/app/actions/get-clients';
 
+import LoadingScreen from '@/src/components/ui/loading-screen';
+
 async function ClientsDataLoader({ children }: { children: React.ReactNode }) {
   const { data: clients, ok } = await getClientsAction();
 
@@ -20,7 +22,7 @@ export default async function ClientsLayout({
   children: React.ReactNode;
 }) {
   return (
-    <Suspense fallback={<p>Carregando clientes...</p>}>
+    <Suspense fallback={<LoadingScreen message="Buscando clientes..." />}>
       <ClientsDataLoader>{children}</ClientsDataLoader>
     </Suspense>
   );
