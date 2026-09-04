@@ -3,6 +3,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { serviceSchema, ServiceSchema } from '@sistema-barbearia/validators';
+import { useQueryClient } from '@tanstack/react-query';
 
 import updateServiceAction from '@/app/actions/update-service';
 
@@ -20,6 +21,7 @@ export function useEditServiceForm({
   closeDialog,
 }: UseEditServiceFormProps) {
   const { services, setServices } = usePanelContext();
+  const queryClient = useQueryClient();
 
   const service = services.find((s) => s.id === serviceId);
 
@@ -58,6 +60,7 @@ export function useEditServiceForm({
       prev.map((s) => (s.id === serviceId ? serviceUpdated! : s)),
     );
 
+    queryClient.invalidateQueries({ queryKey: ['employees'] });
     showSuccessToast('Serviço atualizado com sucesso!');
     closeDialog();
   };
