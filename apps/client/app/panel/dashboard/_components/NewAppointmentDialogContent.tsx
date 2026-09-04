@@ -67,7 +67,7 @@ export default function NewAppointmentDialogContent({
     control,
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = methods;
 
   if (!isReady || !timeSlotsByProfessionalAndDate) {
@@ -213,7 +213,10 @@ export default function NewAppointmentDialogContent({
             </Field>
           </FieldGroup>
 
-          <FormDialogFooter submitLabel="Criar Agendamento" />
+          <FormDialogFooter
+            submitLabel="Criar Agendamento"
+            isSubmitting={isSubmitting}
+          />
         </form>
       </DialogContent>
     </FormProvider>

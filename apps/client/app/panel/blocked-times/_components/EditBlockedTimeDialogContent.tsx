@@ -28,8 +28,15 @@ export default function EditBlockedTimeDialogContent({
   closeDialog,
   blockedTimeId,
 }: IEditBlockedTimeDialogContentProps) {
-  const { register, handleSubmit, errors, control, employees, currentDate } =
-    useEditBlockedTimeForm({ blockedTimeId, closeDialog });
+  const {
+    register,
+    handleSubmit,
+    errors,
+    isSubmitting,
+    control,
+    employees,
+    currentDate,
+  } = useEditBlockedTimeForm({ blockedTimeId, closeDialog });
 
   return (
     <DialogContent showCloseButton={false}>
@@ -126,7 +133,7 @@ export default function EditBlockedTimeDialogContent({
           </div>
         </FieldGroup>
 
-        <FormDialogFooter submitLabel="Editar" />
+        <FormDialogFooter submitLabel="Editar" isSubmitting={isSubmitting} />
       </form>
     </DialogContent>
   );

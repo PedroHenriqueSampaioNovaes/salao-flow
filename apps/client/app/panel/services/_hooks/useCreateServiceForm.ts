@@ -63,5 +63,6 @@ export function useCreateServiceForm({
     handleSubmit: handleSubmit(onSubmit),
     control,
     errors: formState.errors,
+    isSubmitting: formState.isSubmitting,
   };
 }

@@ -71,5 +71,6 @@ export function useEditExpedientForm({
     control,
     watch,
     errors: formState.errors,
+    isSubmitting: formState.isSubmitting,
   };
 }

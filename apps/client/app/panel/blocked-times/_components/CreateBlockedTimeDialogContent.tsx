@@ -28,8 +28,15 @@ interface ICreateBlockedTimeDialogContentProps {
 export default function CreateBlockedTimeDialogContent({
   closeDialog,
 }: ICreateBlockedTimeDialogContentProps) {
-  const { register, handleSubmit, errors, control, employees, currentDate } =
-    useCreateBlockedTimeForm({ closeDialog });
+  const {
+    register,
+    handleSubmit,
+    errors,
+    isSubmitting,
+    control,
+    employees,
+    currentDate,
+  } = useCreateBlockedTimeForm({ closeDialog });
 
   return (
     <DialogContent showCloseButton={false}>
@@ -126,7 +133,7 @@ export default function CreateBlockedTimeDialogContent({
           </div>
         </FieldGroup>
 
-        <FormDialogFooter submitLabel="Criar" />
+        <FormDialogFooter submitLabel="Criar" isSubmitting={isSubmitting} />
       </form>
     </DialogContent>
   );

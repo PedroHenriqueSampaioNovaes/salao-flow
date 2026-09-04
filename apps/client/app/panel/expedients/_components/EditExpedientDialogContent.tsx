@@ -29,7 +29,7 @@ export default function EditExpedientDialogContent({
   expedientId,
   closeDialog,
 }: IEditExpedientDialogContentProps) {
-  const { register, handleSubmit, control, watch, errors } =
+  const { register, handleSubmit, control, watch, errors, isSubmitting } =
     useEditExpedientForm({ expedientId, closeDialog });
 
   return (
@@ -63,7 +63,7 @@ export default function EditExpedientDialogContent({
           </Field>
         </FieldGroup>
 
-        <FormDialogFooter />
+        <FormDialogFooter isSubmitting={isSubmitting} />
       </form>
     </DialogContent>
   );

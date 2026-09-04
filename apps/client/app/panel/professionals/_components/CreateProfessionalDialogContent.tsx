@@ -31,7 +31,7 @@ interface ICreateProfessionalDialogContentProps {
 export default function CreateProfessionalDialogContent({
   closeDialog,
 }: ICreateProfessionalDialogContentProps) {
-  const { register, handleSubmit, errors, employeeSchedules } =
+  const { register, handleSubmit, errors, isSubmitting, employeeSchedules } =
     useCreateProfessionalForm({ closeDialog });
 
   return (
@@ -83,7 +83,7 @@ export default function CreateProfessionalDialogContent({
           </p>
         </FieldGroup>
 
-        <FormDialogFooter submitLabel="Criar" />
+        <FormDialogFooter submitLabel="Criar" isSubmitting={isSubmitting} />
       </form>
     </DialogContent>
   );

@@ -27,8 +27,14 @@ interface ICreateExpedientDialogContentProps {
 export default function CreateExpedientDialogContent({
   closeDialog,
 }: ICreateExpedientDialogContentProps) {
-  const { register, handleSubmit, control, watch, errors } =
-    useCreateExpedientForm({ closeDialog });
+  const {
+    register,
+    handleSubmit,
+    control,
+    watch,
+    errors,
+    isSubmitting,
+  } = useCreateExpedientForm({ closeDialog });
 
   return (
     <DialogContent showCloseButton={false} className="sm:max-w-lg">
@@ -61,7 +67,7 @@ export default function CreateExpedientDialogContent({
           </Field>
         </FieldGroup>
 
-        <FormDialogFooter submitLabel="Criar" />
+        <FormDialogFooter submitLabel="Criar" isSubmitting={isSubmitting} />
       </form>
     </DialogContent>
   );

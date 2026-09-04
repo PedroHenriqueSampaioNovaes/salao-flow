@@ -65,6 +65,7 @@ export function useEditClientForm({
   return {
     register,
     handleSubmit: handleSubmit(onSubmit),
+    isSubmitting: formState.isSubmitting,
     errors: formState.errors,
     control,
   };

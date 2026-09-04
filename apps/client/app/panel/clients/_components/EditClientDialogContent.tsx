@@ -34,10 +34,11 @@ export default function EditClientDialogContent({
   clientId,
   closeDialog,
 }: IEditClientDialogContentProps) {
-  const { register, handleSubmit, errors, control } = useEditClientForm({
-    clientId,
-    closeDialog,
-  });
+  const { register, handleSubmit, errors, isSubmitting, control } =
+    useEditClientForm({
+      clientId,
+      closeDialog,
+    });
 
   return (
     <DialogContent showCloseButton={false}>
@@ -111,7 +112,7 @@ export default function EditClientDialogContent({
           </Field>
         </FieldGroup>
 
-        <FormDialogFooter />
+        <FormDialogFooter isSubmitting={isSubmitting} />
       </form>
     </DialogContent>
   );

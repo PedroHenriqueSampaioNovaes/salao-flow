@@ -27,9 +27,10 @@ interface ICreateClientDialogContentProps {
 export default function CreateClientDialogContent({
   closeDialog,
 }: ICreateClientDialogContentProps) {
-  const { register, handleSubmit, errors, control } = useCreateClientForm({
-    closeDialog,
-  });
+  const { register, handleSubmit, errors, isSubmitting, control } =
+    useCreateClientForm({
+      closeDialog,
+    });
 
   return (
     <DialogContent showCloseButton={false}>
@@ -73,7 +74,7 @@ export default function CreateClientDialogContent({
           </Field>
         </FieldGroup>
 
-        <FormDialogFooter submitLabel="Criar" />
+        <FormDialogFooter submitLabel="Criar" isSubmitting={isSubmitting} />
       </form>
     </DialogContent>
   );

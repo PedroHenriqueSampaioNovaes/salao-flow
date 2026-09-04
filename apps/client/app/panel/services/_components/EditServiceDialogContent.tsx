@@ -35,10 +35,11 @@ export default function EditServiceDialogContent({
   serviceId,
   closeDialog,
 }: IEditServiceDialogContentProps) {
-  const { register, handleSubmit, control, errors } = useEditServiceForm({
-    serviceId,
-    closeDialog,
-  });
+  const { register, handleSubmit, control, errors, isSubmitting } =
+    useEditServiceForm({
+      serviceId,
+      closeDialog,
+    });
 
   const { employees } = usePanelContext();
 
@@ -162,7 +163,7 @@ export default function EditServiceDialogContent({
           )}
         </FieldGroup>
 
-        <FormDialogFooter />
+        <FormDialogFooter isSubmitting={isSubmitting} />
       </form>
     </DialogContent>
   );

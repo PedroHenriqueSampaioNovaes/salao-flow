@@ -82,6 +82,7 @@ export function useEditBlockedTimeForm({
     register,
     handleSubmit: handleSubmit(onSubmit),
     errors: formState.errors,
+    isSubmitting: formState.isSubmitting,
     control,
     employees,
     currentDate,

@@ -10,6 +10,7 @@ import {
   DialogTitle,
 } from '@/src/components/ui/dialog';
 import { Button } from '@/src/components/ui/button';
+import LoadingSecondary from './loading-secondary';
 
 interface FormDialogHeaderProps {
   Icon: LucideIcon;
@@ -43,11 +44,13 @@ export function FormDialogHeader({
 interface FormDialogFooterProps {
   submitLabel?: string;
   cancelLabel?: string;
+  isSubmitting?: boolean;
 }
 
 export function FormDialogFooter({
   submitLabel = 'Editar',
   cancelLabel = 'Cancelar',
+  isSubmitting = false,
 }: FormDialogFooterProps) {
   return (
     <DialogFooter>
@@ -61,9 +64,10 @@ export function FormDialogFooter({
       </DialogClose>
       <Button
         type="submit"
-        className="bg-brand-accent text-white hover:bg-accent px-5 cursor-pointer"
+        className="min-w-40 bg-brand-accent text-white hover:bg-accent px-5 cursor-pointer"
+        disabled={isSubmitting}
       >
-        {submitLabel}
+        {isSubmitting ? <LoadingSecondary /> : submitLabel}
       </Button>
     </DialogFooter>
   );

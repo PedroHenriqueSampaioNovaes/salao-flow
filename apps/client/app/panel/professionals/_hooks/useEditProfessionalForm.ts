@@ -56,6 +56,7 @@ export function useEditProfessionalForm({
   return {
     register,
     handleSubmit: handleSubmit(onSubmit),
+    isSubmitting: formState.isSubmitting,
     errors: formState.errors,
     expedients,
   };

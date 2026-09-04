@@ -25,8 +25,8 @@ export function useEditServiceForm({
 
   const service = services.find((s) => s.id === serviceId);
 
-  const { register, handleSubmit, control, formState } =
-    useForm<ServiceSchema>({
+  const { register, handleSubmit, control, formState } = useForm<ServiceSchema>(
+    {
       resolver: zodResolver(serviceSchema),
       defaultValues: {
         name: service?.name || '',
@@ -37,7 +37,8 @@ export function useEditServiceForm({
         assignToAllEmployees: service?.assignToAllEmployees ?? true,
         employeeIds: service?.employees.map((employee) => employee.id) ?? [],
       },
-    });
+    },
+  );
 
   const onSubmit = async (data: ServiceSchema) => {
     if (!service) return;
@@ -70,5 +71,6 @@ export function useEditServiceForm({
     handleSubmit: handleSubmit(onSubmit),
     control,
     errors: formState.errors,
+    isSubmitting: formState.isSubmitting,
   };
 }

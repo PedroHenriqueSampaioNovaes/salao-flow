@@ -76,6 +76,7 @@ export function useCreateProfessionalForm({
   return {
     register,
     handleSubmit: handleSubmit(onSubmit),
+    isSubmitting: formState.isSubmitting,
     errors: formState.errors,
     employeeSchedules,
   };

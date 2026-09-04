@@ -33,7 +33,7 @@ export default function EditProfessionalDialogContent({
   employeeId,
   closeDialog,
 }: IEditProfessionalDialogContentProps) {
-  const { register, handleSubmit, errors, expedients } =
+  const { register, handleSubmit, errors, isSubmitting, expedients } =
     useEditProfessionalForm({ employeeId, closeDialog });
 
   return (
@@ -85,7 +85,7 @@ export default function EditProfessionalDialogContent({
           </p>
         </FieldGroup>
 
-        <FormDialogFooter />
+        <FormDialogFooter isSubmitting={isSubmitting} />
       </form>
     </DialogContent>
   );

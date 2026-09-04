@@ -33,7 +33,7 @@ interface ICreateServiceDialogContentProps {
 export default function CreateServiceDialogContent({
   closeDialog,
 }: ICreateServiceDialogContentProps) {
-  const { register, handleSubmit, control, errors } = useCreateServiceForm({
+  const { register, handleSubmit, control, errors, isSubmitting } = useCreateServiceForm({
     closeDialog,
   });
 
@@ -159,7 +159,7 @@ export default function CreateServiceDialogContent({
           )}
         </FieldGroup>
 
-        <FormDialogFooter submitLabel="Criar" />
+        <FormDialogFooter submitLabel="Criar" isSubmitting={isSubmitting} />
       </form>
     </DialogContent>
   );

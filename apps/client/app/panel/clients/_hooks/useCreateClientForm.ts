@@ -55,6 +55,7 @@ export function useCreateClientForm({ closeDialog }: UseCreateClientFormProps) {
   return {
     register,
     handleSubmit: handleSubmit(onSubmit),
+    isSubmitting: formState.isSubmitting,
     errors: formState.errors,
     control,
   };
