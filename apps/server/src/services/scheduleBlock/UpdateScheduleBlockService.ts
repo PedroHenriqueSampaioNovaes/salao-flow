@@ -9,6 +9,7 @@ import { BarbershopRepository } from '@/src/repositories/BarbershopRepository.js
 import { UpdateScheduleBlockSchema } from '@sistema-barbearia/validators';
 
 import { AppError } from '@/src/errors/AppError.js';
+import { extractDateAndTimeFromISOString } from '@/src/utils/scheduleHelpers.js';
 
 export class UpdateScheduleBlockService {
   async execute(
@@ -46,7 +47,6 @@ export class UpdateScheduleBlockService {
       ).toString(),
       employeeIds: data.employeeIds,
     };
-
     if (data.initialDate && data.initialTime) {
       const [year, month, day] = data.initialDate.split('-').map(Number);
       const [hour, minute] = data.initialTime.split(':').map(Number);
@@ -77,6 +77,21 @@ export class UpdateScheduleBlockService {
       })
         .toInstant()
         .toString();
+    }
+
+    const initial = extractDateAndTimeFromISOString(updateData.initialDate!);
+    const final = extractDateAndTimeFromISOString(updateData.finalDate!);
+
+    if (final.date < initial.date) {
+      throw new AppError(
+        'Data final deve ser igual ou superior a data inicial',
+      );
+    }
+
+    if (final.date === initial.date && initial.time >= final.time) {
+      throw new AppError(
+        'O horário final deve ser maior que o horário inicial no mesmo dia',
+      );
     }
 
     const updatedScheduleBlock = await scheduleBlockRepository.update(

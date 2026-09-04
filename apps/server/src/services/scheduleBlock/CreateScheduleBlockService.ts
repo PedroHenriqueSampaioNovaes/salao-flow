@@ -5,14 +5,31 @@ import { BarbershopRepository } from '@/src/repositories/BarbershopRepository.js
 
 import { CreateScheduleBlockSchema } from '@sistema-barbearia/validators';
 
+import { AppError } from '@/src/errors/AppError.js';
+
 export class CreateScheduleBlockService {
   async execute(data: CreateScheduleBlockSchema, barbershopId: number) {
     const scheduleBlockRepository = new ScheduleBlockRepository();
     const barbershopRepository = new BarbershopRepository();
 
+    if (data.finalDate < data.initialDate) {
+      throw new AppError(
+        'Data final deve ser igual ou superior a data inicial',
+      );
+    }
+
+    if (
+      data.finalDate === data.initialDate &&
+      data.initialTime >= data.finalTime
+    ) {
+      throw new AppError(
+        'O horário final deve ser maior que o horário inicial no mesmo dia',
+      );
+    }
+
     const barbershop = await barbershopRepository.getById(barbershopId);
     if (!barbershop) {
-      throw new Error('Barbearia não encontrada');
+      throw new AppError('Barbearia não encontrada');
     }
 
     const [year, month, day] = data.initialDate.split('-').map(Number);

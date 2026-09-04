@@ -144,3 +144,9 @@ export function formatMinutesAsTime(totalMinutes: number) {
   const mins = String(totalMinutes % 60).padStart(2, '0');
   return `${hours}:${mins}`;
 }
+
+export function extractDateAndTimeFromISOString(isoString: string) {
+  const [date, time] = isoString.split('T');
+
+  return { date, time: time.slice(0, 5) };
+}
