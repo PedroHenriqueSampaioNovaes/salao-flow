@@ -29,7 +29,12 @@ export class CreateAppointmentService {
     private readonly customerRepository = new CustomerRepository(),
   ) {}
 
-  async execute(data: CreateAppointmentSchema) {
+  async execute(
+    data: CreateAppointmentSchema,
+    options?: { isPanelRequest?: boolean },
+  ) {
+    const isPanelRequest = options?.isPanelRequest ?? false;
+
     const barbershop = await this.barbershopRepository.getBySlug(
       data.barbershopSlug,
     );
@@ -109,6 +114,7 @@ export class CreateAppointmentService {
     const customer = await this.getOrCreateOrUpdateCustomer(
       data,
       barbershop.id,
+      isPanelRequest,
     );
 
     const appointmentCreated = await this.appointmentRepository.create(
@@ -149,6 +155,7 @@ export class CreateAppointmentService {
   private async getOrCreateOrUpdateCustomer(
     data: Pick<CreateAppointmentSchema, 'name' | 'phone' | 'email'>,
     barbershopId: number,
+    isDashboardRequest: boolean,
   ) {
     const customer = await this.customerRepository.getByPhone(
       data.phone,
@@ -157,7 +164,11 @@ export class CreateAppointmentService {
 
     if (customer) {
       if (customer.isBlocked) {
-        throw new AppError('Não foi possível reservar o horário.');
+        throw new AppError(
+          isDashboardRequest
+            ? 'Cliente bloqueado.'
+            : 'Não foi possível reservar o horário.',
+        );
       }
 
       return this.customerRepository.updateProfileAndVisitCount({
