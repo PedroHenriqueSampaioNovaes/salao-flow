@@ -168,4 +168,16 @@ export class AppointmentRepository {
       where: { employeeId },
     });
   }
+
+  async deleteManyOlderThan(date: Date) {
+    const { count } = await prisma.appointment.deleteMany({
+      where: {
+        date: {
+          lt: date,
+        },
+      },
+    });
+
+    return count;
+  }
 }
