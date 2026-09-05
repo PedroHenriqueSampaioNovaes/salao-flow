@@ -123,7 +123,7 @@ export class CreateAppointmentService {
         totalServiceDuration,
         employeeId: data.employeeId,
         customerId: customer.id,
-        serviceIds: data.serviceIds,
+        services,
       },
       barbershop.id,
     );

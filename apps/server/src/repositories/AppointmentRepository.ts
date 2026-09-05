@@ -1,11 +1,18 @@
 import { prisma } from '@/src/lib/prisma.js';
 
+interface AppointmentServiceSnapshot {
+  id: string;
+  name: string;
+  price: number;
+  duration: number;
+}
+
 export interface AppointmentData {
   dateString: string;
   totalServiceDuration: number;
   employeeId: number;
   customerId: number;
-  serviceIds: string[];
+  services: AppointmentServiceSnapshot[];
 }
 
 interface EmployeeShift {
@@ -22,8 +29,13 @@ export class AppointmentRepository {
         employeeId: data.employeeId,
         customerId: data.customerId,
         totalServiceDuration: data.totalServiceDuration,
-        services: {
-          connect: data.serviceIds.map((id) => ({ id })),
+        appointmentServices: {
+          create: data.services.map((service) => ({
+            name: service.name,
+            price: service.price,
+            duration: service.duration,
+            serviceId: service.id,
+          })),
         },
       },
       include: {
@@ -40,7 +52,7 @@ export class AppointmentRepository {
             name: true,
           },
         },
-        services: {
+        appointmentServices: {
           select: {
             name: true,
             price: true,
@@ -56,7 +68,8 @@ export class AppointmentRepository {
       },
     });
 
-    return appointment;
+    const { appointmentServices, ...rest } = appointment;
+    return { ...rest, services: appointmentServices };
   }
 
   async getById(id: string) {
@@ -117,7 +130,7 @@ export class AppointmentRepository {
             name: true,
           },
         },
-        services: {
+        appointmentServices: {
           select: {
             name: true,
             price: true,
@@ -132,7 +145,10 @@ export class AppointmentRepository {
       },
     });
 
-    return appointments;
+    return appointments.map(({ appointmentServices, ...rest }) => ({
+      ...rest,
+      services: appointmentServices,
+    }));
   }
 
   async delete(id: string) {

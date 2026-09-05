@@ -136,8 +136,8 @@ model Service {
   barbershopId Int
   barbershop   Barbershop @relation(fields: [barbershopId], references: [id])
 
-  employees    Employee[]
-  appointments Appointment[]
+  employees           Employee[]
+  appointmentServices AppointmentService[]
 }
 
 model Appointment {
@@ -155,9 +155,23 @@ model Appointment {
   customerId   Int
   customer     Customer   @relation(fields: [customerId], references: [id])
 
-  services Service[]
+  appointmentServices AppointmentService[]
 
   @@index([date])
+}
+
+model AppointmentService {
+  id       String @id @default(uuid())
+  name     String
+  price    Int
+  duration Int
+
+  appointmentId String
+  appointment   Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+  serviceId     String?
+  service       Service?    @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
 }
 
 model ScheduleBlock {
