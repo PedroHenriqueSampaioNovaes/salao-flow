@@ -69,6 +69,7 @@ export class EmployeeRepository {
         },
         barbershopId,
       },
+      orderBy: { createdAt: 'asc' },
     });
 
     return employees;
@@ -93,6 +94,7 @@ export class EmployeeRepository {
       where: {
         barbershopId,
       },
+      orderBy: { createdAt: 'asc' },
       include: {
         services: {
           where: {
@@ -144,6 +146,7 @@ export class EmployeeRepository {
           },
         },
       },
+      orderBy: { createdAt: 'asc' },
       omit: {
         createdAt: true,
         updatedAt: true,

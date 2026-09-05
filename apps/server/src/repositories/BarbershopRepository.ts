@@ -156,6 +156,7 @@ export class BarbershopRepository {
       where: { slug },
       include: {
         employees: {
+          orderBy: { createdAt: 'asc' },
           select: {
             id: true,
             name: true,
