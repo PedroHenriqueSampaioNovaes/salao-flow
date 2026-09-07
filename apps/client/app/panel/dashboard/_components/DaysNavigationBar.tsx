@@ -25,7 +25,7 @@ export default function DaysNavigationBar({
     <div className="p-4 lg:px-6 flex items-center justify-between">
       <button
         onClick={() => moveDay(-1)}
-        className="size-8 sm:size-9 rounded-full border border-border/20 flex items-center justify-center text-gray-600 hover:bg-foreground focus:bg-foreground transition-colors cursor-pointer shrink-0"
+        className="size-8 sm:size-9 rounded-full border border-border/20 flex items-center justify-center text-gray-600 hover:bg-foreground focus-visible:bg-foreground transition-colors cursor-pointer shrink-0"
       >
         <ChevronLeft className="size-4" />
       </button>
@@ -54,7 +54,7 @@ export default function DaysNavigationBar({
 
       <button
         onClick={() => moveDay(1)}
-        className="size-8 sm:size-9 rounded-full border border-border/20 flex items-center justify-center text-gray-600 hover:bg-foreground focus:bg-foreground transition-colors cursor-pointer shrink-0"
+        className="size-8 sm:size-9 rounded-full border border-border/20 flex items-center justify-center text-gray-600 hover:bg-foreground focus-visible:bg-foreground transition-colors cursor-pointer shrink-0"
       >
         <ChevronRight className="size-4" />
       </button>
