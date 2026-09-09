@@ -4,7 +4,7 @@ import { AppError } from '@/src/errors/AppError.js';
 
 import { BarbershopRepository } from '@/src/repositories/BarbershopRepository.js';
 
-import { sendMail } from '@/src/lib/nodemailer.js';
+import { sendMail } from '@/src/lib/resend.js';
 
 interface ForgotPasswordRequest {
   email: string;
@@ -36,7 +36,7 @@ export class ForgotPasswordService {
     await sendMail(
       barbershop.email,
       'Recuperação de Senha',
-      `<p>Você solicitou a recuperação de senha.</p><p>Clique no link abaixo para redefinir sua senha:</p><p><a href="${resetLink}">Redefinir Senha</a></p><p>Este link expira em 15 minutos.</p>`,
+      `<h1>Recuperação de Senha</h1><p>Você solicitou a recuperação de senha.</p><p>Clique no link abaixo para redefinir sua senha:</p><p><a href="${resetLink}">Redefinir Senha</a></p><p>Este link expira em 15 minutos.</p>`,
     );
 
     return {
