@@ -23,7 +23,7 @@ SaaS de agendamento para barbearias: cada barbearia tem sua própria página pú
 | Camada | Tecnologias |
 |---|---|
 | Frontend | Next.js 16, React 19, TypeScript, Tailwind CSS 4, React Query, React Hook Form, Shadcn/ui, Radix UI |
-| Backend | Node.js, Express 5, Prisma ORM 7, PostgreSQL, JWT, Socket.io |
+| Backend | Node.js, Express 5, Prisma ORM 7, PostgreSQL, JWT, Socket.io, Resend |
 | Validação | Zod, em um pacote compartilhado entre client e server |
 | Qualidade | Jest + Testing Library (client), Husky, Commitlint (Conventional Commits) |
 | Infra | Monorepo com npm workspaces, deploy na Vercel |
