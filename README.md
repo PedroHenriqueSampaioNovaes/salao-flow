@@ -16,6 +16,7 @@ SaaS de agendamento para barbearias: cada barbearia tem sua própria página pú
 - **Autenticação** com login e cadastro, sessão via JWT
 - **Notificações em tempo real** entre painel e agenda via Socket.io
 - **Rotina automática (cron)** para limpar agendamentos antigos do banco
+- **Envio de e-mails transacionais** para exibir os detalhes do agendamento ao cliente, resete de senha e avisar a barbearia sobre novo agendamento
 
 ## Stack
 
