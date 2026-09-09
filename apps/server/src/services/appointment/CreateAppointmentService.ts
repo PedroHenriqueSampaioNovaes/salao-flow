@@ -19,6 +19,9 @@ import {
   EmployeeWithSchedule,
 } from '@/src/utils/scheduleHelpers.js';
 
+import { sendMail } from '@/src/lib/resend.js';
+import { formatPrice } from '@/src/utils/formatPrice.js';
+
 export class CreateAppointmentService {
   constructor(
     private readonly employeeRepository = new EmployeeRepository(),
@@ -128,7 +131,56 @@ export class CreateAppointmentService {
       barbershop.id,
     );
 
+    await this.sendConfirmationEmail(
+      data.email,
+      appointmentCreated.services,
+      data.date,
+      data.time,
+      employee.name,
+    );
+
     return { appointment: appointmentCreated, barbershopId: barbershop.id };
+  }
+
+  private async sendConfirmationEmail(
+    customerEmail: string,
+    services: { name: string; price: number }[],
+    date: string,
+    time: string,
+    employeeName: string,
+  ) {
+    const totalPrice = services.reduce(
+      (sum, service) => sum + service.price,
+      0,
+    );
+
+    const [year, month, day] = date.split('-').map(Number);
+    const formattedDate = `${String(day).padStart(2, '0')}/${String(
+      month,
+    ).padStart(2, '0')}/${year}`;
+
+    const servicesListHtml = services
+      .map(
+        (service) => `<li>${service.name} - ${formatPrice(service.price)}</li>`,
+      )
+      .join('');
+
+    try {
+      await sendMail(
+        customerEmail,
+        'Confirmação de Agendamento',
+        `<h1>Agendamento Confirmado</h1>
+        <p>Seu agendamento foi realizado com sucesso. Confira os detalhes abaixo:</p>
+        <p><strong>Data:</strong> ${formattedDate}</p>
+        <p><strong>Horário:</strong> ${time}</p>
+        <p><strong>Profissional:</strong> ${employeeName}</p>
+        <p><strong>Serviços:</strong></p>
+        <ul>${servicesListHtml}</ul>
+        <p><strong>Total:</strong> ${formatPrice(totalPrice)}</p>`,
+      );
+    } catch (error) {
+      console.error('Erro ao enviar e-mail de confirmação:', error);
+    }
   }
 
   private async checkScheduleBlock(
