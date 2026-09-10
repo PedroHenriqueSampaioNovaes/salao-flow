@@ -15,8 +15,18 @@ const employeeScheduleWeekdays = Array.from({ length: 7 }).map((_, index) => ({
   end: '18:00',
 }));
 
+interface StripeSubscriptionData {
+  customerId: string;
+  subscriptionId: string;
+  priceId: string;
+  trialEndsAt: Date;
+}
+
 export class BarbershopRepository {
-  async create(data: CreateBarbershop) {
+  async create(
+    data: CreateBarbershop,
+    stripeSubscription: StripeSubscriptionData,
+  ) {
     const barbershop = await prisma.barbershop.create({
       data: {
         name: data.name,
@@ -28,10 +38,14 @@ export class BarbershopRepository {
         image: data.image,
         slug: data.slug!,
         timezone: data.timezone,
+        customerId: stripeSubscription.customerId,
         subscription: {
           create: {
-            plan: 'FREE',
-            status: 'ACTIVE',
+            plan: 'PROFISSIONAL',
+            status: 'TRIALING',
+            subscriptionId: stripeSubscription.subscriptionId,
+            priceId: stripeSubscription.priceId,
+            trialEndsAt: stripeSubscription.trialEndsAt,
           },
         },
         employeeSchedules: {

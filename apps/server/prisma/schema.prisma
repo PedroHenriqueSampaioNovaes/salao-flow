@@ -43,10 +43,12 @@ model Barbershop {
 }
 
 model Subscription {
-  id      String  @id @default(uuid())
-  status  String
-  plan    Plan
-  priceId String?
+  id             String   @id @default(uuid())
+  status         String
+  plan           Plan
+  priceId        String
+  subscriptionId String   @unique
+  trialEndsAt    DateTime
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -56,7 +58,6 @@ model Subscription {
 }
 
 enum Plan {
-  FREE
   PROFISSIONAL
 }
 

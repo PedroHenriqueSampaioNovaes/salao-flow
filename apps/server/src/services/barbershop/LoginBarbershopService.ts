@@ -29,21 +29,11 @@ export class LoginBarbershopService {
       throw new AppError('E-mail ou senha incorretos.', 401);
     }
 
-    if (
-      barbershop.status === true &&
-      barbershop.subscription?.plan === 'FREE'
-    ) {
-      const dateWithinNext30Days = new Date();
-      dateWithinNext30Days.setDate(barbershop.createdAt.getDate() + 30);
-
-      if (barbershop.createdAt.getTime() >= dateWithinNext30Days.getTime()) {
-        await barbershopRepository.updateProfile(barbershop.id, {
-          status: false,
-          subscription: {
-            status: 'INACTIVE',
-          },
-        });
-      }
+    if (barbershop.status === false) {
+      throw new AppError(
+        'Sua assinatura expirou. Atualize seu plano para continuar.',
+        403,
+      );
     }
 
     const token = jwt.sign(
