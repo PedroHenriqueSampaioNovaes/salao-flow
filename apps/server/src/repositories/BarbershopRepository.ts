@@ -95,6 +95,15 @@ export class BarbershopRepository {
     return barbershop;
   }
 
+  async getStatusById(id: number) {
+    const barbershop = await prisma.barbershop.findUnique({
+      where: { id },
+      select: { status: true },
+    });
+
+    return barbershop;
+  }
+
   async getByResetToken(token: string) {
     const barbershop = await prisma.barbershop.findUnique({
       where: { resetPasswordToken: token },
