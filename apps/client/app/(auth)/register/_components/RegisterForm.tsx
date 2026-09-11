@@ -57,7 +57,7 @@ export function RegisterForm() {
             <FieldError>{errors.businessName?.message}</FieldError>
           </Field>
 
-          <Field data-invalid={!!errors.email}>
+          <Field className="max-md:col-span-2" data-invalid={!!errors.email}>
             <FieldLabel htmlFor="email" className="font-bold text-primary">
               E-mail
             </FieldLabel>
@@ -71,14 +71,16 @@ export function RegisterForm() {
             <FieldError>{errors.email?.message}</FieldError>
           </Field>
 
-          <PhoneInputField
-            id="phone"
-            label="Telefone"
-            name="phone"
-            control={control}
-            error={errors.phone?.message}
-            placeholder="Ex.: (11) 91111-1111"
-          />
+          <div className="max-md:col-span-2">
+            <PhoneInputField
+              id="phone"
+              label="Telefone"
+              name="phone"
+              control={control}
+              error={errors.phone?.message}
+              placeholder="Ex.: (11) 91111-1111"
+            />
+          </div>
 
           <Field className="col-span-2" data-invalid={!!errors.address}>
             <FieldLabel htmlFor="address" className="font-bold text-primary">
