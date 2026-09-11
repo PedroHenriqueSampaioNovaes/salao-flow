@@ -64,7 +64,6 @@ export default function Subscription({
   const daysUntilDue = (currentPeriodEnd.getTime() - now.getTime()) / 86400000;
 
   const isBlocked = BLOCKING_STATUSES.includes(subscription.status);
-  const isDueSoon = !isBlocked && daysUntilDue <= 7;
 
   return (
     <>
@@ -83,7 +82,7 @@ export default function Subscription({
             </AlertDescription>
           </Alert>
         )}
-        {isDueSoon && (
+        {!isBlocked && (
           <Alert variant="accent">
             <Info className="size-4.5 shrink-0 mt-0.5" />
             <AlertDescription className="text-pretty">
@@ -101,6 +100,7 @@ export default function Subscription({
             </AlertDescription>
           </Alert>
         )}
+
         <div className="bg-white rounded-2xl shadow shadow-neutral/20 overflow-hidden mt-6">
           <div className="p-6 flex flex-col gap-5">
             <div className="flex justify-between items-start gap-4 flex-wrap">
