@@ -29,13 +29,6 @@ export class LoginBarbershopService {
       throw new AppError('E-mail ou senha incorretos.', 401);
     }
 
-    if (barbershop.status === false) {
-      throw new AppError(
-        'Sua assinatura expirou. Atualize seu plano para continuar.',
-        403,
-      );
-    }
-
     const token = jwt.sign(
       { id: barbershop.id },
       process.env.JWT_SECRET as string,
