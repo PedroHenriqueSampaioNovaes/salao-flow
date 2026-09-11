@@ -1,6 +1,7 @@
 import { Router } from 'express';
 
 import { verifyToken } from '../middlewares/verifyToken.js';
+import { verifyBarbershopStatus } from '../middlewares/verifyBarbershopStatus.js';
 
 import { CreateScheduleBlockController } from '../controllers/scheduleBlock/CreateScheduleBlockController.js';
 import { DetailsScheduleBlockController } from '../controllers/scheduleBlock/DetailsScheduleBlockController.js';
@@ -10,13 +11,38 @@ import { UpdateScheduleBlockController } from '../controllers/scheduleBlock/Upda
 
 const router = Router();
 
-router.post('/', verifyToken, CreateScheduleBlockController.handle);
+router.post(
+  '/',
+  verifyToken,
+  verifyBarbershopStatus,
+  CreateScheduleBlockController.handle,
+);
 
-router.get('/:id', verifyToken, DetailsScheduleBlockController.handle);
-router.get('/', verifyToken, ListScheduleBlockController.handle);
+router.get(
+  '/:id',
+  verifyToken,
+  verifyBarbershopStatus,
+  DetailsScheduleBlockController.handle,
+);
+router.get(
+  '/',
+  verifyToken,
+  verifyBarbershopStatus,
+  ListScheduleBlockController.handle,
+);
 
-router.put('/:id', verifyToken, UpdateScheduleBlockController.handle);
+router.put(
+  '/:id',
+  verifyToken,
+  verifyBarbershopStatus,
+  UpdateScheduleBlockController.handle,
+);
 
-router.delete('/:id', verifyToken, DeleteScheduleBlockController.handle);
+router.delete(
+  '/:id',
+  verifyToken,
+  verifyBarbershopStatus,
+  DeleteScheduleBlockController.handle,
+);
 
 export default { baseUrl: '/schedule-blocks', router };

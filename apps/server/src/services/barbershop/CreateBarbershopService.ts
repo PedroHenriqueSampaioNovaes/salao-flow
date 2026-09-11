@@ -10,6 +10,8 @@ import { slugify } from '@/src/utils/slugify.js';
 import { generateRandomChars } from '@/src/utils/generateRandomChars.js';
 import { isValidTimeZone } from '@/src/utils/isValidTimeZone.js';
 
+import { CreateStripeSubscriptionService } from '@/src/services/subscription/CreateStripeSubscriptionService.js';
+
 export class CreateBarbershopService {
   async execute(data: CreateBarbershop) {
     const barbershopRepository = new BarbershopRepository();
@@ -52,6 +54,11 @@ export class CreateBarbershopService {
       }
     } while (slugExists);
 
+    const stripeSubscription = await new CreateStripeSubscriptionService().execute({
+      email: data.email,
+      name: data.businessName,
+    });
+
     const barbershopData = {
       ...data,
       password: hashedPassword,
@@ -59,7 +66,7 @@ export class CreateBarbershopService {
       image: `https://ui-avatars.com/api/?name=${data.businessName}&size=96`,
     };
 
-    await barbershopRepository.create(barbershopData);
+    await barbershopRepository.create(barbershopData, stripeSubscription);
 
     return { message: 'Conta criada com sucesso!' };
   }

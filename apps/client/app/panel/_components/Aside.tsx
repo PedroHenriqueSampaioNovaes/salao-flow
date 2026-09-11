@@ -10,6 +10,7 @@ import {
   Settings,
   House,
   ListChecks,
+  CreditCard,
 } from 'lucide-react';
 
 import { cn } from '@/src/lib/utils';
@@ -46,6 +47,11 @@ const navItems = [
     label: 'Clientes',
     href: '/panel/clients',
     icon: User,
+  },
+  {
+    label: 'Assinatura',
+    href: '/panel/subscription-view',
+    icon: CreditCard,
   },
   {
     label: 'Configurações',

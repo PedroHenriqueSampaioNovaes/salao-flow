@@ -1,6 +1,7 @@
 import { Router } from 'express';
 
 import { verifyToken } from '../middlewares/verifyToken.js';
+import { verifyBarbershopStatus } from '../middlewares/verifyBarbershopStatus.js';
 
 import { CreateBarbershopController } from '../controllers/barbershop/CreateBarbershopController.js';
 import { LoginBarbershopController } from '../controllers/barbershop/LoginBarbershopController.js';
@@ -25,6 +26,7 @@ router.get('/me', verifyToken, DetailsBarbershopController.handle);
 router.get(
   '/me/dashboard-metrics',
   verifyToken,
+  verifyBarbershopStatus,
   GetDashboardMetricsController.handle,
 );
 

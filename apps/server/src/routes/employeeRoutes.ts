@@ -1,6 +1,7 @@
 import { Router } from 'express';
 
 import { verifyToken } from '../middlewares/verifyToken.js';
+import { verifyBarbershopStatus } from '../middlewares/verifyBarbershopStatus.js';
 
 import { CreateEmployeeController } from '../controllers/employee/CreateEmployeeController.js';
 import { UpdateEmployeeController } from '../controllers/employee/UpdateEmployeeController.js';
@@ -10,13 +11,38 @@ import { DeleteEmployeeController } from '../controllers/employee/DeleteEmployee
 
 const router = Router();
 
-router.post('/', verifyToken, CreateEmployeeController.handle);
+router.post(
+  '/',
+  verifyToken,
+  verifyBarbershopStatus,
+  CreateEmployeeController.handle,
+);
 
-router.get('/', verifyToken, ListBarbershopEmployeeController.handle);
-router.get('/:id', verifyToken, DetailsEmployeeController.handle);
+router.get(
+  '/',
+  verifyToken,
+  verifyBarbershopStatus,
+  ListBarbershopEmployeeController.handle,
+);
+router.get(
+  '/:id',
+  verifyToken,
+  verifyBarbershopStatus,
+  DetailsEmployeeController.handle,
+);
 
-router.put('/:id', verifyToken, UpdateEmployeeController.handle);
+router.put(
+  '/:id',
+  verifyToken,
+  verifyBarbershopStatus,
+  UpdateEmployeeController.handle,
+);
 
-router.delete('/:id', verifyToken, DeleteEmployeeController.handle);
+router.delete(
+  '/:id',
+  verifyToken,
+  verifyBarbershopStatus,
+  DeleteEmployeeController.handle,
+);
 
 export default { baseUrl: '/employees', router };
