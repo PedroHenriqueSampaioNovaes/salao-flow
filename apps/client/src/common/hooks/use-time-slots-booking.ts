@@ -1,7 +1,8 @@
 'use client';
 
-import { useCallback, useEffect, useState, useTransition } from 'react';
+import { useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
+import { useQuery } from '@tanstack/react-query';
 
 import getAvailableTimeSlotsForBookingAction from '@/app/actions/get-available-time-slots-for-booking';
 
@@ -11,12 +12,6 @@ interface IBookingForm {
   employeeId: number;
   date: string;
   time: string;
-}
-
-interface ITimeSlotsCache {
-  professionalId: number;
-  date: string;
-  slots: string[];
 }
 
 interface IUseTimeSlotsBookingParams {
@@ -29,7 +24,6 @@ export function useTimeSlotsBooking({
   employeesShift,
 }: IUseTimeSlotsBookingParams) {
   const { watch, setValue } = useFormContext<IBookingForm>();
-  const [isPending, startTransition] = useTransition();
 
   const employeeId = watch('employeeId');
   const date = watch('date');
@@ -39,47 +33,25 @@ export function useTimeSlotsBooking({
     ({ id }) => id === Number(employeeId),
   );
 
-  const [fetchedSlots, setFetchedSlots] = useState<ITimeSlotsCache | null>(
-    null,
-  );
+  const { data: times = [], isFetching: isPending } = useQuery({
+    queryKey: ['time-slots', slug, professional?.id, date],
+    queryFn: async () => {
+      const { data, ok } = await getAvailableTimeSlotsForBookingAction({
+        slug,
+        dateString: date,
+        employeeId: professional!.id,
+        lookForNextAvailableTimeSlot: 0,
+      });
 
-  const isInitialDate = professional?.date === date;
-  const hasCachedData =
-    fetchedSlots?.professionalId === professional?.id &&
-    fetchedSlots?.date === date;
+      if (!ok || !data.employees[0]) {
+        throw new Error('Falhou a busca pelos horários disponíveis');
+      }
 
-  const resolveTimeSlots = useCallback(() => {
-    if (!professional) return [];
-    if (hasCachedData) return fetchedSlots!.slots;
-    if (isInitialDate) return professional.availableSlots ?? [];
-    return [];
-  }, [professional, hasCachedData, fetchedSlots, isInitialDate]);
-
-  const times = resolveTimeSlots();
-
-  useEffect(() => {
-    if (!professional || !date || isInitialDate || hasCachedData) return;
-
-    startTransition(() => {
-      const fetchTimeSlots = async () => {
-        const { data, ok } = await getAvailableTimeSlotsForBookingAction({
-          slug,
-          dateString: date,
-          employeeId: professional.id,
-          lookForNextAvailableTimeSlot: 0,
-        });
-
-        if (ok && data.employees[0]) {
-          setFetchedSlots({
-            professionalId: professional.id,
-            date,
-            slots: data.employees[0].availableSlots,
-          });
-        }
-      };
-      fetchTimeSlots();
-    });
-  }, [professional, date, slug, isInitialDate, hasCachedData]);
+      return data.employees[0].availableSlots;
+    },
+    staleTime: 0,
+    refetchOnMount: false,
+  });
 
   const handleSelectTimeSlot = useCallback(
     (time: string) => {
