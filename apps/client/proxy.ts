@@ -44,7 +44,10 @@ export async function proxy(request: NextRequest) {
 }
 
 function redirectToLogin(request: NextRequest) {
-  const response = NextResponse.redirect(new URL('/login', request.url));
+  return logout(NextResponse.redirect(new URL('/login', request.url)));
+}
+
+function logout(response: NextResponse) {
   response.cookies.delete('token');
 
   return response;
