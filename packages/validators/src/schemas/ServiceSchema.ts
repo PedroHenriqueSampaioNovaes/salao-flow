@@ -26,7 +26,7 @@ const baseServiceSchema = z.object({
   description: z.string().optional(),
   price: z
     .number('Obrigatório definir o preço do serviço.')
-    .min(0.01, 'O preço tem que ser maior que R$ 0,01.'),
+    .min(0.01, 'O preço tem que ser maior que R$ 0,00.'),
   duration: z
     .number('Obrigatório definir o tempo de duração do serviço.')
     .min(1, 'Os minutos tem que ser maior que 0.'),
