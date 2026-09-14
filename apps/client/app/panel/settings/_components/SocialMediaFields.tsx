@@ -25,7 +25,7 @@ export default function SocialMediaFields() {
           <Input
             id="whatsAppUrl"
             aria-invalid={!!errors.whatsAppUrl}
-            placeholder="Ex.: wa.me/5511988148020"
+            placeholder="wa.me/5511911112222"
             {...register('whatsAppUrl')}
           />
           <FieldError>{errors.whatsAppUrl?.message}</FieldError>
@@ -36,7 +36,7 @@ export default function SocialMediaFields() {
           <Input
             id="instagramUrl"
             aria-invalid={!!errors.instagramUrl}
-            placeholder="Ex.: instagram.com/seunegocio"
+            placeholder="https://instagram.com/seunegocio"
             {...register('instagramUrl')}
           />
           <FieldError>{errors.instagramUrl?.message}</FieldError>
@@ -47,7 +47,7 @@ export default function SocialMediaFields() {
           <Input
             id="facebookUrl"
             aria-invalid={!!errors.facebookUrl}
-            placeholder="Ex.: facebook.com/seunegocio"
+            placeholder="https://facebook.com/seunegocio"
             {...register('facebookUrl')}
           />
           <FieldError>{errors.facebookUrl?.message}</FieldError>
