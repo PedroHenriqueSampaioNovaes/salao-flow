@@ -1,6 +1,6 @@
 'use client';
 
-import { useTransition } from 'react';
+import { useState, useTransition } from 'react';
 import { useParams } from 'next/navigation';
 import { cn } from '@/src/lib/utils';
 
@@ -12,10 +12,19 @@ import {
   ChevronLeft,
   ChevronRight,
   CalendarCheck,
+  Check,
 } from 'lucide-react';
 
 import createAppointmentAction from '@/app/actions/create-appointment';
-import { showErrorToast, showSuccessToast } from '@/src/common/lib/toast';
+import { showErrorToast } from '@/src/common/lib/toast';
+
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/src/components/ui/dialog';
 
 import {
   BookingFormProvider,
@@ -197,6 +206,8 @@ function StepperFooter() {
   const phone = form.watch('phone');
   const email = form.watch('email');
 
+  const [openDialog, setOpenDialog] = useState(false);
+
   const handleSubmit = async () => {
     const isValid = await validateStep(currentStep);
     if (!isValid) return;
@@ -218,12 +229,42 @@ function StepperFooter() {
     }
 
     form.reset();
-    setStep(1);
-    showSuccessToast('Agendamento realizado com sucesso!', { theme: 'dark' });
+
+    setOpenDialog(true);
   };
 
   return (
     <div className="max-md:fixed left-0 bottom-0 z-50 w-full max-md:px-4 max-md:py-2 py-6 max-md:bg-appointment-foreground flex justify-between md:justify-end gap-4 md:gap-6">
+      <Dialog open={openDialog} onOpenChange={(open) => setOpenDialog(open)}>
+        <DialogContent
+          showCloseButton={false}
+          className="text-center gap-0 bg-appointment-card-background border border-appointment-border p-8"
+        >
+          <DialogHeader className="border-0 flex-col justify-center gap-4">
+            <div className="size-14 rounded-full bg-green-900 flex items-center justify-center mb-2">
+              <Check className="size-7 text-green-300" />
+            </div>
+            <DialogTitle className="text-2xl">
+              Agendamento confirmado
+            </DialogTitle>
+          </DialogHeader>
+          <DialogDescription className="text-sm text-appointment-text-muted max-w-70 mx-auto font-normal mt-0">
+            Enviamos para o seu e-mail os dados do seu agendamento{' '}
+          </DialogDescription>
+
+          <button
+            type="button"
+            onClick={() => {
+              setOpenDialog(false);
+              setStep(1);
+            }}
+            className="w-full mt-6 h-12 md:h-10 px-6 rounded-lg bg-cta-accent hover:bg-[#BFA000] text-black text-sm font-bold transition-all duration-200 cursor-pointer"
+          >
+            Concluir
+          </button>
+        </DialogContent>
+      </Dialog>
+
       {currentStep > 1 && (
         <button
           type="button"
