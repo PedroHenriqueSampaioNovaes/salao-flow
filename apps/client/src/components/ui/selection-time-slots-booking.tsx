@@ -5,13 +5,19 @@ import { CalendarX } from 'lucide-react';
 
 import { cn } from '@/src/lib/utils';
 
-import { useTimeSlotsBooking } from '@/src/common/hooks/use-time-slots-booking';
+import {
+  IServiceDuration,
+  IWeekdaySchedule,
+  useTimeSlotsBooking,
+} from '@/src/common/hooks/use-time-slots-booking';
 
 import { IGetAvailableTimeSlotsForBooking } from '@/src/common/interfaces/barbershop-booking';
 
 interface ISelectionTimeSlotsBooking {
   slug: string;
   employeesShift: IGetAvailableTimeSlotsForBooking['employees'];
+  employeeSchedule?: IWeekdaySchedule[];
+  services?: IServiceDuration[];
   isBookingPage?: boolean;
   isLoadingData?: boolean;
 }
@@ -42,11 +48,13 @@ const timeSlotVariants = cva(
 export default function SelectionTimeSlotsBooking({
   slug,
   employeesShift,
+  employeeSchedule,
+  services,
   isBookingPage = false,
   isLoadingData = false,
 }: ISelectionTimeSlotsBooking) {
   const { times, selectedTime, isPending, handleSelectTimeSlot } =
-    useTimeSlotsBooking({ slug, employeesShift });
+    useTimeSlotsBooking({ slug, employeesShift, employeeSchedule, services });
 
   if (isPending || isLoadingData) {
     return (

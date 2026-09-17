@@ -25,7 +25,7 @@ interface IUseNewAppointmentDialogParams {
 export function useNewAppointmentDialog({
   closeDialog,
 }: IUseNewAppointmentDialogParams) {
-  const { barbershop } = usePanelContext();
+  const { barbershop, services, expedients } = usePanelContext();
 
   const { data: employees = [], isLoading: isLoadingEmployees } = useQuery({
     queryKey: ['employees'],
@@ -89,6 +89,16 @@ export function useNewAppointmentDialog({
 
   const selectedEmployeeServices = selectedEmployee?.services ?? [];
 
+  const selectedEmployeeServicesWithDuration = services.filter((service) =>
+    selectedEmployeeServices.some(
+      (employeeService) => employeeService.id === service.id,
+    ),
+  );
+
+  const selectedEmployeeSchedule = expedients.find(
+    (expedient) => expedient.id === selectedEmployee?.employeeScheduleId,
+  )?.employeeScheduleWeekdays;
+
   useEffect(() => {
     if (!selectedEmployee) return;
 
@@ -138,6 +148,8 @@ export function useNewAppointmentDialog({
     barbershop,
     selectedEmployeeId: selectedEmployee?.id,
     selectedEmployeeServices,
+    selectedEmployeeServicesWithDuration,
+    selectedEmployeeSchedule,
     onSelectEmployee,
     timeSlotsByProfessionalAndDate,
     isFetchingSlots,

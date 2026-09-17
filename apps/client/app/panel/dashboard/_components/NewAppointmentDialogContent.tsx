@@ -55,6 +55,8 @@ export default function NewAppointmentDialogContent({
     barbershop,
     selectedEmployeeId,
     selectedEmployeeServices,
+    selectedEmployeeServicesWithDuration,
+    selectedEmployeeSchedule,
     onSelectEmployee,
     timeSlotsByProfessionalAndDate,
     isFetchingSlots,
@@ -207,6 +209,8 @@ export default function NewAppointmentDialogContent({
               <SelectionTimeSlotsBooking
                 slug={barbershop.slug}
                 employeesShift={timeSlotsByProfessionalAndDate.employees}
+                employeeSchedule={selectedEmployeeSchedule}
+                services={selectedEmployeeServicesWithDuration}
                 isLoadingData={isFetchingSlots}
               />
               <FieldError>{errors.time?.message}</FieldError>

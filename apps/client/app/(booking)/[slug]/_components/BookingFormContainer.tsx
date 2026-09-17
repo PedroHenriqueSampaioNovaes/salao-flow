@@ -78,6 +78,7 @@ function BookingFormWrapper({
             )}
             {currentStep === 3 && (
               <Booking
+                barbershopBookingInfos={barbershopBookingInfos}
                 timeSlotsByProfessionalAndDate={timeSlotsByProfessionalAndDate}
               />
             )}

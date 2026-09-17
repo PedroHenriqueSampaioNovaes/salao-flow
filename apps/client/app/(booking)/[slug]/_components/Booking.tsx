@@ -4,7 +4,10 @@ import { useEffect } from 'react';
 import { AlertCircle, CalendarClock } from 'lucide-react';
 import { useParams } from 'next/navigation';
 
-import { IGetAvailableTimeSlotsForBooking } from '@/src/common/interfaces/barbershop-booking';
+import {
+  IBarbershopBookingInfos,
+  IGetAvailableTimeSlotsForBooking,
+} from '@/src/common/interfaces/barbershop-booking';
 
 import { useBookingForm } from '../_contexts/BookingFormContext';
 
@@ -16,10 +19,12 @@ import SelectionTimeSlotsBooking from '@/src/components/ui/selection-time-slots-
 import { Alert, AlertDescription } from '@/src/components/ui/alert';
 
 interface IBookingProps {
+  barbershopBookingInfos: IBarbershopBookingInfos;
   timeSlotsByProfessionalAndDate: IGetAvailableTimeSlotsForBooking;
 }
 
 export default function Booking({
+  barbershopBookingInfos,
   timeSlotsByProfessionalAndDate,
 }: IBookingProps) {
   const { slug } = useParams() as { slug: string };
@@ -27,6 +32,10 @@ export default function Booking({
   const { form, setStep } = useBookingForm();
 
   const employeeId = form.watch('employeeId');
+
+  const professional = barbershopBookingInfos.employees.find(
+    ({ id }) => id === Number(employeeId),
+  );
 
   const dateError = form.formState.errors.date;
   const timeError = form.formState.errors.time;
@@ -64,6 +73,10 @@ export default function Booking({
         <SelectionTimeSlotsBooking
           slug={slug}
           employeesShift={timeSlotsByProfessionalAndDate.employees}
+          employeeSchedule={
+            professional?.employeeSchedule.employeeScheduleWeekdays
+          }
+          services={professional?.services}
           isBookingPage
         />
       </Wrapper>
