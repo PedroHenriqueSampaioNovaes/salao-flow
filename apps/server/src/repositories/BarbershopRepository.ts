@@ -205,6 +205,8 @@ export class BarbershopRepository {
             status: data.subscription?.status,
           },
         },
+        resetPasswordToken: data.resetPasswordToken,
+        resetPasswordExpires: data.resetPasswordExpires,
       },
       omit: {
         id: true,
