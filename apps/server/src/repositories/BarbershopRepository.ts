@@ -22,6 +22,19 @@ interface StripeSubscriptionData {
   trialEndsAt: Date;
 }
 
+interface CreateRecruiterAccount {
+  name: string;
+  businessName: string;
+  email: string;
+  password: string;
+  address: string;
+  phone: string;
+  image: string;
+  slug: string;
+  timezone: string;
+  expiresAt: Date;
+}
+
 export class BarbershopRepository {
   async create(
     data: CreateBarbershop,
@@ -63,6 +76,65 @@ export class BarbershopRepository {
     });
 
     return barbershop;
+  }
+
+  async createRecruiterAccount(data: CreateRecruiterAccount) {
+    const barbershop = await prisma.barbershop.create({
+      data: {
+        name: data.name,
+        businessName: data.businessName,
+        email: data.email,
+        password: data.password,
+        address: data.address,
+        phone: data.phone,
+        image: data.image,
+        slug: data.slug,
+        timezone: data.timezone,
+        isRecruiter: true,
+        expiresAt: data.expiresAt,
+        employeeSchedules: {
+          create: [
+            {
+              name: 'Horários de Expediente Padrão',
+              isDefault: true,
+              employeeScheduleWeekdays: {
+                create: employeeScheduleWeekdays,
+              },
+            },
+          ],
+        },
+      },
+    });
+
+    return barbershop;
+  }
+
+  async deleteManyExpiredRecruiterAccounts(now: Date) {
+    const expired = await prisma.barbershop.findMany({
+      where: { isRecruiter: true, expiresAt: { lte: now } },
+      select: { id: true },
+    });
+
+    const ids = expired.map((barbershop) => barbershop.id);
+
+    if (ids.length === 0) {
+      return 0;
+    }
+
+    await prisma.$transaction([
+      prisma.appointment.deleteMany({ where: { barbershopId: { in: ids } } }),
+      prisma.scheduleBlock.deleteMany({ where: { barbershopId: { in: ids } } }),
+      prisma.employee.deleteMany({ where: { barbershopId: { in: ids } } }),
+      prisma.service.deleteMany({ where: { barbershopId: { in: ids } } }),
+      prisma.employeeSchedule.deleteMany({
+        where: { barbershopId: { in: ids } },
+      }),
+      prisma.customer.deleteMany({ where: { barbershopId: { in: ids } } }),
+      prisma.subscription.deleteMany({ where: { barbershopId: { in: ids } } }),
+      prisma.barbershop.deleteMany({ where: { id: { in: ids } } }),
+    ]);
+
+    return ids.length;
   }
 
   async getByEmail(email: string) {
