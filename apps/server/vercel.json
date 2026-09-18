@@ -3,6 +3,10 @@
     {
       "path": "/cron/cleanup-old-appointments",
       "schedule": "0 3 * * *"
+    },
+    {
+      "path": "/cron/cleanup-expired-recruiter-accounts",
+      "schedule": "0 * * * *"
     }
   ]
 }

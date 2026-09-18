@@ -4,6 +4,7 @@ import { verifyToken } from '../middlewares/verifyToken.js';
 import { verifyBarbershopStatus } from '../middlewares/verifyBarbershopStatus.js';
 
 import { CreateBarbershopController } from '../controllers/barbershop/CreateBarbershopController.js';
+import { CreateRecruiterAccountController } from '../controllers/barbershop/CreateRecruiterAccountController.js';
 import { LoginBarbershopController } from '../controllers/barbershop/LoginBarbershopController.js';
 import { DetailsBarbershopController } from '../controllers/barbershop/DetailsBarbershopController.js';
 import { ForgotPasswordController } from '../controllers/barbershop/ForgotPasswordController.js';
@@ -16,6 +17,7 @@ import { GetDashboardMetricsController } from '../controllers/barbershop/GetDash
 const router = Router();
 
 router.post('/', CreateBarbershopController.handle);
+router.post('/recruiter', CreateRecruiterAccountController.handle);
 router.post('/login', LoginBarbershopController.handle);
 router.post('/forgot-password', ForgotPasswordController.handle);
 router.post('/reset-password', ResetPasswordController.handle);
