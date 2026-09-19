@@ -12,11 +12,7 @@ export default function FormButton({
   children,
 }: FormButtonProps) {
   return (
-    <button
-      type="submit"
-      disabled={isSubmitting}
-      className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-brand-accent px-6 py-3.5 text-sm font-bold text-white transition-colors duration-150 hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50"
-    >
+    <button type="submit" disabled={isSubmitting} className="button-form">
       {isSubmitting ? <LoadingSecondary /> : children}
     </button>
   );

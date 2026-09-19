@@ -106,6 +106,10 @@ body {
   @apply text-sm text-error;
 }
 
+@utility button-form {
+  @apply flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-brand-accent px-6 py-3.5 text-sm font-bold text-white transition-colors duration-150 hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50;
+}
+
 @utility dialog-overlay {
   @apply fixed inset-0 z-50 bg-black/10 duration-100 supports-backdrop-filter:backdrop-blur-xs data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0;
 }
