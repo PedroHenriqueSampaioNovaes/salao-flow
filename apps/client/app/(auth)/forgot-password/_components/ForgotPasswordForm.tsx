@@ -11,9 +11,10 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/src/components/ui/dialog-form';
+} from '@/src/components/ui/dialog';
 
 export function ForgotPasswordForm() {
   const {
@@ -29,24 +30,30 @@ export function ForgotPasswordForm() {
   return (
     <div className="w-full max-w-sm rounded-2xl bg-white p-8 shadow-[0_1px_3px_rgba(73,81,93,0.2)]">
       <Dialog open={isSuccess}>
-        <DialogContent showCloseButton={false} className="text-center gap-0">
-          <DialogHeader className="flex-col justify-center gap-4">
-            <div className="size-14 rounded-full bg-green-100 flex items-center justify-center mb-2 mx-auto">
-              <Check className="size-7 text-green-600" />
+        <DialogContent
+          showCloseButton={false}
+          className="dialog-warning-content"
+        >
+          <DialogHeader className="dialog-warning-header">
+            <div className="dialog-check-success-wrapper">
+              <Check className="dialog-check-success" />
             </div>
-            <DialogTitle className="text-2xl">E-mail enviado</DialogTitle>
-          </DialogHeader>
-          <DialogDescription className="text-sm max-w-70 mx-auto">
-            Se o e-mail informado estiver cadastrado, você receberá um link para
-            redefinir sua senha. Verifique também a caixa de spam.
-          </DialogDescription>
 
-          <Link
-            href="/login"
-            className="w-full mt-6 h-10 px-6 rounded-lg bg-primary text-white text-sm font-bold flex items-center justify-center transition-all duration-200"
-          >
-            Voltar para o login
-          </Link>
+            <DialogTitle className="dialog-warning-title">
+              E-mail enviado
+            </DialogTitle>
+
+            <DialogDescription className="dialog-warning-description">
+              Se o e-mail informado estiver cadastrado, você receberá um link
+              para redefinir sua senha. Verifique também a caixa de spam.
+            </DialogDescription>
+          </DialogHeader>
+
+          <DialogFooter>
+            <Link href="/login" className="button-form">
+              Voltar para o login
+            </Link>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
 
