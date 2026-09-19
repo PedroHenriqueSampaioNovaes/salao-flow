@@ -105,7 +105,6 @@ export function useTimeSlotsBooking({
       return data.employees[0].availableSlots;
     },
     staleTime: 0,
-    refetchOnMount: false,
   });
 
   const totalServicesDuration = useMemo(() => {
