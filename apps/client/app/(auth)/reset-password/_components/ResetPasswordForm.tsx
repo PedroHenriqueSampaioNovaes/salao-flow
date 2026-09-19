@@ -46,11 +46,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
             sua nova senha.
           </DialogDescription>
 
-          <button
-            type="button"
-            onClick={goToLogin}
-            className="w-full mt-6 h-10 px-6 rounded-lg bg-primary text-white text-sm font-bold transition-all duration-200 cursor-pointer"
-          >
+          <button type="button" onClick={goToLogin} className="button-form">
             Ir para o login
           </button>
         </DialogContent>
