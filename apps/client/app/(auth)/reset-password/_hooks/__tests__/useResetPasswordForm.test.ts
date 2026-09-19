@@ -1,5 +1,4 @@
 import { renderHook, act } from '@testing-library/react';
-import { useRouter } from 'next/navigation';
 
 import { useResetPasswordForm } from '../useResetPasswordForm';
 
@@ -10,18 +9,9 @@ jest.mock('@/app/actions/resetPassword', () => ({
   default: jest.fn(),
 }));
 
-jest.mock('next/navigation', () => ({
-  useRouter: jest.fn(),
-}));
-
 describe('useResetPasswordForm', () => {
-  const mockPush = jest.fn();
-
   beforeEach(() => {
     jest.clearAllMocks();
-    jest.mocked(useRouter).mockReturnValue({
-      push: mockPush,
-    } as unknown as ReturnType<typeof useRouter>);
   });
 
   it('should return initial state with default values', () => {
@@ -100,15 +90,5 @@ describe('useResetPasswordForm', () => {
       'Token de resete de senha inválido ou expirado.',
     );
     expect(result.current.isSuccess).toBe(false);
-  });
-
-  it('should navigate to login when goToLogin is called', () => {
-    const { result } = renderHook(() => useResetPasswordForm('abc123'));
-
-    act(() => {
-      result.current.goToLogin();
-    });
-
-    expect(mockPush).toHaveBeenCalledWith('/login');
   });
 });

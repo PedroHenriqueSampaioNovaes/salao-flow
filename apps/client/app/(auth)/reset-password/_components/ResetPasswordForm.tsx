@@ -13,7 +13,8 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/src/components/ui/dialog-form';
+  DialogFooter,
+} from '@/src/components/ui/dialog';
 
 interface ResetPasswordFormProps {
   token: string;
@@ -28,27 +29,35 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
     isSubmitting,
     isSuccess,
     onSubmit,
-    goToLogin,
   } = useResetPasswordForm(token);
 
   return (
     <div className="w-full max-w-sm rounded-2xl bg-white p-8 shadow-[0_1px_3px_rgba(73,81,93,0.2)]">
-      <Dialog open={isSuccess} onOpenChange={(open) => !open && goToLogin()}>
-        <DialogContent showCloseButton={false} className="text-center gap-0">
-          <DialogHeader className="flex-col justify-center gap-4">
-            <div className="size-14 rounded-full bg-green-100 flex items-center justify-center mb-2 mx-auto">
-              <Check className="size-7 text-green-600" />
+      <Dialog open={isSuccess}>
+        <DialogContent
+          showCloseButton={false}
+          className="dialog-warning-content"
+        >
+          <DialogHeader className="dialog-warning-header">
+            <div className="dialog-check-success-wrapper">
+              <Check className="dialog-check-success" />
             </div>
-            <DialogTitle className="text-2xl">Senha redefinida</DialogTitle>
-          </DialogHeader>
-          <DialogDescription className="text-sm max-w-70 mx-auto">
-            Sua senha foi redefinida com sucesso. Agora você já pode entrar com
-            sua nova senha.
-          </DialogDescription>
 
-          <button type="button" onClick={goToLogin} className="button-form">
-            Ir para o login
-          </button>
+            <DialogTitle className="dialog-warning-title">
+              Senha redefinida
+            </DialogTitle>
+
+            <DialogDescription className="dialog-warning-description">
+              Sua senha foi redefinida com sucesso. Agora você já pode entrar
+              com sua nova senha.
+            </DialogDescription>
+          </DialogHeader>
+
+          <DialogFooter>
+            <Link href="/login" className="button-form">
+              Ir para o login
+            </Link>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
 

@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -24,8 +23,6 @@ export function useResetPasswordForm(token: string) {
   const [error, setError] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
 
-  const router = useRouter();
-
   const onSubmit = async (data: ResetPasswordInput) => {
     setError('');
 
@@ -39,8 +36,6 @@ export function useResetPasswordForm(token: string) {
     setIsSuccess(true);
   };
 
-  const goToLogin = () => router.push('/login');
-
   return {
     register,
     handleSubmit,
@@ -49,6 +44,5 @@ export function useResetPasswordForm(token: string) {
     isSubmitting: formState.isSubmitting,
     isSuccess,
     onSubmit,
-    goToLogin,
   };
 }

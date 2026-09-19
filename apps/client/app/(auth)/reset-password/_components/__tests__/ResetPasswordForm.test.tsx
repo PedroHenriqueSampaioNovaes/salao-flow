@@ -19,7 +19,6 @@ describe('ResetPasswordForm', () => {
       fn();
     });
   const mockOnSubmit = jest.fn();
-  const mockGoToLogin = jest.fn();
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -31,7 +30,6 @@ describe('ResetPasswordForm', () => {
       isSubmitting: false,
       isSuccess: false,
       onSubmit: mockOnSubmit,
-      goToLogin: mockGoToLogin,
     });
   });
 
@@ -67,7 +65,6 @@ describe('ResetPasswordForm', () => {
       isSubmitting: false,
       isSuccess: false,
       onSubmit: mockOnSubmit,
-      goToLogin: mockGoToLogin,
     });
 
     render(<ResetPasswordForm token="abc123" />);
@@ -86,7 +83,6 @@ describe('ResetPasswordForm', () => {
       isSubmitting: true,
       isSuccess: false,
       onSubmit: mockOnSubmit,
-      goToLogin: mockGoToLogin,
     });
 
     render(<ResetPasswordForm token="abc123" />);
@@ -106,7 +102,6 @@ describe('ResetPasswordForm', () => {
       isSubmitting: false,
       isSuccess: false,
       onSubmit: mockOnSubmit,
-      goToLogin: mockGoToLogin,
     });
 
     render(<ResetPasswordForm token="abc123" />);
@@ -125,11 +120,28 @@ describe('ResetPasswordForm', () => {
       isSubmitting: false,
       isSuccess: true,
       onSubmit: mockOnSubmit,
-      goToLogin: mockGoToLogin,
     });
 
     render(<ResetPasswordForm token="abc123" />);
 
     expect(screen.getByText('Senha redefinida')).toBeInTheDocument();
+  });
+
+  it('should display a link to login inside the success dialog', () => {
+    jest.mocked(useResetPasswordForm).mockReturnValue({
+      register: mockRegister,
+      handleSubmit: mockHandleSubmit,
+      error: '',
+      errors: {},
+      isSubmitting: false,
+      isSuccess: true,
+      onSubmit: mockOnSubmit,
+    });
+
+    render(<ResetPasswordForm token="abc123" />);
+
+    expect(
+      screen.getByRole('link', { name: /ir para o login/i }),
+    ).toHaveAttribute('href', '/login');
   });
 });
