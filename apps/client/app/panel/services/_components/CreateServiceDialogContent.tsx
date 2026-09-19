@@ -7,7 +7,7 @@ import { useCreateServiceForm } from '../_hooks/useCreateServiceForm';
 
 import { usePanelContext } from '@/src/common/contexts/panel-context';
 
-import { DialogContent } from '@/src/components/ui/dialog';
+import { DialogContent } from '@/src/components/ui/dialog-form';
 import {
   FormDialogFooter,
   FormDialogHeader,
@@ -33,9 +33,10 @@ interface ICreateServiceDialogContentProps {
 export default function CreateServiceDialogContent({
   closeDialog,
 }: ICreateServiceDialogContentProps) {
-  const { register, handleSubmit, control, errors, isSubmitting } = useCreateServiceForm({
-    closeDialog,
-  });
+  const { register, handleSubmit, control, errors, isSubmitting } =
+    useCreateServiceForm({
+      closeDialog,
+    });
 
   const { employees } = usePanelContext();
 

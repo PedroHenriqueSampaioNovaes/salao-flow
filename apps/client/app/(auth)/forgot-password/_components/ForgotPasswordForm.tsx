@@ -13,11 +13,18 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/src/components/ui/dialog';
+} from '@/src/components/ui/dialog-form';
 
 export function ForgotPasswordForm() {
-  const { register, handleSubmit, error, errors, isSubmitting, isSuccess, onSubmit } =
-    useForgotPasswordForm();
+  const {
+    register,
+    handleSubmit,
+    error,
+    errors,
+    isSubmitting,
+    isSuccess,
+    onSubmit,
+  } = useForgotPasswordForm();
 
   return (
     <div className="w-full max-w-sm rounded-2xl bg-white p-8 shadow-[0_1px_3px_rgba(73,81,93,0.2)]">
@@ -30,8 +37,8 @@ export function ForgotPasswordForm() {
             <DialogTitle className="text-2xl">E-mail enviado</DialogTitle>
           </DialogHeader>
           <DialogDescription className="text-sm max-w-70 mx-auto">
-            Se o e-mail informado estiver cadastrado, você receberá um link
-            para redefinir sua senha. Verifique também a caixa de spam.
+            Se o e-mail informado estiver cadastrado, você receberá um link para
+            redefinir sua senha. Verifique também a caixa de spam.
           </DialogDescription>
 
           <Link

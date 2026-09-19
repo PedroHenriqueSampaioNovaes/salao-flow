@@ -5,7 +5,7 @@ import { UserPlus } from 'lucide-react';
 
 import { useCreateProfessionalForm } from '../_hooks/useCreateProfessionalForm';
 
-import { DialogContent } from '@/src/components/ui/dialog';
+import { DialogContent } from '@/src/components/ui/dialog-form';
 import {
   FormDialogFooter,
   FormDialogHeader,

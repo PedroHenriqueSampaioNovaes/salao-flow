@@ -3,7 +3,7 @@
 import { Suspense, useState } from 'react';
 import dynamic from 'next/dynamic';
 
-import { Dialog, DialogTrigger } from '@/src/components/ui/dialog';
+import { Dialog, DialogTrigger } from '@/src/components/ui/dialog-form';
 import Loading from '@/src/components/ui/loading';
 import PanelActionButton from '@/app/panel/_components/PanelActionButton';
 
@@ -30,9 +30,7 @@ export default function CreateProfessionalDialog() {
             </div>
           }
         >
-          <CreateProfessionalDialogContent
-            closeDialog={() => setOpen(false)}
-          />
+          <CreateProfessionalDialogContent closeDialog={() => setOpen(false)} />
         </Suspense>
       )}
     </Dialog>

@@ -5,7 +5,7 @@ import { UserCog } from 'lucide-react';
 
 import { useEditProfessionalForm } from '../_hooks/useEditProfessionalForm';
 
-import { DialogContent } from '@/src/components/ui/dialog';
+import { DialogContent } from '@/src/components/ui/dialog-form';
 import {
   FormDialogFooter,
   FormDialogHeader,

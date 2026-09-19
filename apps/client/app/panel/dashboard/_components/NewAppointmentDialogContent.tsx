@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import { Controller, FormProvider } from 'react-hook-form';
 
-import { DialogContent } from '@/src/components/ui/dialog';
+import { DialogContent } from '@/src/components/ui/dialog-form';
 import {
   FormDialogFooter,
   FormDialogHeader,

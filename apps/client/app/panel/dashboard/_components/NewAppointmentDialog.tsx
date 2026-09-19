@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 
 import { CalendarPlus2 } from 'lucide-react';
 
-import { Dialog, DialogTrigger } from '@/src/components/ui/dialog';
+import { Dialog, DialogTrigger } from '@/src/components/ui/dialog-form';
 import Loading from '@/src/components/ui/loading';
 
 import { usePanelContext } from '@/src/common/contexts/panel-context';

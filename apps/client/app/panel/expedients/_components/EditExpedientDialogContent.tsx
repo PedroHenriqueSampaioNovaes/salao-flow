@@ -4,7 +4,7 @@ import { CalendarCog } from 'lucide-react';
 
 import { useEditExpedientForm } from '../_hooks/useEditExpedientForm';
 
-import { DialogContent } from '@/src/components/ui/dialog';
+import { DialogContent } from '@/src/components/ui/dialog-form';
 import {
   FormDialogFooter,
   FormDialogHeader,

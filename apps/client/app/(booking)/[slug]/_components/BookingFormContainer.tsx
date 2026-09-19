@@ -24,7 +24,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/src/components/ui/dialog';
+} from '@/src/components/ui/dialog-form';
 
 import {
   BookingFormProvider,

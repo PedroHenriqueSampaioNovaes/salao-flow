@@ -13,7 +13,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/src/components/ui/dialog';
+} from '@/src/components/ui/dialog-form';
 
 interface ResetPasswordFormProps {
   token: string;
@@ -42,8 +42,8 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
             <DialogTitle className="text-2xl">Senha redefinida</DialogTitle>
           </DialogHeader>
           <DialogDescription className="text-sm max-w-70 mx-auto">
-            Sua senha foi redefinida com sucesso. Agora você já pode entrar
-            com sua nova senha.
+            Sua senha foi redefinida com sucesso. Agora você já pode entrar com
+            sua nova senha.
           </DialogDescription>
 
           <button

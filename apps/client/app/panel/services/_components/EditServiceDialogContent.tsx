@@ -7,7 +7,7 @@ import { useEditServiceForm } from '../_hooks/useEditServiceForm';
 
 import { usePanelContext } from '@/src/common/contexts/panel-context';
 
-import { DialogContent } from '@/src/components/ui/dialog';
+import { DialogContent } from '@/src/components/ui/dialog-form';
 import {
   FormDialogFooter,
   FormDialogHeader,

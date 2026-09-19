@@ -4,7 +4,7 @@ import { CalendarPlus } from 'lucide-react';
 
 import { useCreateExpedientForm } from '../_hooks/useCreateExpedientForm';
 
-import { DialogContent } from '@/src/components/ui/dialog';
+import { DialogContent } from '@/src/components/ui/dialog-form';
 import {
   FormDialogFooter,
   FormDialogHeader,
@@ -27,14 +27,8 @@ interface ICreateExpedientDialogContentProps {
 export default function CreateExpedientDialogContent({
   closeDialog,
 }: ICreateExpedientDialogContentProps) {
-  const {
-    register,
-    handleSubmit,
-    control,
-    watch,
-    errors,
-    isSubmitting,
-  } = useCreateExpedientForm({ closeDialog });
+  const { register, handleSubmit, control, watch, errors, isSubmitting } =
+    useCreateExpedientForm({ closeDialog });
 
   return (
     <DialogContent showCloseButton={false} className="sm:max-w-lg">

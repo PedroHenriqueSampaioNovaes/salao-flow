@@ -5,7 +5,7 @@ import { Controller } from 'react-hook-form';
 
 import { useEditClientForm } from '../_hooks/useEditClientForm';
 
-import { DialogContent } from '@/src/components/ui/dialog';
+import { DialogContent } from '@/src/components/ui/dialog-form';
 import {
   FormDialogFooter,
   FormDialogHeader,

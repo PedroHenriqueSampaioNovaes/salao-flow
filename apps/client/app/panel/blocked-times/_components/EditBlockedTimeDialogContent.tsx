@@ -5,7 +5,7 @@ import { Controller } from 'react-hook-form';
 
 import { useEditBlockedTimeForm } from '../_hooks/useEditBlockedTimeForm';
 
-import { DialogContent } from '@/src/components/ui/dialog';
+import { DialogContent } from '@/src/components/ui/dialog-form';
 import {
   FormDialogFooter,
   FormDialogHeader,

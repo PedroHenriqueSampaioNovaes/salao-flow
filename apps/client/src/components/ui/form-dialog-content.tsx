@@ -8,7 +8,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/src/components/ui/dialog';
+} from '@/src/components/ui/dialog-form';
 import { Button } from '@/src/components/ui/button';
 import LoadingSecondary from './loading-secondary';
 

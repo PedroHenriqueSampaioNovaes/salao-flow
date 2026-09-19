@@ -3,7 +3,7 @@
 import { Suspense, useState } from 'react';
 import dynamic from 'next/dynamic';
 
-import { Dialog, DialogTrigger } from '@/src/components/ui/dialog';
+import { Dialog, DialogTrigger } from '@/src/components/ui/dialog-form';
 import Loading from '@/src/components/ui/loading';
 import { EditButton } from '@/src/components/ui/edit-button';
 
