@@ -39,6 +39,8 @@ interface IUseTimeSlotsBookingParams {
   services?: IServiceDuration[];
 }
 
+const SLOT_INTERVAL_MINUTES = 30;
+
 function filterSlotsByServicesDuration(
   slots: string[],
   weekdaySchedule: IWeekdaySchedule | undefined,
@@ -56,6 +58,8 @@ function filterSlotsByServicesDuration(
   const lunchStart = startLunch ? timeToMinutes(startLunch) : null;
   const lunchEnd = endLunch ? timeToMinutes(endLunch) : null;
 
+  const availableMinutes = new Set(slots.map(timeToMinutes));
+
   return slots.filter((slot) => {
     const slotStart = timeToMinutes(slot);
     const slotEnd = slotStart + totalServicesDuration;
@@ -65,6 +69,15 @@ function filterSlotsByServicesDuration(
     if (lunchStart !== null && lunchEnd !== null) {
       const overlapsLunch = slotStart < lunchEnd && slotEnd > lunchStart;
       if (overlapsLunch) return false;
+    }
+
+    // Todos os slots que a duração ocupa precisam estar livres em sequência
+    for (
+      let minute = slotStart + SLOT_INTERVAL_MINUTES;
+      minute < slotEnd;
+      minute += SLOT_INTERVAL_MINUTES
+    ) {
+      if (!availableMinutes.has(minute)) return false;
     }
 
     return true;
