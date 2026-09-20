@@ -22,9 +22,10 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/src/components/ui/dialog-form';
+} from '@/src/components/ui/dialog';
 
 import {
   BookingFormProvider,
@@ -238,30 +239,35 @@ function StepperFooter() {
       <Dialog open={openDialog} onOpenChange={(open) => setOpenDialog(open)}>
         <DialogContent
           showCloseButton={false}
-          className="text-center gap-0 bg-appointment-card-background border border-appointment-border p-8"
+          className="dialog-warning-content bg-appointment-card-background border border-appointment-border"
         >
-          <DialogHeader className="border-0 flex-col justify-center gap-4">
-            <div className="size-14 rounded-full bg-green-900 flex items-center justify-center mb-2">
-              <Check className="size-7 text-green-300" />
+          <DialogHeader className="dialog-warning-header">
+            <div className="dialog-check-success-wrapper">
+              <Check className="dialog-check-success" />
             </div>
-            <DialogTitle className="text-2xl">
-              Agendamento confirmado
-            </DialogTitle>
-          </DialogHeader>
-          <DialogDescription className="text-sm text-appointment-text-muted max-w-70 mx-auto font-normal mt-0">
-            Enviamos para o seu e-mail os dados do seu agendamento{' '}
-          </DialogDescription>
 
-          <button
-            type="button"
-            onClick={() => {
-              setOpenDialog(false);
-              setStep(1);
-            }}
-            className="w-full mt-6 h-12 md:h-10 px-6 rounded-lg bg-cta-accent hover:bg-[#BFA000] text-black text-sm font-bold transition-all duration-200 cursor-pointer"
-          >
-            Concluir
-          </button>
+            <DialogTitle className="dialog-warning-title">
+              E-mail enviado
+            </DialogTitle>
+
+            <DialogDescription className="dialog-warning-description text-appointment-text-muted">
+              Se o e-mail informado estiver cadastrado, você receberá um link
+              para redefinir sua senha. Verifique também a caixa de spam.
+            </DialogDescription>
+          </DialogHeader>
+
+          <DialogFooter>
+            <button
+              type="button"
+              onClick={() => {
+                setOpenDialog(false);
+                setStep(1);
+              }}
+              className="w-full mt-6 h-12 md:h-10 px-6 rounded-lg bg-cta-accent hover:bg-[#BFA000] text-black text-sm font-bold transition-all duration-200 cursor-pointer"
+            >
+              Concluir
+            </button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
 
