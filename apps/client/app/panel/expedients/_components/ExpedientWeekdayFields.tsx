@@ -12,6 +12,8 @@ import { cn } from '@/src/lib/utils';
 import { Checkbox } from '@/src/components/ui/checkbox';
 import { Input } from '@/src/components/ui/input';
 
+import { LunchToggle } from './LunchToggle';
+
 const WEEKDAY_INFOS = [
   { name: 'Segunda-feira', weekdayIndex: 1 },
   { name: 'Terça-feira', weekdayIndex: 2 },
@@ -44,6 +46,9 @@ export function ExpedientWeekdayFields({
           ({ weekday }) => weekday === weekdayIndex,
         );
         const isWorkingDay = weekdays[index].isWorkingDay;
+        const hasLunch =
+          weekdays[index].startLunch != null ||
+          weekdays[index].endLunch != null;
 
         return (
           <div
@@ -93,20 +98,29 @@ export function ExpedientWeekdayFields({
                 </div>
 
                 <div className="flex items-center flex-wrap gap-3">
-                  <span className="w-full min-[450px]:w-20 shrink-0 text-xs text-neutral font-medium">
-                    Almoço
-                  </span>
-                  <Input
-                    type="time"
-                    className={timeInputClassName}
-                    {...register(`weekdays.${index}.startLunch`)}
-                  />
-                  <span className="text-xs text-neutral font-medium">às</span>
-                  <Input
-                    type="time"
-                    className={timeInputClassName}
-                    {...register(`weekdays.${index}.endLunch`)}
-                  />
+                  <LunchToggle control={control} index={index} />
+                  {!hasLunch && (
+                    <span className="text-xs text-neutral font-medium">
+                      Sem pausa para almoço
+                    </span>
+                  )}
+                  {hasLunch && (
+                    <>
+                      <Input
+                        type="time"
+                        className={timeInputClassName}
+                        {...register(`weekdays.${index}.startLunch`)}
+                      />
+                      <span className="text-xs text-neutral font-medium">
+                        às
+                      </span>
+                      <Input
+                        type="time"
+                        className={timeInputClassName}
+                        {...register(`weekdays.${index}.endLunch`)}
+                      />
+                    </>
+                  )}
                 </div>
               </div>
             )}

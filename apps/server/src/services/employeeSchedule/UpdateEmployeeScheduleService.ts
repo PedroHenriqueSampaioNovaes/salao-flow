@@ -13,10 +13,10 @@ export class UpdateEmployeeScheduleService {
     const employeeScheduleRepository = new EmployeeScheduleRepository();
 
     const hasInvalidWorkday = data.weekdays?.some((day) => {
-      const isMissingHours =
-        !day.start || !day.startLunch || !day.endLunch || !day.end;
+      const isMissingHours = !day.start || !day.end;
+      const isLunchIncomplete = !day.startLunch !== !day.endLunch;
 
-      return day.isWorkingDay && isMissingHours;
+      return day.isWorkingDay && (isMissingHours || isLunchIncomplete);
     });
 
     if (hasInvalidWorkday) {
