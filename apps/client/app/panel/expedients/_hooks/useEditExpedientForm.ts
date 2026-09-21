@@ -36,8 +36,13 @@ export function useEditExpedientForm({
             weekday: weekday.weekday,
             start: weekday.start || '09:00',
             end: weekday.end || '18:00',
-            startLunch: weekday.startLunch || '12:00',
-            endLunch: weekday.endLunch || '13:00',
+            // Em dia de trabalho, lunch nulo significa "sem almoço"
+            startLunch: weekday.isWorkingDay
+              ? weekday.startLunch
+              : weekday.startLunch || '12:00',
+            endLunch: weekday.isWorkingDay
+              ? weekday.endLunch
+              : weekday.endLunch || '13:00',
             isWorkingDay: weekday.isWorkingDay,
           })) ?? [],
       },

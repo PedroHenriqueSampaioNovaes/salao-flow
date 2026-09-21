@@ -7,8 +7,8 @@ import { convertTimeToMinutes } from '@/src/utils/convertTImeToMinutes.js';
 export interface ShiftSchedule {
   startShift: number;
   endShift: number;
-  startLunch: number;
-  endLunch: number;
+  startLunch: number | null;
+  endLunch: number | null;
 }
 
 export interface ScheduleBlock {
@@ -34,6 +34,9 @@ export function isSlotDuringLunch(
   slotEnd: number,
   shift: ShiftSchedule,
 ) {
+  if (shift.startLunch === null || shift.endLunch === null) {
+    return false;
+  }
   return slotStart < shift.endLunch && slotEnd > shift.startLunch;
 }
 
@@ -99,8 +102,10 @@ export function parseShiftScheduleToMinutes(weekday: EmployeeScheduleWeekday) {
   return {
     startShift: convertTimeToMinutes(weekday.start!),
     endShift: convertTimeToMinutes(weekday.end!),
-    startLunch: convertTimeToMinutes(weekday.startLunch!),
-    endLunch: convertTimeToMinutes(weekday.endLunch!),
+    startLunch: weekday.startLunch
+      ? convertTimeToMinutes(weekday.startLunch)
+      : null,
+    endLunch: weekday.endLunch ? convertTimeToMinutes(weekday.endLunch) : null,
   };
 }
 
