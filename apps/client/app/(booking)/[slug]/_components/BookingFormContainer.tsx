@@ -251,7 +251,7 @@ function StepperFooter() {
             </DialogTitle>
 
             <DialogDescription className="dialog-warning-description text-appointment-text-muted">
-              Se o e-mail informado estiver cadastrado, você receberá um link
+              Se o e-mail informado estiver correto, você receberá um link
               para redefinir sua senha. Verifique também a caixa de spam.
             </DialogDescription>
           </DialogHeader>
