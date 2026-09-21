@@ -14,9 +14,8 @@ export class UpdateEmployeeScheduleService {
 
     const hasInvalidWorkday = data.weekdays?.some((day) => {
       const isMissingHours = !day.start || !day.end;
-      const isLunchIncomplete = !day.startLunch !== !day.endLunch;
 
-      return day.isWorkingDay && (isMissingHours || isLunchIncomplete);
+      return day.isWorkingDay && isMissingHours;
     });
 
     if (hasInvalidWorkday) {
