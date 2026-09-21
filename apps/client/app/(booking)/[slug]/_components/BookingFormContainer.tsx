@@ -225,7 +225,7 @@ function StepperFooter() {
     });
 
     if (!ok) {
-      showErrorToast(error, { theme: 'dark' });
+      showErrorToast(error, { theme: 'dark', position: 'top-center' });
       return;
     }
 
