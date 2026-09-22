@@ -14,6 +14,10 @@ export const passwordsMatchRefine = {
 
 const password = z.string().min(8, 'Senha deve conter pelo menos 8 caracteres');
 
+const urlRegex =
+  /^(https?:\/\/)?(www\.)?[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?(\.[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?)+(\/\S*)?$/;
+const url = () => z.string().regex(urlRegex, 'URL inválida');
+
 export const baseBarbershopSchema = z.object({
   name: z.string().min(3, 'Nome deve conter pelo menos 3 caracteres'),
   businessName: z
@@ -44,9 +48,9 @@ export const updateBarbershopSchema = baseBarbershopSchema
     slug: z.string().optional(),
     password: password.optional().or(z.literal('')),
     currentPassword: z.string().optional(),
-    facebookUrl: z.url('URL inválida').optional().or(z.literal('')),
-    instagramUrl: z.url('URL inválida').optional().or(z.literal('')),
-    whatsAppUrl: z.url('URL inválida').optional().or(z.literal('')),
+    facebookUrl: url().optional().or(z.literal('')),
+    instagramUrl: url().optional().or(z.literal('')),
+    whatsAppUrl: url().optional().or(z.literal('')),
   })
   .refine(
     (data) => !data.password || passwordsMatch(data as any),
