@@ -1,11 +1,22 @@
 'use client';
 
-import Image from 'next/image';
-import { Menu } from 'lucide-react';
+import { LogOutIcon, Menu, Settings } from 'lucide-react';
+import Link from 'next/link';
 
 import { IBarbershop } from '@/src/common/interfaces/barbershop';
 
 import { useSidebarContext } from '@/src/common/contexts/sidebar-context';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/src/components/ui/dropdown-menu';
+import { Button } from '@/src/components/ui/button';
+import { Avatar, AvatarImage } from '@/src/components/ui/avatar';
+import logoutAction from '@/app/actions/logout';
 
 interface IHeaderProps {
   barbershop: IBarbershop;
@@ -23,13 +34,36 @@ export default function Header({ barbershop }: IHeaderProps) {
         <Menu className="size-6" />
       </button>
 
-      <Image
-        src={barbershop.image}
-        alt={`Logo do empreendimento ${barbershop.name}`}
-        width={90}
-        height={90}
-        className="size-9 rounded-full flex items-center justify-center select-none"
-      />
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button className="rounded-full px-0">
+            <Avatar size="lg">
+              <AvatarImage
+                src={barbershop.image}
+                alt={`Logo do empreendimento ${barbershop.name}`}
+              />
+            </Avatar>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuGroup>
+            <DropdownMenuItem asChild>
+              <Link
+                href="/panel/settings"
+                className="flex items-center gap-1.5"
+              >
+                <Settings />
+                Configurações
+              </Link>
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+          <DropdownMenuSeparator className="bg-neutral/20" />
+          <DropdownMenuItem variant="destructive" onSelect={logoutAction}>
+            <LogOutIcon />
+            Sair da conta
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </header>
   );
 }
