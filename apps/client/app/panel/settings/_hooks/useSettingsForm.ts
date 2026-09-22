@@ -30,6 +30,7 @@ export function useSettingsForm() {
       whatsAppUrl: barbershop?.whatsAppUrl || '',
       facebookUrl: barbershop?.facebookUrl || '',
       instagramUrl: barbershop?.instagramUrl || '',
+      tiktokUrl: barbershop?.tiktokUrl || '',
     },
   });
 

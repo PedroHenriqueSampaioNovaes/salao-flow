@@ -200,6 +200,7 @@ export class BarbershopRepository {
         whatsAppUrl: data.whatsAppUrl,
         facebookUrl: data.facebookUrl,
         instagramUrl: data.instagramUrl,
+        tiktokUrl: data.tiktokUrl,
         subscription: {
           update: {
             status: data.subscription?.status,

@@ -38,6 +38,7 @@ export class UpdateBarbershopService {
       timezone: data.timezone,
       facebookUrl: data.facebookUrl,
       instagramUrl: data.instagramUrl,
+      tiktokUrl: data.tiktokUrl,
       whatsAppUrl: data.whatsAppUrl,
     };
 

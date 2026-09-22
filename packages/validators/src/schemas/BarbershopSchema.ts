@@ -50,6 +50,7 @@ export const updateBarbershopSchema = baseBarbershopSchema
     currentPassword: z.string().optional(),
     facebookUrl: url().optional().or(z.literal('')),
     instagramUrl: url().optional().or(z.literal('')),
+    tiktokUrl: url().optional().or(z.literal('')),
     whatsAppUrl: url().optional().or(z.literal('')),
   })
   .refine(

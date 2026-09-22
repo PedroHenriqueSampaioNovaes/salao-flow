@@ -25,6 +25,7 @@ model Barbershop {
   whatsAppUrl          String?
   facebookUrl          String?
   instagramUrl         String?
+  tiktokUrl            String?
   isRecruiter          Boolean   @default(false)
   expiresAt            DateTime?
 

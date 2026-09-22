@@ -104,6 +104,7 @@ function BookingFormWrapper({
               whatsAppUrl={barbershopBookingInfos.whatsAppUrl}
               facebookUrl={barbershopBookingInfos.facebookUrl}
               instagramUrl={barbershopBookingInfos.instagramUrl}
+              tiktokUrl={barbershopBookingInfos.tiktokUrl}
             />
           </div>
         </div>

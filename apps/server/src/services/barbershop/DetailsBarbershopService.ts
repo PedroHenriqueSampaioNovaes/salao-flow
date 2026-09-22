@@ -30,6 +30,7 @@ export class DetailsBarbershopService {
       whatsAppUrl: barbershop.whatsAppUrl,
       facebookUrl: barbershop.facebookUrl,
       instagramUrl: barbershop.instagramUrl,
+      tiktokUrl: barbershop.tiktokUrl,
     };
   }
 }

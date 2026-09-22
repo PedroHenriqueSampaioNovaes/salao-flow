@@ -19,7 +19,7 @@ export default function SocialMediaFields() {
       title="Redes sociais"
       description="Exibidas abaixo do resumo do agendamento na página de agendamento"
     >
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
         <Field data-invalid={!!errors.whatsAppUrl} className="max-w-md">
           <FieldLabel htmlFor="whatsAppUrl">WhatsApp</FieldLabel>
           <Input
@@ -51,6 +51,17 @@ export default function SocialMediaFields() {
             {...register('facebookUrl')}
           />
           <FieldError>{errors.facebookUrl?.message}</FieldError>
+        </Field>
+
+        <Field data-invalid={!!errors.tiktokUrl} className="max-w-md">
+          <FieldLabel htmlFor="tiktokUrl">TikTok</FieldLabel>
+          <Input
+            id="tiktokUrl"
+            aria-invalid={!!errors.tiktokUrl}
+            placeholder="https://tiktok.com/@seunegocio"
+            {...register('tiktokUrl')}
+          />
+          <FieldError>{errors.tiktokUrl?.message}</FieldError>
         </Field>
       </div>
     </SettingsCard>

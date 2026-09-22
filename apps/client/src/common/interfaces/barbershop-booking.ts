@@ -61,6 +61,7 @@ export interface IBarbershopBookingInfos {
   facebookUrl?: string;
   instagramUrl?: string;
   whatsAppUrl?: string;
+  tiktokUrl?: string;
 }
 
 export interface IGetAvailableTimeSlotsForBooking {

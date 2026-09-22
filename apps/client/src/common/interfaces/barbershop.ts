@@ -12,6 +12,7 @@ export interface IBarbershop {
   whatsAppUrl?: string;
   facebookUrl?: string;
   instagramUrl?: string;
+  tiktokUrl?: string;
   instantLocalTime: string;
 }
 

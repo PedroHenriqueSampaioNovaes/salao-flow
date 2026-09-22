@@ -45,6 +45,7 @@ export class GetBookingInfoService {
       whatsAppUrl: bookingInfo.whatsAppUrl,
       facebookUrl: bookingInfo.facebookUrl,
       instagramUrl: bookingInfo.instagramUrl,
+      tiktokUrl: bookingInfo.tiktokUrl,
     };
   }
 }
