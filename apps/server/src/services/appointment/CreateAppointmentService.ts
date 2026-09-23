@@ -11,6 +11,8 @@ import { ScheduleBlockRepository } from '@/src/repositories/ScheduleBlockReposit
 
 import { AppError } from '@/src/errors/AppError.js';
 
+import { prisma, PrismaClientOrTransaction } from '@/src/lib/prisma.js';
+
 import {
   getEmployeeWorkdaySchedule,
   parseShiftScheduleToMinutes,
@@ -87,13 +89,6 @@ export class CreateAppointmentService {
       minutes: totalServiceDuration,
     });
 
-    await this.checkScheduleBlock(
-      instantInitialDateAppointment.toString(),
-      instantFinalDateAppointment.toString(),
-      barbershop.id,
-      employee.id,
-    );
-
     const appointmentStartMinutes =
       zonedTargetDate.hour * 60 + zonedTargetDate.minute;
     const appointmentEndMinutes =
@@ -106,29 +101,54 @@ export class CreateAppointmentService {
       employee,
     );
 
-    await this.checkForAppointmentConflict(
-      employee,
-      zonedTargetDate,
-      appointmentStartMinutes,
-      appointmentEndMinutes,
-      barbershop.timezone,
-    );
+    const { appointmentCreated, customer } = await prisma.$transaction(
+      async (tx) => {
+        // Serializa qualquer criação/checagem de conflito para o mesmo
+        // funcionário, evitando que duas requisições concorrentes leiam
+        // "sem conflito" antes de qualquer uma delas inserir o registro.
+        await this.appointmentRepository.acquireEmployeeLock(
+          employee.id,
+          tx,
+        );
 
-    const customer = await this.getOrCreateOrUpdateCustomer(
-      data,
-      barbershop.id,
-      isPanelRequest,
-    );
+        await this.checkScheduleBlock(
+          instantInitialDateAppointment.toString(),
+          instantFinalDateAppointment.toString(),
+          barbershop.id,
+          employee.id,
+          tx,
+        );
 
-    const appointmentCreated = await this.appointmentRepository.create(
-      {
-        dateString: instantInitialDateAppointment.toString(),
-        totalServiceDuration,
-        employeeId: data.employeeId,
-        customerId: customer.id,
-        services,
+        await this.checkForAppointmentConflict(
+          employee,
+          zonedTargetDate,
+          appointmentStartMinutes,
+          appointmentEndMinutes,
+          barbershop.timezone,
+          tx,
+        );
+
+        const customer = await this.getOrCreateOrUpdateCustomer(
+          data,
+          barbershop.id,
+          isPanelRequest,
+          tx,
+        );
+
+        const appointmentCreated = await this.appointmentRepository.create(
+          {
+            dateString: instantInitialDateAppointment.toString(),
+            totalServiceDuration,
+            employeeId: data.employeeId,
+            customerId: customer.id,
+            services,
+          },
+          barbershop.id,
+          tx,
+        );
+
+        return { appointmentCreated, customer };
       },
-      barbershop.id,
     );
 
     await this.sendConfirmationEmail(
@@ -202,6 +222,7 @@ export class CreateAppointmentService {
     finalAppointmentDateString: string,
     barbershopId: number,
     employeeId: number,
+    client: PrismaClientOrTransaction,
   ) {
     const scheduleBlock =
       await this.scheduleBlockRepository.findByDateRangeAndEmployeeId(
@@ -209,6 +230,7 @@ export class CreateAppointmentService {
         finalAppointmentDateString,
         barbershopId,
         employeeId,
+        client,
       );
 
     if (scheduleBlock.length > 0) {
@@ -222,10 +244,12 @@ export class CreateAppointmentService {
     data: Pick<CreateAppointmentSchema, 'name' | 'phone' | 'email'>,
     barbershopId: number,
     isDashboardRequest: boolean,
+    client: PrismaClientOrTransaction,
   ) {
     const customer = await this.customerRepository.getByPhone(
       data.phone,
       barbershopId,
+      client,
     );
 
     if (customer) {
@@ -237,11 +261,14 @@ export class CreateAppointmentService {
         );
       }
 
-      return this.customerRepository.updateProfileAndVisitCount({
-        id: customer.id,
-        name: data.name,
-        email: data.email,
-      });
+      return this.customerRepository.updateProfileAndVisitCount(
+        {
+          id: customer.id,
+          name: data.name,
+          email: data.email,
+        },
+        client,
+      );
     }
 
     return this.customerRepository.create(
@@ -252,6 +279,7 @@ export class CreateAppointmentService {
         isBlocked: false,
       },
       barbershopId,
+      client,
     );
   }
 
@@ -334,6 +362,7 @@ export class CreateAppointmentService {
     newStart: number,
     newEnd: number,
     timezone: string,
+    client: PrismaClientOrTransaction,
   ) {
     const employeeScheduleWeekday = getEmployeeWorkdaySchedule(
       employee,
@@ -365,6 +394,7 @@ export class CreateAppointmentService {
           employeeShiftEnd: employeeShiftEnd.toInstant().toString(),
         },
         employee.id,
+        client,
       );
 
     const hasConflict = hasAppointmentConflict(

@@ -1,4 +1,4 @@
-import { prisma } from '@/src/lib/prisma.js';
+import { prisma, PrismaClientOrTransaction } from '@/src/lib/prisma.js';
 
 export interface ScheduleBlockData {
   name: string;
@@ -76,8 +76,9 @@ export class ScheduleBlockRepository {
     endDate: string,
     barbershopId: number,
     employeeId: number,
+    client: PrismaClientOrTransaction = prisma,
   ) {
-    const scheduleBlocks = await prisma.scheduleBlock.findMany({
+    const scheduleBlocks = await client.scheduleBlock.findMany({
       where: {
         barbershopId,
         employees: {

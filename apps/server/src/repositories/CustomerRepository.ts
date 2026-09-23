@@ -1,4 +1,4 @@
-import { prisma } from '@/src/lib/prisma.js';
+import { prisma, PrismaClientOrTransaction } from '@/src/lib/prisma.js';
 
 interface CreateCustomer {
   name: string;
@@ -16,8 +16,12 @@ interface UpdateCustomer {
 }
 
 export class CustomerRepository {
-  async create(data: CreateCustomer, barbershopId: number) {
-    const customer = await prisma.customer.create({
+  async create(
+    data: CreateCustomer,
+    barbershopId: number,
+    client: PrismaClientOrTransaction = prisma,
+  ) {
+    const customer = await client.customer.create({
       data: {
         name: data.name,
         email: data.email,
@@ -35,8 +39,11 @@ export class CustomerRepository {
     return customer;
   }
 
-  async updateProfileAndVisitCount(data: UpdateCustomer) {
-    return prisma.customer.update({
+  async updateProfileAndVisitCount(
+    data: UpdateCustomer,
+    client: PrismaClientOrTransaction = prisma,
+  ) {
+    return client.customer.update({
       where: {
         id: data.id,
       },
@@ -96,8 +103,12 @@ export class CustomerRepository {
     });
   }
 
-  async getByPhone(phone: string, barbershopId: number) {
-    const customer = await prisma.customer.findFirst({
+  async getByPhone(
+    phone: string,
+    barbershopId: number,
+    client: PrismaClientOrTransaction = prisma,
+  ) {
+    const customer = await client.customer.findFirst({
       where: {
         phone,
         barbershopId,

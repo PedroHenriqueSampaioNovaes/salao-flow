@@ -1,4 +1,4 @@
-import { prisma } from '@/src/lib/prisma.js';
+import { prisma, PrismaClientOrTransaction } from '@/src/lib/prisma.js';
 
 interface AppointmentServiceSnapshot {
   id: string;
@@ -21,8 +21,12 @@ interface EmployeeShift {
 }
 
 export class AppointmentRepository {
-  async create(data: AppointmentData, barbershopId: number) {
-    const appointment = await prisma.appointment.create({
+  async create(
+    data: AppointmentData,
+    barbershopId: number,
+    client: PrismaClientOrTransaction = prisma,
+  ) {
+    const appointment = await client.appointment.create({
       data: {
         date: data.dateString,
         barbershopId,
@@ -83,8 +87,9 @@ export class AppointmentRepository {
   async getByEmployeeShiftUtcAndEmployeeId(
     { employeeShiftStart, employeeShiftEnd }: EmployeeShift,
     employeeId: number,
+    client: PrismaClientOrTransaction = prisma,
   ) {
-    const appointments = await prisma.appointment.findMany({
+    const appointments = await client.appointment.findMany({
       where: {
         date: {
           gte: employeeShiftStart,
@@ -95,6 +100,13 @@ export class AppointmentRepository {
     });
 
     return appointments;
+  }
+
+  async acquireEmployeeLock(
+    employeeId: number,
+    client: PrismaClientOrTransaction,
+  ) {
+    await client.$queryRaw`SELECT pg_advisory_xact_lock(${employeeId})`;
   }
 
   async getAppointmentsForMonth(dateInUTC: string, barbershopId: number) {
