@@ -106,10 +106,7 @@ export class CreateAppointmentService {
         // Serializa qualquer criação/checagem de conflito para o mesmo
         // funcionário, evitando que duas requisições concorrentes leiam
         // "sem conflito" antes de qualquer uma delas inserir o registro.
-        await this.appointmentRepository.acquireEmployeeLock(
-          employee.id,
-          tx,
-        );
+        await this.appointmentRepository.acquireEmployeeLock(employee.id, tx);
 
         await this.checkScheduleBlock(
           instantInitialDateAppointment.toString(),

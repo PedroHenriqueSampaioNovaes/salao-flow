@@ -106,7 +106,7 @@ export class AppointmentRepository {
     employeeId: number,
     client: PrismaClientOrTransaction,
   ) {
-    await client.$queryRaw`SELECT pg_advisory_xact_lock(${employeeId})`;
+    await client.$executeRaw`SELECT pg_advisory_xact_lock(${employeeId})`;
   }
 
   async getAppointmentsForMonth(dateInUTC: string, barbershopId: number) {
