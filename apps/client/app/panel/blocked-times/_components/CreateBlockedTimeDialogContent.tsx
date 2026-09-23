@@ -53,7 +53,7 @@ export default function CreateBlockedTimeDialogContent({
             <Input
               id="customer-name"
               aria-invalid={!!errors.name}
-              placeholder="Ex: Folga, Problema Pessoal, etc."
+              placeholder="Ex: Folga, Compromisso Pessoal, etc."
               {...register('name')}
             />
             <FieldError>{errors.name?.message}</FieldError>

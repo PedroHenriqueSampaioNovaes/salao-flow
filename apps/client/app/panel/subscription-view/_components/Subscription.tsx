@@ -96,8 +96,8 @@ export default function Subscription({
               </strong>
               , no dia{' '}
               {dueDateFormatter.format(new Date(subscription.currentPeriodEnd))}
-              . Depois disso a página de agendamento sairá do ar e não poderá
-              ser acessada.
+              . Após esse período, sua página de agendamento ficará fora do ar e
+              não poderá ser acessada.
             </AlertDescription>
           </Alert>
         )}
