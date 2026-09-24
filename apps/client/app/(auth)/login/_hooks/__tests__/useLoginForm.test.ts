@@ -8,6 +8,14 @@ jest.mock('@/app/actions/login', () => ({
   default: jest.fn(),
 }));
 
+const mockPush = jest.fn();
+
+jest.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: mockPush,
+  }),
+}));
+
 describe('useLoginForm', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -22,6 +30,7 @@ describe('useLoginForm', () => {
     expect(typeof result.current.register).toBe('function');
     expect(typeof result.current.handleSubmit).toBe('function');
     expect(typeof result.current.onSubmit).toBe('function');
+    expect(result.current.control).toBeDefined();
   });
 
   it('should fail validation when fields are empty', async () => {
@@ -64,6 +73,36 @@ describe('useLoginForm', () => {
       email: 'teste@email.com',
       password: '123456',
     });
+    expect(mockPush).toHaveBeenCalledWith('/panel/dashboard');
+  });
+
+  it('should not redirect if loginAction fails', async () => {
+    const mockLogin = jest.mocked(loginAction);
+    mockLogin.mockResolvedValue({
+      ok: false,
+      data: null,
+      error: 'Login falhou',
+    });
+
+    const { result } = renderHook(() => useLoginForm());
+    const emailField = result.current.register('email');
+    const passwordField = result.current.register('password');
+
+    await act(async () => {
+      await emailField.onChange({
+        target: { name: 'email', value: 'teste@email.com' },
+      });
+      await passwordField.onChange({
+        target: { name: 'password', value: '123456' },
+      });
+    });
+
+    await act(async () => {
+      const submitFn = result.current.handleSubmit(result.current.onSubmit);
+      await submitFn();
+    });
+
+    expect(mockPush).not.toHaveBeenCalled();
   });
 
   it('should set error state if loginAction fails', async () => {
