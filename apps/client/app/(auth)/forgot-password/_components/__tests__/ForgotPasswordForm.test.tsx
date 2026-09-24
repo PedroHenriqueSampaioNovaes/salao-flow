@@ -3,7 +3,9 @@ import { render, screen } from '@testing-library/react';
 import { ForgotPasswordForm } from '../ForgotPasswordForm';
 import { useForgotPasswordForm } from '../../_hooks/useForgotPasswordForm';
 
-jest.mock('../../_hooks/useForgotPasswordForm');
+jest.mock('../../_hooks/useForgotPasswordForm', () => ({
+  useForgotPasswordForm: jest.fn(),
+}));
 
 describe('ForgotPasswordForm', () => {
   const mockRegister = jest.fn().mockImplementation((name) => ({

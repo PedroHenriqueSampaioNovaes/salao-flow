@@ -5,7 +5,9 @@ import { LoginRequest } from '@sistema-barbearia/validators';
 import { LoginForm } from '../LoginForm';
 import { useLoginForm } from '../../_hooks/useLoginForm';
 
-jest.mock('../../_hooks/useLoginForm');
+jest.mock('../../_hooks/useLoginForm', () => ({
+  useLoginForm: jest.fn(),
+}));
 
 describe('LoginForm', () => {
   const mockRegister = jest.fn().mockImplementation((name) => ({
