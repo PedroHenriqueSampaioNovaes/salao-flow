@@ -5,7 +5,9 @@ import { CreateBarbershopSchema } from '@sistema-barbearia/validators';
 import { RegisterForm } from '../RegisterForm';
 import { useRegisterForm } from '../../_hooks/useRegisterForm';
 
-jest.mock('../../_hooks/useRegisterForm');
+jest.mock('../../_hooks/useRegisterForm', () => ({
+  useRegisterForm: jest.fn(),
+}));
 jest.mock('@/src/components/ui/phone-input-field', () => ({
   PhoneInputField: ({ label, error }: { label: string; error?: string }) => (
     <div>
@@ -47,7 +49,10 @@ describe('RegisterForm', () => {
   it('should render all form inputs and the submit button', () => {
     render(<RegisterForm />);
 
-    expect(screen.getByLabelText(/nome/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/seu nome/i)).toBeInTheDocument();
+    expect(
+      screen.getByLabelText(/nome do estabelecimento/i),
+    ).toBeInTheDocument();
     expect(screen.getByLabelText(/e-mail/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/telefone/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/endereço/i)).toBeInTheDocument();
@@ -69,6 +74,10 @@ describe('RegisterForm', () => {
           type: 'required',
           message: 'Nome deve conter pelo menos 3 caracteres',
         },
+        businessName: {
+          type: 'required',
+          message: 'Nome do estabelecimento deve conter pelo menos 3 caracteres',
+        },
         email: { type: 'required', message: 'E-mail inválido' },
         password: {
           type: 'required',
@@ -89,6 +98,11 @@ describe('RegisterForm', () => {
 
     expect(
       screen.getByText('Nome deve conter pelo menos 3 caracteres'),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        'Nome do estabelecimento deve conter pelo menos 3 caracteres',
+      ),
     ).toBeInTheDocument();
     expect(screen.getByText('E-mail inválido')).toBeInTheDocument();
     expect(
