@@ -43,22 +43,10 @@ packages/
 
 O backend segue separação em camadas (`routes → controllers → services → repositories`), com Prisma como camada de acesso a dados e middlewares dedicados (autenticação, verificação de assinatura de webhook).
 
-## Como rodar localmente
-
-Pré-requisitos: Node.js, PostgreSQL.
-
-```bash
-# instalar dependências (client, server e pacote de validators)
-npm install
-
-# gerar client do Prisma e aplicar migrations
-npm run prisma:deploy
-
-# subir client, server e o build watch dos validators juntos
-npm run dev
-```
-
-Scripts individuais também estão disponíveis: `npm run client`, `npm run server`, `npm run build:client`, `npm run build:server`.
+## Melhorias futuras
+- Criar sistema de métricas completo
+- Integração da plataforma com o WhatsApp para enviar lembretes sobre o agendamento aos clientes das barbearias
+- Atendente virtual para atender automaticamente os clientes que entrarem em contato com o WhatsApp das barbearias
 
 ## Licença
 
