@@ -50,4 +50,4 @@ O backend segue separação em camadas (`routes → controllers → services →
 
 ## Licença
 
-ISC
+Todos os direitos reservados ©
