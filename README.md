@@ -13,9 +13,10 @@ SaaS de agendamento para barbearias: cada barbearia tem sua própria página pú
   - Expedientes: horários de trabalho por profissional/dia da semana
   - Bloqueios de agenda (folgas, feriados, indisponibilidades pontuais)
   - Configurações da barbearia
+  - Gerenciamento de assinatura
 - **Autenticação** com login e cadastro, sessão via JWT
 - **Notificações em tempo real** entre painel e agenda via Socket.io
-- **Rotina automática (cron)** para limpar agendamentos antigos do banco
+- **Rotina automática (cron)** para limpar agendamentos antigos do banco e contas temporárias de recrutador
 - **Envio de e-mails transacionais** para exibir os detalhes do agendamento ao cliente, resete de senha e avisar a barbearia sobre novo agendamento
 
 ## Stack
@@ -23,7 +24,7 @@ SaaS de agendamento para barbearias: cada barbearia tem sua própria página pú
 | Camada | Tecnologias |
 |---|---|
 | Frontend | Next.js 16, React 19, TypeScript, Tailwind CSS 4, React Query, React Hook Form, Shadcn/ui, Radix UI |
-| Backend | Node.js, Express 5, Prisma ORM 7, PostgreSQL, JWT, Socket.io, Resend |
+| Backend | Node.js, Express 5, Prisma ORM 7, PostgreSQL, JWT, Socket.io, Resend, Stripe |
 | Validação | Zod, em um pacote compartilhado entre client e server |
 | Qualidade | Jest + Testing Library (client), Husky, Commitlint (Conventional Commits) |
 | Infra | Monorepo com npm workspaces, deploy na Vercel |
