@@ -2,6 +2,13 @@
 
 SaaS de agendamento para barbearias: cada barbearia tem sua própria página pública de reservas, um painel administrativo completo e uma assinatura recorrente (com o primeiro mês sendo gratuito, não sendo necessário cartão de crédito) que libera o acesso ao sistema.
 
+- [Funcionalidades](#funcionalidades)
+- [Link do Projeto](#link)
+- [Screenshot GIF](#screenshot-gif)
+- [Stack](#stack)
+- [Arquitetura](#arquitetura)
+- [Melhorias futuras](#melhorias-futuras)
+
 ## Funcionalidades
 
 - **Página pública de agendamento** (`/[slug]`) — clientes marcam horário direto pelo link da barbearia, sem precisar criar conta.
@@ -20,7 +27,27 @@ SaaS de agendamento para barbearias: cada barbearia tem sua própria página pú
 - **Envio de e-mails transacionais** para exibir os detalhes do agendamento ao cliente, resete de senha e avisar a barbearia sobre novo agendamento
 
 ## Link
-https://sistema-barbearia-freela-client.vercel.app/login
+https://sistema-barbearia-freela-client.vercel.app/register/recruiter
+
+## Screenshot GIF
+### Autenticação
+![autenticacao](https://github.com/user-attachments/assets/ba1896f5-0a46-4e3b-9b67-9ae7440f1344)
+#### Criação de profissionais
+![profissionais](https://github.com/user-attachments/assets/4ca1113a-8bd5-4046-9bbf-20d446b7d621)
+#### Criação de Serviços
+![serviços](https://github.com/user-attachments/assets/f65ec227-3d95-4160-aa38-64cec0400c18)
+#### Expedientes
+![expedientes](https://github.com/user-attachments/assets/8d017786-8307-456f-b18b-a41b8d2aa715)
+#### Bloqueio de Horários
+![bloqueio de horários](https://github.com/user-attachments/assets/07191666-9751-4465-ba81-4d6467c4a199)
+#### Configurações
+![configurações](https://github.com/user-attachments/assets/143e8f03-2e81-4ab6-94d4-9a8bca006427)
+#### Assinatura
+![assinatura](https://github.com/user-attachments/assets/e0ef9d45-c139-42a3-9ce9-5a68bef8a106)
+#### Dashboard - Agendamento
+![dashboard agendamento](https://github.com/user-attachments/assets/78892939-1b68-4da4-aeac-21f3a1e1374b)
+#### Página de Agendamento (Clientes fazem o próprio agendamento)
+![página de agendamento](https://github.com/user-attachments/assets/24610dac-0dc7-43ec-8cb8-98a22b39652d)
 
 ## Stack
 
