@@ -8,6 +8,10 @@ interface IContactsProps {
   tiktokUrl?: string;
 }
 
+function withProtocol(url: string) {
+  return /^https?:\/\//i.test(url) ? url : `https://${url}`;
+}
+
 export default function Contacts({
   whatsAppUrl,
   facebookUrl,
@@ -23,12 +27,20 @@ export default function Contacts({
 
       <div className="flex items-center gap-8">
         {whatsAppUrl && (
-          <Link href={whatsAppUrl} target="_blank" rel="noopener noreferrer">
+          <Link
+            href={withProtocol(whatsAppUrl)}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <Image src="/whatsapp.png" alt="WhatsApp" width={46} height={46} />
           </Link>
         )}
         {instagramUrl && (
-          <Link href={instagramUrl} target="_blank" rel="noopener noreferrer">
+          <Link
+            href={withProtocol(instagramUrl)}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <Image
               src="/instagram.png"
               alt="Instagram"
@@ -38,12 +50,20 @@ export default function Contacts({
           </Link>
         )}
         {facebookUrl && (
-          <Link href={facebookUrl} target="_blank" rel="noopener noreferrer">
+          <Link
+            href={withProtocol(facebookUrl)}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <Image src="/facebook.png" alt="Facebook" width={40} height={40} />
           </Link>
         )}
         {tiktokUrl && (
-          <Link href={tiktokUrl} target="_blank" rel="noopener noreferrer">
+          <Link
+            href={withProtocol(tiktokUrl)}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <Image
               src="/tiktok.webp"
               alt="TikTok"
