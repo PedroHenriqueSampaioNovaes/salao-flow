@@ -2,6 +2,13 @@
 
 SaaS de agendamento para barbearias: cada barbearia tem sua própria página pública de reservas, um painel administrativo completo e uma assinatura recorrente (com o primeiro mês sendo gratuito, não sendo necessário cartão de crédito) que libera o acesso ao sistema.
 
+- [Funcionalidades](#funcionalidades)
+- [Link do Projeto](#link)
+- [Screenshot GIF](#screenshot-gif)
+- [Stack](#stack)
+- [Arquitetura](#arquitetura)
+- [Melhorias futuras](#melhorias-futuras)
+
 ## Funcionalidades
 
 - **Página pública de agendamento** (`/[slug]`) — clientes marcam horário direto pelo link da barbearia, sem precisar criar conta.
