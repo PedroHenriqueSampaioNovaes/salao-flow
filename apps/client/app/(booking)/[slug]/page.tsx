@@ -35,6 +35,7 @@ export default async function BookingPage({
               alt={bookingInfos.businessName}
               width={96}
               height={96}
+              unoptimized
               loading="eager"
               className="object-cover rounded-lg"
             />
