@@ -146,6 +146,14 @@ export class BarbershopRepository {
     return barbershop;
   }
 
+  async getByPhone(phone: string) {
+    const barbershop = await prisma.barbershop.findFirst({
+      where: { phone },
+    });
+
+    return barbershop;
+  }
+
   async getBySlug(slug: string) {
     const barbershop = await prisma.barbershop.findUnique({
       where: { slug },

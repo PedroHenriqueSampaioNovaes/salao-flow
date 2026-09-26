@@ -24,6 +24,13 @@ export class CreateBarbershopService {
       throw new AppError('Este e-mail já está em uso, escolha outro.', 409);
     }
 
+    const barbershopWithSamePhoneAlreadyExists =
+      await barbershopRepository.getByPhone(data.phone);
+
+    if (barbershopWithSamePhoneAlreadyExists) {
+      throw new AppError('Este número de telefone já está em uso.', 409);
+    }
+
     if (!isValidTimeZone(data.timezone)) {
       throw new AppError('Fuso horário inválido.', 400);
     }
@@ -54,10 +61,11 @@ export class CreateBarbershopService {
       }
     } while (slugExists);
 
-    const stripeSubscription = await new CreateStripeSubscriptionService().execute({
-      email: data.email,
-      name: data.businessName,
-    });
+    const stripeSubscription =
+      await new CreateStripeSubscriptionService().execute({
+        email: data.email,
+        name: data.businessName,
+      });
 
     const barbershopData = {
       ...data,
