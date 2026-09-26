@@ -9,6 +9,9 @@ const nextConfig: NextConfig = {
         pathname: '/api/**',
       },
     ],
+    dangerouslyAllowSVG: true,
+    contentDispositionType: 'attachment',
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
 };
 
