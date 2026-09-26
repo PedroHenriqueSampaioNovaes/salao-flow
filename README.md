@@ -26,6 +26,14 @@ SaaS de agendamento para barbearias: cada barbearia tem sua própria página pú
 ![profissionais](https://github.com/user-attachments/assets/4ca1113a-8bd5-4046-9bbf-20d446b7d621)
 #### Criação de Serviços
 ![serviços](https://github.com/user-attachments/assets/f65ec227-3d95-4160-aa38-64cec0400c18)
+#### Expedientes
+![expedientes](https://github.com/user-attachments/assets/8d017786-8307-456f-b18b-a41b8d2aa715)
+#### Bloqueio de Horários
+![bloqueio de horários](https://github.com/user-attachments/assets/07191666-9751-4465-ba81-4d6467c4a199)
+#### Configurações
+![configurações](https://github.com/user-attachments/assets/143e8f03-2e81-4ab6-94d4-9a8bca006427)
+#### Assinatura
+![assinatura](https://github.com/user-attachments/assets/e0ef9d45-c139-42a3-9ce9-5a68bef8a106)
 
 ## Link
 https://sistema-barbearia-freela-client.vercel.app/login
