@@ -30,7 +30,7 @@ SaaS de agendamento para barbearias: cada barbearia tem sua própria página pú
 https://salao-flow-client.vercel.app/register/recruiter
 
 ## Screenshot GIF
-### Autenticação
+#### Autenticação
 ![autenticacao](https://github.com/user-attachments/assets/ba1896f5-0a46-4e3b-9b67-9ae7440f1344)
 #### Criação de profissionais
 ![profissionais](https://github.com/user-attachments/assets/4ca1113a-8bd5-4046-9bbf-20d446b7d621)
