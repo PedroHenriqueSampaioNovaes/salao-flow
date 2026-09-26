@@ -19,8 +19,11 @@ SaaS de agendamento para barbearias: cada barbearia tem sua própria página pú
 - **Rotina automática (cron)** para limpar agendamentos antigos do banco e contas temporárias de recrutador
 - **Envio de e-mails transacionais** para exibir os detalhes do agendamento ao cliente, resete de senha e avisar a barbearia sobre novo agendamento
 
-### Screenshot GIF
-#### Autenticação
+## Link
+https://sistema-barbearia-freela-client.vercel.app/register/recruiter
+
+## Screenshot GIF
+### Autenticação
 ![autenticacao](https://github.com/user-attachments/assets/ba1896f5-0a46-4e3b-9b67-9ae7440f1344)
 #### Criação de profissionais
 ![profissionais](https://github.com/user-attachments/assets/4ca1113a-8bd5-4046-9bbf-20d446b7d621)
@@ -38,9 +41,6 @@ SaaS de agendamento para barbearias: cada barbearia tem sua própria página pú
 ![dashboard agendamento](https://github.com/user-attachments/assets/78892939-1b68-4da4-aeac-21f3a1e1374b)
 #### Página de Agendamento (Clientes fazem o próprio agendamento)
 ![página de agendamento](https://github.com/user-attachments/assets/24610dac-0dc7-43ec-8cb8-98a22b39652d)
-
-## Link
-https://sistema-barbearia-freela-client.vercel.app/login
 
 ## Stack
 
