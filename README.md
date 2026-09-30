@@ -5,6 +5,7 @@ SaaS de agendamento para barbearias: cada barbearia tem sua própria página pú
 - [Funcionalidades](#funcionalidades)
 - [Link do Projeto](#link)
 - [Screenshot GIF](#screenshot-gif)
+- [Modelagem de dados](#modelagem-de-dados)
 - [Stack](#stack)
 - [Arquitetura](#arquitetura)
 - [Melhorias futuras](#melhorias-futuras)
@@ -27,10 +28,10 @@ SaaS de agendamento para barbearias: cada barbearia tem sua própria página pú
 - **Envio de e-mails transacionais** para exibir os detalhes do agendamento ao cliente, resete de senha e avisar a barbearia sobre novo agendamento
 
 ## Link
-https://sistema-barbearia-freela-client.vercel.app/register/recruiter
+https://salao-flow-client.vercel.app/register/recruiter
 
 ## Screenshot GIF
-### Autenticação
+#### Autenticação
 ![autenticacao](https://github.com/user-attachments/assets/ba1896f5-0a46-4e3b-9b67-9ae7440f1344)
 #### Criação de profissionais
 ![profissionais](https://github.com/user-attachments/assets/4ca1113a-8bd5-4046-9bbf-20d446b7d621)
@@ -48,6 +49,10 @@ https://sistema-barbearia-freela-client.vercel.app/register/recruiter
 ![dashboard agendamento](https://github.com/user-attachments/assets/78892939-1b68-4da4-aeac-21f3a1e1374b)
 #### Página de Agendamento (Clientes fazem o próprio agendamento)
 ![página de agendamento](https://github.com/user-attachments/assets/24610dac-0dc7-43ec-8cb8-98a22b39652d)
+
+## Modelagem de dados
+![modelagem de dados](https://github.com/user-attachments/assets/cd3ec418-76a4-473d-b857-00e1f2d08a55)
+![modelagem de dados](https://github.com/user-attachments/assets/353771a8-999a-4707-b8f1-594f41ba2de6)
 
 ## Stack
 
