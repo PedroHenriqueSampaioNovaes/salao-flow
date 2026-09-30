@@ -49,7 +49,6 @@ export function useAppointmentsList({
 
       return data;
     },
-    staleTime: Infinity,
   });
 
   useEffect(() => {
