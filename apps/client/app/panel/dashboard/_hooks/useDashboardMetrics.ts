@@ -1,7 +1,6 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
 
 import { getLocalDateAsUTCDate } from '@/src/common/utils/getLocalDateAsUTCDate';
 
@@ -11,8 +10,6 @@ import { IAppointment } from '@/src/common/interfaces/appointment';
 import { IDashboardMetrics } from '@/src/common/interfaces/barbershop';
 
 import { connectToSocket, disconnectSocket } from '@/src/common/lib/socket';
-
-import getDashboardMetricsAction from '@/app/actions/get-dashboard-metrics';
 
 interface NewAppointmentEvent {
   appointment: IAppointment;
@@ -30,7 +27,6 @@ export function useDashboardMetrics({
   apiUrl,
   initialDashboardMetrics,
 }: IUseDashboardMetricsParams) {
-  const queryClient = useQueryClient();
   const { barbershop, setAppointments } = usePanelContext();
 
   const [dashboardMetrics, setDashboardMetrics] = useState(
@@ -46,35 +42,19 @@ export function useDashboardMetrics({
     [setAppointments],
   );
 
-  const syncAfterReconnect = useCallback(async () => {
-    queryClient.invalidateQueries({ queryKey: ['appointments'] });
-
-    const { data, ok } = await getDashboardMetricsAction();
-    if (ok && data) setDashboardMetrics(data);
-  }, [queryClient]);
-
   useEffect(() => {
     if (!token || socketConnected.current) return;
 
     const socket = connectToSocket(token, apiUrl);
-    let hasConnectedBefore = socket.connected;
-
-    const handleConnect = () => {
-      if (hasConnectedBefore) syncAfterReconnect();
-      hasConnectedBefore = true;
-    };
-
-    socket.on('connect', handleConnect);
     socket.on('new-appointment', handleNewAppointment);
     socketConnected.current = true;
 
     return () => {
-      socket.off('connect', handleConnect);
       socket.off('new-appointment', handleNewAppointment);
       disconnectSocket(token, apiUrl);
       socketConnected.current = false;
     };
-  }, [token, apiUrl, handleNewAppointment, syncAfterReconnect]);
+  }, [token, apiUrl, handleNewAppointment]);
 
   const today = getLocalDateAsUTCDate(
     barbershop.instantLocalTime,
