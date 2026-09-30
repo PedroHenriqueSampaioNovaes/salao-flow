@@ -16,9 +16,6 @@ export function connectToSocket(token: string, apiUrl: string) {
 
   const socket = io(apiUrl, {
     auth: { token },
-    reconnection: true,
-    reconnectionAttempts: 5,
-    reconnectionDelay: 1000,
   });
 
   sockets.set(key, socket);
