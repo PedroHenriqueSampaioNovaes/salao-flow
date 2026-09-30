@@ -36,7 +36,9 @@ export function useDashboardMetrics({
   const socketConnected = useRef(false);
   const handleNewAppointment = useCallback(
     ({ appointment, dashboardMetrics }: NewAppointmentEvent) => {
-      setAppointments((prev) => [...prev, appointment]);
+      setAppointments((prev) =>
+        [...prev, appointment].sort((a, b) => a.date.localeCompare(b.date)),
+      );
       setDashboardMetrics(dashboardMetrics);
     },
     [setAppointments],
