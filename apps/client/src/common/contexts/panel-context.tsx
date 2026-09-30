@@ -60,7 +60,6 @@ interface IPanelProviderProps {
   children: React.ReactNode;
   barbershopData: IBarbershop;
   employeesData: IEmployee[];
-  appointmentsData: IAppointment[];
   servicesData: IService[];
   expedientsData: IExpedient[];
   blockedTimesData: IBlockedTime[];
@@ -70,14 +69,13 @@ export function PanelProvider({
   children,
   barbershopData,
   employeesData,
-  appointmentsData,
   servicesData,
   expedientsData,
   blockedTimesData,
 }: IPanelProviderProps) {
   const [barbershop, setBarbershop] = useState(barbershopData);
   const [employees, setEmployees] = useState(employeesData);
-  const [appointments, setAppointments] = useState(appointmentsData);
+  const [appointments, setAppointments] = useState<IAppointment[]>([]);
   const [services, setServices] = useState(servicesData);
   const [expedients, setExpedients] = useState(expedientsData);
   const [blockedTimes, setBlockedTimes] = useState(blockedTimesData);

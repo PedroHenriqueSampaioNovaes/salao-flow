@@ -2,7 +2,6 @@ import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 
-import getAppointmentsAction from '../actions/get-appointments';
 import getEmployeesAction from '../actions/get-employees';
 import getBarbershopAction from '../actions/get-barbershop';
 import getServicesAction from '../actions/get-services';
@@ -59,20 +58,17 @@ async function PanelData({
   children: React.ReactNode;
 }) {
   const [
-    appointmentsResponse,
     employeesResponse,
     servicesResponse,
     expedientsResponse,
     blockedTimesResponse,
   ] = await Promise.all([
-    getAppointmentsAction(),
     getEmployeesAction(),
     getServicesAction(),
     getExpedientsAction(),
     getBlockedTimesAction(),
   ]);
 
-  const appointments = appointmentsResponse?.data ?? [];
   const employees = employeesResponse?.data ?? [];
   const services = servicesResponse?.data ?? [];
   const expedients = expedientsResponse?.data ?? [];
@@ -81,7 +77,6 @@ async function PanelData({
   return (
     <PanelProvider
       barbershopData={barbershop}
-      appointmentsData={appointments}
       employeesData={employees}
       servicesData={services}
       expedientsData={expedients}
