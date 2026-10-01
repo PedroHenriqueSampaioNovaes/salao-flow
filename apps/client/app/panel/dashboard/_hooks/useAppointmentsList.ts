@@ -3,7 +3,7 @@
 import { useEffect, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 
-import { IAppointment } from '@/src/common/interfaces/appointment';
+import { IAppointmentsByDate } from '@/src/common/interfaces/appointment';
 
 import { usePanelContext } from '@/src/common/contexts/panel-context';
 
@@ -11,24 +11,23 @@ import getAppointmentsAction from '@/app/actions/get-appointments';
 
 interface UseAppointmentsListParams {
   employee: number | '';
-  selectedDate: Date;
-  barbershopTimezone: string;
+  selectedDateString: string;
 }
 
 export function useAppointmentsList({
   employee = '',
-  selectedDate,
-  barbershopTimezone,
+  selectedDateString,
 }: UseAppointmentsListParams) {
   const { appointments, setAppointments } = usePanelContext();
 
   const monthParam = useMemo(() => {
+    const selectedDate = new Date(selectedDateString);
     const firstDayOfMonth = new Date(
       Date.UTC(selectedDate.getUTCFullYear(), selectedDate.getUTCMonth(), 1),
     );
 
     return firstDayOfMonth.toLocaleDateString('en-CA', { timeZone: 'UTC' });
-  }, [selectedDate]);
+  }, [selectedDateString]);
 
   const {
     data,
@@ -56,14 +55,8 @@ export function useAppointmentsList({
   }, [data, setAppointments]);
 
   const filteredAppointments = useMemo(
-    () =>
-      filterAppointments(
-        appointments ?? [],
-        employee,
-        selectedDate,
-        barbershopTimezone,
-      ),
-    [appointments, employee, selectedDate, barbershopTimezone],
+    () => filterAppointments(appointments, employee, selectedDateString),
+    [appointments, employee, selectedDateString],
   );
 
   return {
@@ -75,18 +68,16 @@ export function useAppointmentsList({
 }
 
 function filterAppointments(
-  appointments: IAppointment[],
+  appointmentsByDate: IAppointmentsByDate,
   employeeId: number | '',
-  selectedDate: Date,
-  timezone: string,
+  selectedDate: string,
 ) {
-  return appointments?.filter(({ date: appointmentDate, employee }) => {
-    const appointment = new Date(appointmentDate);
-    const isSameDate =
-      appointment.toLocaleDateString('pt-BR', { timeZone: timezone }) ===
-      selectedDate.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
-    const isSameEmployee = employeeId ? employee.id === employeeId : true;
+  const appointments = appointmentsByDate[selectedDate] || [];
 
-    return isSameDate && isSameEmployee;
+  return appointments?.filter((appointment) => {
+    const isSameEmployee = employeeId
+      ? appointment.employee.id === employeeId
+      : true;
+    return isSameEmployee;
   });
 }

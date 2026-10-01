@@ -150,6 +150,7 @@ export class AppointmentRepository {
         },
       },
       omit: {
+        barbershopId: true,
         createdAt: true,
         updatedAt: true,
         customerId: true,

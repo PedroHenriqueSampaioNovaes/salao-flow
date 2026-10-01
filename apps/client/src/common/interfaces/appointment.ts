@@ -11,6 +11,10 @@ export interface IAppointment {
   totalServiceDuration: number;
 }
 
+export interface IAppointmentsByDate {
+  [key: string]: IAppointment[];
+}
+
 export interface ICreateAppointment {
   name: string;
   phone: string;

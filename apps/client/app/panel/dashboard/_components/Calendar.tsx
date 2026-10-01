@@ -20,16 +20,13 @@ const dateRibbonFormatter = new Intl.DateTimeFormat('pt-BR', {
 
 export default function Calendar() {
   const { barbershop } = usePanelContext();
-  const [selectedDate, setSelectedDate] = useState(() => {
+  const [selectedDateString, setSelectedDateString] = useState(() => {
     const today = getLocalDateAsUTCDate(
       barbershop.instantLocalTime,
       barbershop.timezone,
     );
 
-    const initialDate = new Date(
-      Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()),
-    );
-    return initialDate;
+    return today.toLocaleDateString('en-CA', { timeZone: 'UTC' });
   });
 
   const [employee, setEmployee] = useState<number | ''>('');
@@ -44,19 +41,19 @@ export default function Calendar() {
       </div>
 
       <DaysNavigationBar
-        selectedDate={selectedDate}
-        setSelectedDate={setSelectedDate}
+        selectedDateString={selectedDateString}
+        setSelectedDateString={setSelectedDateString}
       />
 
       <div className="bg-[#F8F9FA] border-t border-b border-border/20 py-2 text-center font-medium text-primary">
-        {dateRibbonFormatter.format(selectedDate)}
+        {dateRibbonFormatter.format(new Date(selectedDateString))}
       </div>
 
       <ActionControls employee={employee} onEmployeeChange={setEmployee} />
 
       <AppointmentsList
         employee={employee}
-        selectedDate={selectedDate}
+        selectedDateString={selectedDateString}
       />
     </div>
   );

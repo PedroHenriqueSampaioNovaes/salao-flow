@@ -10,19 +10,18 @@ import AppointmentItem from './AppointmentItem';
 
 interface AppointmentsListProps {
   employee: number | '';
-  selectedDate: Date;
+  selectedDateString: string;
 }
 
 export default function AppointmentsList({
   employee,
-  selectedDate,
+  selectedDateString,
 }: AppointmentsListProps) {
   const { barbershop } = usePanelContext();
   const { filteredAppointments, isLoading, isError, refetchAppointments } =
     useAppointmentsList({
       employee,
-      selectedDate,
-      barbershopTimezone: barbershop.timezone,
+      selectedDateString,
     });
 
   if (isLoading) {

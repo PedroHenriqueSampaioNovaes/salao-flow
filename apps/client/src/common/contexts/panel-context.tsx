@@ -10,20 +10,20 @@ import {
 
 import { IBarbershop } from '../interfaces/barbershop';
 import { IEmployee, IExpedient } from '../interfaces/employee';
-import { IAppointment } from '../interfaces/appointment';
+import { IAppointmentsByDate } from '../interfaces/appointment';
 import { IService } from '../interfaces/service';
 import { IBlockedTime } from '../interfaces/employee-schedule';
 
 interface IPanelContext {
   barbershop: IBarbershop;
   employees: IEmployee[];
-  appointments: IAppointment[];
+  appointments: IAppointmentsByDate;
   services: IService[];
   expedients: IExpedient[];
   blockedTimes: IBlockedTime[];
   setBarbershop: Dispatch<SetStateAction<IBarbershop>>;
   setEmployees: Dispatch<SetStateAction<IEmployee[]>>;
-  setAppointments: Dispatch<SetStateAction<IAppointment[]>>;
+  setAppointments: Dispatch<SetStateAction<IAppointmentsByDate>>;
   setServices: Dispatch<SetStateAction<IService[]>>;
   setExpedients: Dispatch<SetStateAction<IExpedient[]>>;
   setBlockedTimes: Dispatch<SetStateAction<IBlockedTime[]>>;
@@ -32,7 +32,7 @@ interface IPanelContext {
 const PanelContext = createContext<IPanelContext>({
   barbershop: {} as IBarbershop,
   employees: [],
-  appointments: [],
+  appointments: {},
   services: [],
   expedients: [],
   blockedTimes: [],
@@ -75,7 +75,7 @@ export function PanelProvider({
 }: IPanelProviderProps) {
   const [barbershop, setBarbershop] = useState(barbershopData);
   const [employees, setEmployees] = useState(employeesData);
-  const [appointments, setAppointments] = useState<IAppointment[]>([]);
+  const [appointments, setAppointments] = useState<IAppointmentsByDate>({});
   const [services, setServices] = useState(servicesData);
   const [expedients, setExpedients] = useState(expedientsData);
   const [blockedTimes, setBlockedTimes] = useState(blockedTimesData);

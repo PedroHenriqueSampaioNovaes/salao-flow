@@ -21,13 +21,13 @@ function getDayName(date: Date): string {
 }
 
 interface IUseDaysNavigationParams {
-  selectedDate: Date;
-  setSelectedDate: Dispatch<SetStateAction<Date>>;
+  selectedDateString: string;
+  setSelectedDateString: Dispatch<SetStateAction<string>>;
 }
 
 export function useDaysNavigation({
-  selectedDate,
-  setSelectedDate,
+  selectedDateString,
+  setSelectedDateString,
 }: IUseDaysNavigationParams) {
   const { barbershop } = usePanelContext();
 
@@ -39,40 +39,39 @@ export function useDaysNavigation({
   const days = useMemo(
     () =>
       [-2, -1, 0, 1, 2].map((offset) => {
-        const dayDate = new Date(
-          Date.UTC(
-            selectedDate.getUTCFullYear(),
-            selectedDate.getUTCMonth(),
-            selectedDate.getUTCDate() + offset,
-          ),
-        );
+        const selectedDate = new Date(selectedDateString);
+        const dayDate = new Date(selectedDate);
+        dayDate.setUTCDate(dayDate.getUTCDate() + offset);
+
+        const dayDateString = dayDate.toLocaleDateString('en-CA', {
+          timeZone: 'UTC',
+        });
 
         return {
-          date: dayDate,
+          date: dayDateString,
           dayName: getDayName(dayDate),
           dayNum: dayDate.getUTCDate(),
-          isSelected: selectedDate.getTime() === dayDate.getTime(),
+          isSelected: selectedDateString === dayDateString,
           isMatchDate:
-            today.toLocaleDateString('pt-BR', { timeZone: 'UTC' }) ===
-            dayDate.toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+            today.toLocaleDateString('en-CA', { timeZone: 'UTC' }) ===
+            dayDateString,
         };
       }),
-    [selectedDate, today],
+    [selectedDateString, today],
   );
 
   const moveDay = (delta: number) => {
-    setSelectedDate((current) => {
+    setSelectedDateString((currentDateString) => {
+      const currentDate = new Date(currentDateString);
       return new Date(
-        Date.UTC(
-          current.getUTCFullYear(),
-          current.getUTCMonth(),
-          current.getUTCDate() + delta,
-        ),
-      );
+        currentDate.getUTCFullYear(),
+        currentDate.getUTCMonth(),
+        currentDate.getUTCDate() + delta,
+      ).toLocaleDateString('en-CA', { timeZone: 'UTC' });
     });
   };
 
-  const selectDay = (dayDate: Date) => setSelectedDate(dayDate);
+  const selectDay = (dateString: string) => setSelectedDateString(dateString);
 
   return {
     days,

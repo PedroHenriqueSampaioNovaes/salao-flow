@@ -36,9 +36,21 @@ export function useDashboardMetrics({
   const socketConnected = useRef(false);
   const handleNewAppointment = useCallback(
     ({ appointment, dashboardMetrics }: NewAppointmentEvent) => {
-      setAppointments((prev) =>
-        [...prev, appointment].sort((a, b) => a.date.localeCompare(b.date)),
-      );
+      setAppointments((prev) => {
+        const appointmentDate = new Date(appointment.date).toLocaleDateString(
+          'en-CA',
+          { timeZone: 'UTC' },
+        );
+        const appointmentsOfTheDay = prev[appointmentDate] || [];
+        const ordenedAppointments = [...appointmentsOfTheDay, appointment].sort(
+          (a, b) => a.date.localeCompare(b.date),
+        );
+
+        return {
+          ...prev,
+          [appointmentDate]: ordenedAppointments,
+        };
+      });
       setDashboardMetrics(dashboardMetrics);
     },
     [setAppointments],

@@ -22,18 +22,19 @@ export class ListAppointmentService {
       barbershopId,
     );
 
-    const appointmentsBelongToBarbershop = appointments.every(
-      (appointment) => appointment.barbershopId === barbershopId,
+    const listAppointmentByDate = appointments.reduce(
+      (acc, appointment) => {
+        const dateString = appointment.date.toLocaleDateString('en-CA', {
+          timeZone: barbershop.timezone,
+        });
+        if (!acc[dateString]) acc[dateString] = [];
+
+        acc[dateString].push(appointment);
+        return acc;
+      },
+      {} as Record<string, (typeof appointments)[number][]>,
     );
 
-    if (!appointmentsBelongToBarbershop) {
-      throw new AppError('Nenhum agendamento encontrado.', 403);
-    }
-
-    const listAppointment = appointments.map(
-      ({ barbershopId, ...appointment }) => appointment,
-    );
-
-    return listAppointment;
+    return listAppointmentByDate;
   }
 }

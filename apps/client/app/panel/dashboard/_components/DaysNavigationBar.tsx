@@ -8,17 +8,17 @@ import { useDaysNavigation } from '../_hooks/useDaysNavigation';
 import { cn } from '@/src/lib/utils';
 
 interface IDaysNavigationBarProps {
-  selectedDate: Date;
-  setSelectedDate: Dispatch<SetStateAction<Date>>;
+  selectedDateString: string;
+  setSelectedDateString: Dispatch<SetStateAction<string>>;
 }
 
 export default function DaysNavigationBar({
-  selectedDate,
-  setSelectedDate,
+  selectedDateString,
+  setSelectedDateString,
 }: IDaysNavigationBarProps) {
   const { days, moveDay, selectDay } = useDaysNavigation({
-    selectedDate,
-    setSelectedDate,
+    selectedDateString,
+    setSelectedDateString,
   });
 
   return (
@@ -33,7 +33,7 @@ export default function DaysNavigationBar({
       <div className="flex items-center justify-center gap-2.5 sm:gap-3 flex-1">
         {days.map(({ date, dayName, dayNum, isSelected, isMatchDate }) => (
           <button
-            key={date.getTime()}
+            key={date}
             onClick={() => selectDay(date)}
             className={cn(
               'flex flex-col items-center cursor-pointer py-2 relative hover:bg-foreground focus:bg-foreground rounded-md w-7.5 sm:w-10',
