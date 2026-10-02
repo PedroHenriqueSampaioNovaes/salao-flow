@@ -1,41 +1,33 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { getLocalDateAsUTCDate } from '@/src/common/utils/getLocalDateAsUTCDate';
 
 import { usePanelContext } from '@/src/common/contexts/panel-context';
 
 import { IAppointment } from '@/src/common/interfaces/appointment';
-import { IDashboardMetrics } from '@/src/common/interfaces/barbershop';
 
 import { connectToSocket, disconnectSocket } from '@/src/common/lib/socket';
 
-interface NewAppointmentEvent {
-  appointment: IAppointment;
-  dashboardMetrics: IDashboardMetrics;
-}
+import { DASHBOARD_METRICS_QUERY_KEY } from '../_components/MetricCards';
 
 interface IUseDashboardMetricsParams {
   token: string;
   apiUrl: string;
-  initialDashboardMetrics: IDashboardMetrics;
 }
 
 export function useDashboardMetrics({
   token,
   apiUrl,
-  initialDashboardMetrics,
 }: IUseDashboardMetricsParams) {
   const { barbershop, setAppointments } = usePanelContext();
-
-  const [dashboardMetrics, setDashboardMetrics] = useState(
-    initialDashboardMetrics,
-  );
+  const queryClient = useQueryClient();
 
   const socketConnected = useRef(false);
   const handleNewAppointment = useCallback(
-    ({ appointment, dashboardMetrics }: NewAppointmentEvent) => {
+    (appointment: IAppointment) => {
       setAppointments((prev) => {
         const appointmentDate = new Date(appointment.date).toLocaleDateString(
           'en-CA',
@@ -51,9 +43,9 @@ export function useDashboardMetrics({
           [appointmentDate]: ordenedAppointments,
         };
       });
-      setDashboardMetrics(dashboardMetrics);
+      queryClient.invalidateQueries({ queryKey: DASHBOARD_METRICS_QUERY_KEY });
     },
-    [setAppointments],
+    [setAppointments, queryClient],
   );
 
   useEffect(() => {
@@ -82,7 +74,6 @@ export function useDashboardMetrics({
 
   return {
     barbershop,
-    dashboardMetrics,
     currentDateFormatted:
       currentDateFormatted[0].toUpperCase() + currentDateFormatted.slice(1),
   };

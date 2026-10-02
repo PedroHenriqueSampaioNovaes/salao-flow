@@ -9,6 +9,8 @@ import { showErrorToast, showSuccessToast } from '@/src/common/lib/toast';
 
 import deleteServiceAction from '@/app/actions/delete-service';
 
+import { DASHBOARD_METRICS_QUERY_KEY } from '@/app/panel/dashboard/_components/MetricCards';
+
 export function useDeleteService() {
   const queryClient = useQueryClient();
   const { setServices } = usePanelContext();
@@ -28,6 +30,7 @@ export function useDeleteService() {
     showSuccessToast('Serviço excluído com sucesso!');
 
     queryClient.invalidateQueries({ queryKey: ['employees'] });
+    queryClient.invalidateQueries({ queryKey: DASHBOARD_METRICS_QUERY_KEY });
     setServices((prev) =>
       prev.filter((service) => service.id !== serviceToDelete),
     );

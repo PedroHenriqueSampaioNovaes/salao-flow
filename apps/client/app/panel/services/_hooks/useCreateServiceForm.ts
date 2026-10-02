@@ -7,6 +7,8 @@ import { serviceSchema, ServiceSchema } from '@sistema-barbearia/validators';
 
 import createServiceAction from '@/app/actions/create-service';
 
+import { DASHBOARD_METRICS_QUERY_KEY } from '@/app/panel/dashboard/_components/MetricCards';
+
 import { usePanelContext } from '@/src/common/contexts/panel-context';
 
 import { showErrorToast, showSuccessToast } from '@/src/common/lib/toast';
@@ -53,6 +55,7 @@ export function useCreateServiceForm({
 
     setServices((prev) => [...prev, serviceResponse!]);
     queryClient.invalidateQueries({ queryKey: ['employees'] });
+    queryClient.invalidateQueries({ queryKey: DASHBOARD_METRICS_QUERY_KEY });
 
     showSuccessToast('Serviço criado com sucesso!');
     closeDialog();
