@@ -1,7 +1,5 @@
 'use client';
 
-import { IDashboardMetrics } from '@/src/common/interfaces/barbershop';
-
 import { useDashboardMetrics } from '../_hooks/useDashboardMetrics';
 
 import MetricCards from './MetricCards';
@@ -11,20 +9,13 @@ import BookingLink from './BookingLink';
 interface DashboardProps {
   token: string;
   apiUrl: string;
-  initialDashboardMetrics: IDashboardMetrics;
 }
 
-export default function Dashboard({
-  token,
-  apiUrl,
-  initialDashboardMetrics,
-}: DashboardProps) {
-  const { barbershop, dashboardMetrics, currentDateFormatted } =
-    useDashboardMetrics({
-      token,
-      apiUrl,
-      initialDashboardMetrics,
-    });
+export default function Dashboard({ token, apiUrl }: DashboardProps) {
+  const { barbershop, currentDateFormatted } = useDashboardMetrics({
+    token,
+    apiUrl,
+  });
 
   return (
     <div className="flex flex-col gap-6">
@@ -37,7 +28,7 @@ export default function Dashboard({
         </p>
       </div>
 
-      <MetricCards dashboardMetrics={dashboardMetrics} />
+      <MetricCards />
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] xl:grid-cols-[1fr_350px] gap-5 items-start">
         <Calendar />

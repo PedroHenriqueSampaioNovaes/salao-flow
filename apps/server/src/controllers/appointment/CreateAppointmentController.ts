@@ -7,7 +7,6 @@ import { createAppointmentSchema } from '@sistema-barbearia/validators';
 import { isAuthenticatedRequest } from '../../utils/isAuthenticatedRequest.js';
 
 import { CreateAppointmentService } from '../../services/appointment/CreateAppointmentService.js';
-import { GetDashboardMetricsService } from '../../services/barbershop/GetDashboardMetricsService.js';
 
 export class CreateAppointmentController {
   static async handle(req: Request, res: Response) {
@@ -15,19 +14,11 @@ export class CreateAppointmentController {
 
     const createAppointmentService = new CreateAppointmentService();
 
-    const { appointment, barbershopId } =
-      await createAppointmentService.execute(body, {
-        isPanelRequest: isAuthenticatedRequest(req),
-      });
-
-    const dashboardMetrics = await new GetDashboardMetricsService().execute(
-      barbershopId,
-    );
-
-    emitToBarbershop(body.barbershopSlug, 'new-appointment', {
-      appointment,
-      dashboardMetrics,
+    const { appointment } = await createAppointmentService.execute(body, {
+      isPanelRequest: isAuthenticatedRequest(req),
     });
+
+    emitToBarbershop(body.barbershopSlug, 'new-appointment', appointment);
 
     return res.status(201).json(appointment);
   }
