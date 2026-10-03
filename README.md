@@ -8,6 +8,7 @@ SaaS de agendamento para barbearias: cada barbearia tem sua própria página pú
 - [Modelagem de dados](#modelagem-de-dados)
 - [Stack](#stack)
 - [Arquitetura](#arquitetura)
+- [Principais Desafios](#principais-desafios)
 - [Melhorias futuras](#melhorias-futuras)
 
 ## Funcionalidades
@@ -77,6 +78,18 @@ packages/
 ```
 
 O backend segue separação em camadas (`routes → controllers → services → repositories`), com Prisma como camada de acesso a dados e middlewares dedicados (autenticação, verificação de assinatura de webhook).
+
+## Principais desafios
+- Lidar com diferentes fusos horários: Um dos principais desafios do projeto foi garantir que os agendamentos fossem registrados e exibidos corretamente **independentemente** do fuso horário utilizado. Para isso, precisei analisar duas questões principais: como representar e armazenar os agendamentos no banco de dados e como realizar conversões entre diferentes fusos horários de forma confiável no JavaScript. Após analisar as possibilidades, optei por armazenar todos os agendamentos em UTC (Coordinated Universal Time). Dessa forma, o banco mantém uma representação única e independente do fuso horário, enquanto a conversão para o horário local é realizada apenas na camada de apresentação. Se um agendamento fosse armazenado diretamente como 10:30, esse valor não carregaria informação suficiente para determinar qual instante ele representa. Armazenando o instante em UTC, posso posteriormente convertê-lo para o fuso do estabelecimento ou do usuário sem perder a referência temporal original. Essa abordagem reduz a complexidade das regras de negócio e evita inconsistências ao comparar ou manipular datas.
+Durante a implementação, também identifiquei limitações na API Date do JavaScript para trabalhar diretamente com diferentes fusos horários. Por isso, pesquisei alternativas e optei pelo uso da Temporal API, que fornece abstrações mais adequadas para representar instantes e horários associados a fusos específicos.
+Atualmente, o sistema consegue trabalhar com os principais fusos horários brasileiros: Brasília (UTC-3), Fernando de Noronha (UTC-2), Amazonas (UTC-4) e Acre (UTC-5), realizando as conversões necessárias para que os horários apresentados ao usuário correspondam ao seu contexto local.
+
+- Otimização da exibição dos agendamentos em tempo real: Durante a implementação do dashboard da barbearia, identifiquei um gargalo de performance na atualização dos agendamentos em tempo real utilizando Socket.IO.
+Inicialmente, a API retornava todos os agendamentos do mês selecionado em uma única lista. Quando um novo agendamento era recebido pelo Socket.IO, o client precisava adicioná-lo à lista e realizar uma nova ordenação por data. O problema é que essa operação percorria novamente todos os agendamentos, mesmo quando o novo agendamento pertencia a apenas um dia específico.
+Por exemplo, considerando que existam agendamentos às 10:00 e 11:00 e um novo agendamento seja criado para 09:00, o client precisava reorganizar toda a lista para posicionar o novo horário corretamente. À medida que a quantidade de agendamentos aumentava, esse processamento se tornava cada vez mais custoso e afetava a responsividade do dashboard.
+Para solucionar o problema, analisei como os dados eram consumidos pelo client e alterei o contrato da API para que os agendamentos fossem agrupados por data. Em vez de retornar uma única lista, a API passou a retornar uma estrutura em que cada chave representa uma data e seu valor contém os agendamentos daquele dia.
+Com essa estrutura, quando um novo agendamento é recebido em tempo real, o client precisa atualizar e ordenar somente os agendamentos daquele dia, em vez de percorrer e reorganizar todos os agendamentos do mês.
+Essa abordagem transfere parte do processamento para o backend durante a consulta inicial do mês, mas essa consulta ocorre apenas quando necessário. Em contrapartida, as atualizações em tempo real — que podem acontecer diversas vezes durante o uso do dashboard — passam a trabalhar sobre um conjunto significativamente menor de dados. Dessa forma, a solução reduz o custo das operações realizadas no client e melhora a escalabilidade da interface conforme aumenta a quantidade de agendamentos.
 
 ## Melhorias futuras
 - Criar sistema de métricas completo
