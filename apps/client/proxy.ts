@@ -6,7 +6,7 @@ import { checkSubscriptionActive } from '@/src/common/utils/checkSubscriptionAct
 
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
 
-const GUEST_ONLY_ROUTES = ['/login', '/register'];
+const GUEST_ONLY_ROUTES = ['/login', '/register', '/register/recruiter'];
 const SUBSCRIPTION_VIEW_ROUTE = '/panel/subscription-view';
 
 export async function proxy(request: NextRequest) {
@@ -58,5 +58,5 @@ function redirectToDashboard(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/panel/:path*', '/login', '/register'],
+  matcher: ['/panel/:path*', '/login', '/register', '/register/recruiter'],
 };
