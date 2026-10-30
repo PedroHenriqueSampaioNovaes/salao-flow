@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 
@@ -74,8 +75,16 @@ async function PanelData({
   const expedients = expedientsResponse?.data ?? [];
   const blockedTimes = blockedTimesResponse?.data ?? [];
 
+  const cookieStore = await cookies();
+  const token = cookieStore.get('token')?.value;
+  const apiUrl = process.env.API_URL || 'http://localhost:3333';
+
+  if (!token) redirect('/login');
+
   return (
     <PanelProvider
+      token={token}
+      apiUrl={apiUrl}
       barbershopData={barbershop}
       employeesData={employees}
       servicesData={services}

@@ -6,16 +6,8 @@ import MetricCards from './MetricCards';
 import Calendar from './Calendar';
 import BookingLink from './BookingLink';
 
-interface DashboardProps {
-  token: string;
-  apiUrl: string;
-}
-
-export default function Dashboard({ token, apiUrl }: DashboardProps) {
-  const { barbershop, currentDateFormatted } = useDashboardMetrics({
-    token,
-    apiUrl,
-  });
+export default function Dashboard() {
+  const { barbershop, currentDateFormatted } = useDashboardMetrics();
 
   return (
     <div className="flex flex-col gap-6">

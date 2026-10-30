@@ -48,12 +48,13 @@ export function useAppointmentsList({
       return data;
     },
     retry: 1,
-    staleTime: 5 * 60 * 1000,
+    staleTime: Infinity,
     refetchOnReconnect: 'always',
   });
 
   useEffect(() => {
-    if (data) setAppointments(data);
+    if (data)
+      setAppointments((prevAppointments) => ({ ...data, ...prevAppointments }));
   }, [data, setAppointments]);
 
   const filteredAppointments = useMemo(
