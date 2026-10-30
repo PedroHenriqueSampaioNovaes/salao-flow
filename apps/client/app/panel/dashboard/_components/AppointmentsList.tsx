@@ -18,13 +18,13 @@ export default function AppointmentsList({
   selectedDateString,
 }: AppointmentsListProps) {
   const { barbershop } = usePanelContext();
-  const { filteredAppointments, isLoading, isError, refetchAppointments } =
+  const { filteredAppointments, isFetching, isError, refetchAppointments } =
     useAppointmentsList({
       employee,
       selectedDateString,
     });
 
-  if (isLoading) {
+  if (isFetching) {
     return (
       <div className="flex items-center justify-center gap-2 p-4 md:p-6 text-secondary">
         <Loader2 className="size-4 animate-spin shrink-0" />

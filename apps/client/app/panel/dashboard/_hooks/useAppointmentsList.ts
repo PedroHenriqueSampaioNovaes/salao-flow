@@ -31,7 +31,6 @@ export function useAppointmentsList({
 
   const {
     data,
-    isLoading,
     isFetching,
     isError,
     refetch: refetchAppointments,
@@ -48,6 +47,9 @@ export function useAppointmentsList({
 
       return data;
     },
+    retry: 1,
+    staleTime: 5 * 60 * 1000,
+    refetchOnReconnect: 'always',
   });
 
   useEffect(() => {
@@ -61,7 +63,7 @@ export function useAppointmentsList({
 
   return {
     filteredAppointments,
-    isLoading: isLoading || (isFetching && isError),
+    isFetching,
     isError,
     refetchAppointments,
   };
