@@ -53,10 +53,10 @@ export default function SelectionTimeSlotsBooking({
   isBookingPage = false,
   isLoadingData = false,
 }: ISelectionTimeSlotsBooking) {
-  const { times, selectedTime, isPending, handleSelectTimeSlot } =
+  const { times, selectedTime, isFetching, handleSelectTimeSlot } =
     useTimeSlotsBooking({ slug, employeesShift, employeeSchedule, services });
 
-  if (isPending || isLoadingData) {
+  if (isFetching || isLoadingData) {
     return (
       <div className="flex justify-center py-4">
         <div className="size-6 animate-spin rounded-full border-2 border-border border-t-transparent" />

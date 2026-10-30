@@ -101,7 +101,7 @@ export function useTimeSlotsBooking({
     ({ id }) => id === Number(employeeId),
   );
 
-  const { data: rawTimes = [], isFetching: isPending } = useQuery({
+  const { data: rawTimes = [], isFetching } = useQuery({
     queryKey: ['time-slots', slug, professional?.id, date],
     queryFn: async () => {
       const { data, ok } = await getAvailableTimeSlotsForBookingAction({
@@ -117,7 +117,7 @@ export function useTimeSlotsBooking({
 
       return data.employees[0].availableSlots;
     },
-    staleTime: 0,
+    staleTime: 2 * 60 * 1000,
   });
 
   const totalServicesDuration = useMemo(() => {
@@ -153,7 +153,7 @@ export function useTimeSlotsBooking({
   return {
     times,
     selectedTime,
-    isPending,
+    isFetching,
     handleSelectTimeSlot,
   };
 }
