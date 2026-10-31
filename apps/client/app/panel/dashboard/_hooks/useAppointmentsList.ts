@@ -5,7 +5,10 @@ import { useQuery } from '@tanstack/react-query';
 
 import { IAppointmentsByDate } from '@/src/common/interfaces/appointment';
 
-import { usePanelContext } from '@/src/common/contexts/panel-context';
+import {
+  APPOINTMENTS_QUERY_KEY,
+  usePanelContext,
+} from '@/src/common/contexts/panel-context';
 
 import getAppointmentsAction from '@/app/actions/get-appointments';
 
@@ -35,7 +38,7 @@ export function useAppointmentsList({
     isError,
     refetch: refetchAppointments,
   } = useQuery({
-    queryKey: ['appointments', monthParam],
+    queryKey: [...APPOINTMENTS_QUERY_KEY, monthParam],
     queryFn: async () => {
       const { data, ok, error } = await getAppointmentsAction({
         dateString: monthParam,
@@ -49,12 +52,11 @@ export function useAppointmentsList({
     },
     retry: 1,
     staleTime: Infinity,
-    refetchOnReconnect: 'always',
   });
 
   useEffect(() => {
     if (data)
-      setAppointments((prevAppointments) => ({ ...data, ...prevAppointments }));
+      setAppointments((prevAppointments) => ({ ...prevAppointments, ...data }));
   }, [data, setAppointments]);
 
   const filteredAppointments = useMemo(

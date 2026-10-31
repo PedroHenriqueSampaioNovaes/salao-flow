@@ -22,6 +22,8 @@ import { connectToSocket, disconnectSocket } from '../lib/socket';
 
 import { DASHBOARD_METRICS_QUERY_KEY } from '@/app/panel/dashboard/_components/MetricCards';
 
+export const APPOINTMENTS_QUERY_KEY = ['appointments'] as const;
+
 interface IPanelContext {
   barbershop: IBarbershop;
   employees: IEmployee[];
@@ -102,6 +104,11 @@ export function PanelProvider({
           { timeZone: 'UTC' },
         );
         const appointmentsOfTheDay = prev[appointmentDate] || [];
+
+        if (appointmentsOfTheDay.some(({ id }) => id === appointment.id)) {
+          return prev;
+        }
+
         const ordenedAppointments = [...appointmentsOfTheDay, appointment].sort(
           (a, b) => a.date.localeCompare(b.date),
         );
@@ -120,15 +127,29 @@ export function PanelProvider({
     if (!token || socketConnected.current) return;
 
     const socket = connectToSocket(token, apiUrl);
+    let hasConnectedBefore = socket.connected;
+
+    const handleConnect = () => {
+      if (hasConnectedBefore && !socket.recovered) {
+        queryClient.invalidateQueries({ queryKey: APPOINTMENTS_QUERY_KEY });
+        queryClient.invalidateQueries({
+          queryKey: DASHBOARD_METRICS_QUERY_KEY,
+        });
+      }
+      hasConnectedBefore = true;
+    };
+
+    socket.on('connect', handleConnect);
     socket.on('new-appointment', handleNewAppointment);
     socketConnected.current = true;
 
     return () => {
+      socket.off('connect', handleConnect);
       socket.off('new-appointment', handleNewAppointment);
       disconnectSocket(token, apiUrl);
       socketConnected.current = false;
     };
-  }, [token, apiUrl, handleNewAppointment]);
+  }, [token, apiUrl, handleNewAppointment, queryClient]);
 
   return (
     <PanelContext.Provider
